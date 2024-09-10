@@ -4,5 +4,6 @@ import { Field, ObjectType } from "@nestjs/graphql";
 export class UserResponse {
   @Field() email: string;
   @Field() name: string;
+  @Field() id: number;
   
 }

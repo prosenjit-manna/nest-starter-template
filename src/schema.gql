@@ -5,6 +5,7 @@
 type UserResponse {
   email: String!
   name: String!
+  id: Float!
 }
 
 type CreateUserResponse {
