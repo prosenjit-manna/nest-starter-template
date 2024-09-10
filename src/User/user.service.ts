@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma.service';
 import { UserResponse } from './user.response.dto';
 import { CreateUserInput } from './create-user.dto';
 import { CreateUserResponse } from './create-user-response.dto';
+import { UsePipes, ValidationPipe } from '@nestjs/common';
 
 @Resolver()
 export class UserService {
@@ -15,6 +16,7 @@ export class UserService {
   }
 
   @Mutation(() => CreateUserResponse)
+  @UsePipes(new ValidationPipe({ transform: true }))
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<CreateUserResponse> {
