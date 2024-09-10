@@ -1,7 +1,9 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { UserResponse } from './user.response.dto';
+import { CreateUserInput } from './create-user.dto';
+import { CreateUserResponse } from './create-user-response.dto';
 
 @Resolver()
 export class UserService {
@@ -10,6 +12,14 @@ export class UserService {
   async getUsers(): Promise<User[]> {
     const users = await this.prisma.user.findMany();
     return users;
+  }
 
+  @Mutation(() => CreateUserResponse)
+  async createUser(
+    @Args('createUserInput') createUserInput: CreateUserInput,
+  ): Promise<CreateUserResponse> {
+
+    const user = await this.prisma.user.create({ data: createUserInput });
+    return { id: user.id };
   }
 }

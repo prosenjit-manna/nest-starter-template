@@ -2,19 +2,24 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Cat {
-  id: Int!
-  name: String!
-  age: Int!
-}
-
 type UserResponse {
   email: String!
   name: String!
 }
 
+type CreateUserResponse {
+  id: Float!
+}
+
 type Query {
-  getHello: String!
   getUsers: [UserResponse!]!
-  findAllCats(page: Float! = 1): [Cat!]!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): CreateUserResponse!
+}
+
+input CreateUserInput {
+  email: String!
+  name: String!
 }
