@@ -1,15 +1,20 @@
-import { Controller, Get, Post, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Put, Param, Delete, Body } from '@nestjs/common';
+import { CatService } from './cat.service';
 
 @Controller('cats')
 export class CatController {
+
+  constructor(private catsService: CatService) {}
+
   @Post()
-  create() {
-    return 'This action adds a new cat';
+  create(@Body() cat: any) {
+    this.catsService.create(cat);
+    return cat;
   }
 
   @Get()
   findAll() {
-    return `This action returns all cats `;
+    return this.catsService.findAll();
   }
 
   @Get(':id')
@@ -18,8 +23,9 @@ export class CatController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string) {
-    return `This action updates a #${id} cat`;
+  update(@Param('id') id: string, @Body() cat: any) {
+    this.catsService.update(cat);
+    return cat;
   }
 
   @Delete(':id')
