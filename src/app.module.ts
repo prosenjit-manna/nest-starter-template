@@ -1,14 +1,17 @@
-import { CatModule } from './cat.module';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
+import { CatModule } from './cat.module';
+import { AppService } from './app.service';
+import { PrismaService } from './prisma.service';
+import { UserModule } from './User/user.module';
 
 @Module({
   imports: [
+    UserModule,
     CatModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -20,6 +23,6 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
     }),
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [PrismaService, AppService],
 })
 export class AppModule {}

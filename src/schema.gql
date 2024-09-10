@@ -8,7 +8,13 @@ type Cat {
   age: Int!
 }
 
+type UserResponse {
+  email: String!
+  name: String!
+}
+
 type Query {
   getHello: String!
+  getUsers: [UserResponse!]!
   findAllCats(page: Float! = 1): [Cat!]!
 }
