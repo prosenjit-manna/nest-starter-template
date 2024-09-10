@@ -2,6 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Cat {
+  id: Int!
+  name: String!
+  age: Int!
+}
+
 type Query {
   getHello: String!
+  findAllCats(page: Float! = 1): [Cat!]!
 }

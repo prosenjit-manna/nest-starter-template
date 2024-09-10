@@ -1,14 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Args, Query, Resolver } from "@nestjs/graphql";
+import { Field, Int, ObjectType } from "@nestjs/graphql";
 
-@Injectable()
+
+@ObjectType()
+export class Cat {
+  @Field(() => Int)
+  id: number;
+
+  @Field()
+  name: string;
+
+  @Field(() => Int)
+  age: number;
+}
+
+@Resolver()
 export class CatService {
-  private readonly cats: Array<any> = [];
+  private readonly cats: Array<Cat> = [];
 
   create(cat: any) {
     this.cats.push(cat);
   }
 
-  findAll() {
+  @Query(() => [Cat])
+  findAllCats(
+    @Args('page', { defaultValue: 1 }) page: number,
+  ) {
+    console.log(page);
     return this.cats;
   }
 

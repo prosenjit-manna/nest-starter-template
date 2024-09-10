@@ -1,6 +1,5 @@
 import { CatModule } from './cat.module';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -20,7 +19,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [AppService],
 })
 export class AppModule {}
