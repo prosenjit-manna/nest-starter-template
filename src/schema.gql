@@ -45,6 +45,7 @@ input GetPostListInput {
   page: Int
   pageSize: Int
   title: String
+  authorId: Int
 }
 
 type Mutation {

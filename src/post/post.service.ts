@@ -22,6 +22,9 @@ export class PostService {
         contains: getPostListInput?.title || undefined,
         mode: 'insensitive',
       },
+      authorId: {
+        equals: getPostListInput?.authorId,
+      }
     };
 
     const postCount = await this.prisma.post.count({
@@ -41,7 +44,7 @@ export class PostService {
         id: 'desc',
       },
       where: {
-        ...queryObject
+        ...queryObject,
       },
       include: { author: true },
     });
