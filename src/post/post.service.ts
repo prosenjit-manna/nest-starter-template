@@ -7,6 +7,7 @@ import { ValidationPipe } from 'src/validator.pipe';
 import { GetPostListInput } from './get-post-list-input.dto';
 import { paginationInputTransformer } from 'src/shared/pagination/pagination-input-transform';
 import { PostListResponse } from './post-list-response.dto';
+import { Prisma } from '@prisma/client';
 
 @Resolver()
 export class PostService {
@@ -17,7 +18,7 @@ export class PostService {
     @Args('getPostListInput', { nullable: true })
     getPostListInput: GetPostListInput,
   ) {
-    const queryObject: any = {
+    const queryObject: Prisma.PostWhereInput = {
       title: {
         contains: getPostListInput?.title || undefined,
         mode: 'insensitive',
