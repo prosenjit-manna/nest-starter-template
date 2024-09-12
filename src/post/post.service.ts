@@ -1,31 +1,70 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-import { Post } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
-import { PostResponse } from './post-response.dto';
 import { CreatePostInput } from './create-post.dto';
 import { CreatePostResponse } from './create-post-response.dto';
 import { UsePipes } from '@nestjs/common';
 import { ValidationPipe } from 'src/validator.pipe';
+import { GetPostListInput } from './get-post-list-input.dto';
+import { paginationInputTransformer } from 'src/shared/pagination/pagination-input-transform';
+import { PostListResponse } from './post-list-response.dto';
 
 @Resolver()
 export class PostService {
   constructor(private prisma: PrismaService) {}
 
-  @Query(() => [PostResponse])
-  async getPostList(): Promise<Post[]> {
-    const posts = await this.prisma.post.findMany({ 
-        include: { author: true },
+  @Query(() => PostListResponse)
+  async getPostList(
+    @Args('getPostListInput', { nullable: true })
+    getPostListInput: GetPostListInput,
+  ) {
+    const queryObject: any = {
+      title: {
+        contains: getPostListInput?.title || undefined,
+        mode: 'insensitive',
+      },
+    };
+
+    const postCount = await this.prisma.post.count({
+      where: queryObject,
     });
-    return posts;
+
+    const paginationMeta = paginationInputTransformer({
+      page: getPostListInput?.page,
+      pageSize: getPostListInput?.pageSize,
+      totalRowCount: postCount,
+    });
+
+    const posts = await this.prisma.post.findMany({
+      skip: paginationMeta.skip,
+      take: paginationMeta.perPage,
+      orderBy: {
+        id: 'desc',
+      },
+      where: {
+        ...queryObject
+      },
+      include: { author: true },
+    });
+
+
+    return {
+      posts: posts,
+      pagination: {
+        currentPage: paginationMeta.page,
+        totalPage: paginationMeta.totalPage,
+        perPage: paginationMeta.perPage,
+      }
+    };
   }
 
   @Mutation(() => CreatePostResponse)
   @UsePipes(new ValidationPipe())
   async createPost(
     @Args('createPostInput') createPostInput: CreatePostInput,
-  ): Promise<Post> {
-    const post = await this.prisma.post.create({ data: createPostInput as any });
+  ) {
+    const post = await this.prisma.post.create({
+      data: createPostInput,
+    });
     return post;
   }
-
 }

@@ -2,6 +2,16 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type CreatePostResponse {
+  id: Float!
+}
+
+type PaginationResponse {
+  totalPage: Float!
+  currentPage: Float!
+  perPage: Float!
+}
+
 type UserResponse {
   email: String!
   name: String!
@@ -17,8 +27,9 @@ type PostResponse {
   author: UserResponse!
 }
 
-type CreatePostResponse {
-  id: Float!
+type PostListResponse {
+  posts: [PostResponse!]!
+  pagination: PaginationResponse!
 }
 
 type CreateUserResponse {
@@ -26,8 +37,14 @@ type CreateUserResponse {
 }
 
 type Query {
-  getPostList: [PostResponse!]!
+  getPostList(getPostListInput: GetPostListInput): PostListResponse!
   getUsers: [UserResponse!]!
+}
+
+input GetPostListInput {
+  page: Int
+  pageSize: Int
+  title: String
 }
 
 type Mutation {
