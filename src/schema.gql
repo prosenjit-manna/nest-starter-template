@@ -8,17 +8,38 @@ type UserResponse {
   id: Float!
 }
 
+type PostResponse {
+  title: String!
+  content: String!
+  id: Float!
+  published: Boolean!
+  authorId: Float!
+  author: UserResponse!
+}
+
+type CreatePostResponse {
+  id: Float!
+}
+
 type CreateUserResponse {
   id: Float!
 }
 
 type Query {
+  getPostList: [PostResponse!]!
   getUsers: [UserResponse!]!
 }
 
 type Mutation {
+  createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   createUser(createUserInput: CreateUserInput!): CreateUserResponse!
-  listUser(createUserInput: CreateUserInput!): CreateUserResponse!
+}
+
+input CreatePostInput {
+  title: String!
+  content: String
+  published: Boolean! = false
+  authorId: Int!
 }
 
 input CreateUserInput {

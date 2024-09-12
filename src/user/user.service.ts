@@ -24,17 +24,6 @@ export class UserService {
 
     const user = await this.prisma.user.create({ data: createUserInput });
     return { id: user.id };
-
   }
 
-  @Mutation(() => CreateUserResponse)
-  @UsePipes(new ValidationPipe())
-  async listUser(
-    @Args('createUserInput') createUserInput: CreateUserInput,
-  ): Promise<CreateUserResponse> {
-
-    const user = await this.prisma.user.create({ data: createUserInput });
-    return { id: user.id };
-
-  }
 }
