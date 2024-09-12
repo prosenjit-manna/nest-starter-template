@@ -18,6 +18,7 @@ type Query {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): CreateUserResponse!
+  listUser(createUserInput: CreateUserInput!): CreateUserResponse!
 }
 
 input CreateUserInput {
