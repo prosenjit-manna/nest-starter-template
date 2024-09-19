@@ -32,7 +32,13 @@ export class JwtAuthGuard implements CanActivate {
       const user = await this.prismaService.user.findFirst({
         where: {
           id: payload.userId
-        }
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          UserRole: true,
+        },
       });
       request.user = user;
 

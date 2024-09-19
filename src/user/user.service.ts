@@ -24,17 +24,17 @@ export class UserService {
         id: true,
         email: true,
         name: true,
-        UserRole: {
-          select: {
-            role: true,
-          },
-        },
+        UserRole: true,
       },
     });
-    console.log(JSON.stringify(user));
+
+    if (!user) {
+      throw new Error('User not found');
+    }
     return user;
   }
 
+ 
   @Query(() => [UserResponse])
   async getUsers(): Promise<User[]> {
     const users = await this.prisma.user.findMany();

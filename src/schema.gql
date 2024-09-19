@@ -14,7 +14,8 @@ type baseListResponse {
 
 type UserRole {
   id: String!
-  name: String!
+  userId: String!
+  roleId: String!
 }
 
 type UserResponse {
@@ -42,6 +43,13 @@ type CreateUserResponse {
   id: String!
 }
 
+type CurrentPrivilegeResponse {
+  name: String!
+  type: String!
+  userId: String
+  roleId: String
+}
+
 type LoginResponse {
   id: String!
   token: String!
@@ -51,6 +59,7 @@ type Query {
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
   currentUser: UserResponse!
   getUsers: [UserResponse!]!
+  currentUserPrivileges: [CurrentPrivilegeResponse!]!
   login(loginInput: LoginInput!): LoginResponse!
 }
 

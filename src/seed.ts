@@ -41,7 +41,7 @@ async function main() {
     ],
   });
 
-  const role = await prismaClient.role.findFirst({ where: { name: 'ADMIN' } });
+  const role = await prismaClient.role.findFirst({ where: { name: 'USER' } });
 
   // Assign roles in privileges
   postPrivilege.forEach(async (privilege) => {

@@ -1,14 +1,28 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+
 @ObjectType()
 export class UserRole {
-  @Field() id: string;
-  @Field() name: string;
-}
-@ObjectType()
-export class UserResponse {
-  @Field() email: string;
-  @Field() name: string;
-  @Field() id: string;
-  @Field() role: UserRole[];
+  @Field(() => String)
+  id: string;
+
+  @Field(() => String)
+  userId: string;
+
+  @Field(() => String)
+  roleId: string;
 }
 
+@ObjectType()
+export class UserResponse {
+  @Field(() => String) 
+  email: string;
+
+  @Field(() => String) 
+  name: string;
+
+  @Field(() => String) 
+  id: string;
+
+  @Field(() => [UserRole]) 
+  UserRole: UserRole[];
+}
