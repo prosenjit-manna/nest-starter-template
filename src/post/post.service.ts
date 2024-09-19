@@ -4,11 +4,10 @@ import { CreatePostInput } from './create-post.dto';
 import { CreatePostResponse } from './create-post-response.dto';
 import { UsePipes } from '@nestjs/common';
 import { ValidationPipe } from 'src/validator.pipe';
-import { GetPostListInput } from './get-post-list-input.dto';
-import { paginationInputTransformer } from 'src/shared/pagination/pagination-input-transform';
+import { GetPostListInput} from './get-post-list-input.dto';
 import { PostListResponse } from './post-list-response.dto';
 import { Prisma } from '@prisma/client';
-
+import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';
 @Resolver()
 export class PostService {
   constructor(private prisma: PrismaService) {}
@@ -38,12 +37,14 @@ export class PostService {
       totalRowCount: postCount,
     });
 
+    const orderByQuery = {
+      [getPostListInput.orderByField as string]: getPostListInput.orderBy,
+    };
+
     const posts = await this.prisma.post.findMany({
       skip: paginationMeta.skip,
       take: paginationMeta.perPage,
-      orderBy: {
-        id: 'desc',
-      },
+      orderBy: orderByQuery,
       where: {
         ...queryObject,
       },

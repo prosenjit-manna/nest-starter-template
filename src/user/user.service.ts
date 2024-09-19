@@ -21,6 +21,14 @@ export class UserService {
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<CreateUserResponse> {
+    
+    const result = await this.prisma.user.findFirst(
+      { where: { email: createUserInput.email } },
+    );
+
+    if (result) {
+      throw new Error('User already exists');
+    }
 
     const user = await this.prisma.user.create({ data: createUserInput });
     return { id: user.id };

@@ -6,7 +6,7 @@ type CreatePostResponse {
   id: Float!
 }
 
-type PaginationResponse {
+type baseListResponse {
   totalPage: Float!
   currentPage: Float!
   perPage: Float!
@@ -29,7 +29,7 @@ type PostResponse {
 
 type PostListResponse {
   posts: [PostResponse!]!
-  pagination: PaginationResponse!
+  pagination: baseListResponse!
 }
 
 type CreateUserResponse {
@@ -44,8 +44,22 @@ type Query {
 input GetPostListInput {
   page: Int
   pageSize: Int
+  orderBy: Order! = DESC
   title: String
   authorId: Int
+  orderByField: orderByField! = id
+}
+
+enum Order {
+  ASC
+  DESC
+}
+
+enum orderByField {
+  id
+  title
+  authorId
+  published
 }
 
 type Mutation {
