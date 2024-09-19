@@ -44,10 +44,10 @@ type Query {
 input GetPostListInput {
   page: Int
   pageSize: Int
-  orderBy: Order! = DESC
+  orderBy: Order = DESC
   title: String
   authorId: Int
-  orderByField: orderByField! = id
+  orderByField: orderByField = id
 }
 
 enum Order {

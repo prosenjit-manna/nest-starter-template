@@ -16,6 +16,6 @@ export class BaseListInput {
   @Field(() => Int, { nullable: true })
   pageSize?: number;
 
-  @Field(() => Order, { defaultValue: Order.DESC })
+  @Field(() => Order, { nullable: true, defaultValue: Order.DESC })
   orderBy?: Order;
 }
