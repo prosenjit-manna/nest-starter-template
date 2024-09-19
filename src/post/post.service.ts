@@ -9,11 +9,12 @@ import { PostListResponse } from './post-list-response.dto';
 import { Prisma } from '@prisma/client';
 import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { Order } from 'src/shared/base-list/base-list-input.dto';
 @Resolver()
+@UseGuards(JwtAuthGuard)
 export class PostService {
   constructor(private prisma: PrismaService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Query(() => PostListResponse)
   async getPostList(
     @Args('getPostListInput', { nullable: true })
@@ -39,9 +40,16 @@ export class PostService {
       totalRowCount: postCount,
     });
 
-    const orderByQuery = {
-      [getPostListInput.orderByField as string]: getPostListInput.orderBy,
+    let orderByQuery: any = {
+      id: Order.DESC,
     };
+
+    if (getPostListInput?.orderByField && getPostListInput?.orderBy) {
+      orderByQuery = {
+        [getPostListInput.orderByField as string]: getPostListInput.orderBy,
+      };
+    }
+    
 
     const posts = await this.prisma.post.findMany({
       skip: paginationMeta.skip,

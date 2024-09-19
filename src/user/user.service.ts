@@ -4,9 +4,11 @@ import { PrismaService } from 'src/prisma.service';
 import { UserResponse } from './user.response.dto';
 import { CreateUserInput } from './create-user.dto';
 import { CreateUserResponse } from './create-user-response.dto';
-import { UsePipes } from '@nestjs/common';
+import { UseGuards, UsePipes } from '@nestjs/common';
 import { ValidationPipe } from '../validator.pipe';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Resolver()
 export class UserService {
   constructor(private prisma: PrismaService) {}
