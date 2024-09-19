@@ -4,6 +4,8 @@ export const appEnv = cleanEnv(process.env, {
   PORT: num({ default: 4000 }),
   ADMIN_EMAIL: email({ default: 'admin@example.com' }),
   NODE_ENV: str({ default: 'development', choices: ['development', 'test', 'production', 'staging'] }),
+  SEED_PASSWORD: str({ default: 'SamLauncher@123' }),
+  JSON_TOKEN_SECRET: str({ default: 'SamLauncher@123' }),
 })
 
 // Read an environment variable, which is validated and cleaned during

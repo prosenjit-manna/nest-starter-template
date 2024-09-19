@@ -36,9 +36,15 @@ type CreateUserResponse {
   id: Float!
 }
 
+type LoginResponse {
+  id: Float!
+  token: String!
+}
+
 type Query {
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
   getUsers: [UserResponse!]!
+  login(loginInput: LoginInput!): LoginResponse!
 }
 
 input GetPostListInput {
@@ -60,6 +66,11 @@ enum orderByField {
   title
   authorId
   published
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 type Mutation {

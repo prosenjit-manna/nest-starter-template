@@ -7,6 +7,7 @@ import { join } from 'path';
 
 import { PrismaService } from './prisma.service';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserModule } from './user/user.module';
       csrfPrevention: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
+    AuthModule,
   ],
   controllers: [],
   providers: [PrismaService],
