@@ -2,16 +2,18 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { PrismaService } from 'src/prisma.service';
 import { CreatePostInput } from './create-post.dto';
 import { CreatePostResponse } from './create-post-response.dto';
-import { UsePipes } from '@nestjs/common';
+import { UseGuards, UsePipes } from '@nestjs/common';
 import { ValidationPipe } from 'src/validator.pipe';
 import { GetPostListInput} from './get-post-list-input.dto';
 import { PostListResponse } from './post-list-response.dto';
 import { Prisma } from '@prisma/client';
 import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 @Resolver()
 export class PostService {
   constructor(private prisma: PrismaService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Query(() => PostListResponse)
   async getPostList(
     @Args('getPostListInput', { nullable: true })
