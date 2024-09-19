@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Privilege" ALTER COLUMN "type" DROP NOT NULL,
+ALTER COLUMN "type" SET DEFAULT 'DEFAULT';

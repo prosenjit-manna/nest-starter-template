@@ -1,5 +1,6 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from '@prisma/client';
+import { Request } from 'express';
 import { PrismaService } from 'src/prisma.service';
 import { UserResponse } from './user.response.dto';
 import { CreateUserInput } from './create-user.dto';
@@ -12,6 +13,28 @@ import { JwtAuthGuard } from 'src/auth/auth.guard';
 @Resolver()
 export class UserService {
   constructor(private prisma: PrismaService) {}
+
+  @Query(() => UserResponse)
+  async currentUser(@Context('req') req: Request) {
+    const user = await this.prisma.user.findFirst({ 
+      where: {
+        id: req.jwt.userId
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        UserRole: {
+          select: {
+            role: true,
+          },
+        },
+      },
+    });
+    console.log(JSON.stringify(user));
+    return user;
+  }
+
   @Query(() => [UserResponse])
   async getUsers(): Promise<User[]> {
     const users = await this.prisma.user.findMany();

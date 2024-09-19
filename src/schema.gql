@@ -12,10 +12,16 @@ type baseListResponse {
   perPage: Float!
 }
 
+type UserRole {
+  id: String!
+  name: String!
+}
+
 type UserResponse {
   email: String!
   name: String!
-  id: Float!
+  id: String!
+  UserRole: [UserRole!]!
 }
 
 type PostResponse {
@@ -33,16 +39,17 @@ type PostListResponse {
 }
 
 type CreateUserResponse {
-  id: Float!
+  id: String!
 }
 
 type LoginResponse {
-  id: Float!
+  id: String!
   token: String!
 }
 
 type Query {
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
+  currentUser: UserResponse!
   getUsers: [UserResponse!]!
   login(loginInput: LoginInput!): LoginResponse!
 }

@@ -15,6 +15,6 @@ export class CreatePostInput {
   published: boolean = false;
 
   @Field(() => Int, { nullable: false })
-  authorId: number;
+  authorId: string;
   
 }

@@ -19,7 +19,7 @@ export class GetPostListInput extends BaseListInput {
   title: string;
 
   @Field(() => Int, { nullable: true })
-  authorId: number;
+  authorId: string;
 
   @Field(() => PostListOrderByField, { nullable: true, defaultValue: PostListOrderByField.id })
   orderByField?: PostListOrderByField;
