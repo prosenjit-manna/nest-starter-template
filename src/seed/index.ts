@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import _ from 'lodash';
 import { faker } from '@faker-js/faker';
 import bcrypt from 'bcrypt';
-import appEnv from './env';
+import appEnv from '../env';
 
 const prismaClient = new PrismaClient();
 

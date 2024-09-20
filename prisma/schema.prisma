@@ -31,11 +31,25 @@ model UserPrivilege {
 enum PrivilegeType {
   CUSTOM
   DEFAULT
+  BASE
+}
+
+enum PrivilegeName {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+}
+
+enum PrivilegeGroup {
+  POST
+  USER
 }
 
 model Privilege {
   id     String        @id @default(uuid())
-  name   String
+  name   PrivilegeName
+  group  PrivilegeGroup
   type   PrivilegeType? @default(DEFAULT)
   user   User?         @relation(fields: [usreId], references: [id])
   usreId String?

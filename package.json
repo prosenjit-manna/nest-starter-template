@@ -22,7 +22,7 @@
     "prisma:generate": "prisma generate",
     "prisma": "prisma",
     "tsx": "tsx",
-    "db:seed": "npm run tsx src/seed.ts"
+    "db:seed": "npm run tsx src/seed/index.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.11.0",
