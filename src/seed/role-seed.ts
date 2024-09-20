@@ -1,4 +1,5 @@
 import {
+  Prisma,
   PrismaClient,
   PrivilegeGroup,
   PrivilegeName,
@@ -13,44 +14,35 @@ export async function roleSeed() {
   await prismaClient.privilege.deleteMany();
   await prismaClient.role.deleteMany();
 
+  // create privileges data
+  const privilegeData: Prisma.PrivilegeCreateManyInput | Prisma.PrivilegeCreateManyInput[] = [];
+  const models = [PrivilegeGroup.POST, PrivilegeGroup.USER];
+  models.forEach((model) => {
+    [PrivilegeName.CREATE, PrivilegeName.DELETE, PrivilegeName.UPDATE, PrivilegeName.READ].forEach((name) => {
+      privilegeData.push({
+        name,
+        group: model,
+        type: PrivilegeType.BASE,
+      });
+    });
+  });
 
   // Create privileges
   await prismaClient.privilege.createMany({
-    data: [
-      {
-        name: PrivilegeName.CREATE,
-        group: PrivilegeGroup.POST,
-        type: PrivilegeType.BASE,
-      },
-      {
-        name: PrivilegeName.DELETE,
-        group: PrivilegeGroup.POST,
-        type: PrivilegeType.BASE,
-      },
-      {
-        name: PrivilegeName.UPDATE,
-        group: PrivilegeGroup.POST,
-        type: PrivilegeType.BASE,
-      },
-      {
-        name: PrivilegeName.READ,
-        group: PrivilegeGroup.POST,
-        type: PrivilegeType.BASE,
-      },
-    ],
+    data: privilegeData,
   });
+
   // Create roles
+  const rolesData: Prisma.RoleCreateManyInput | Prisma.RoleCreateManyInput[] = [];
+  [RoleName.ADMIN, RoleName.USER].forEach((name) => {
+    rolesData.push({
+      name,
+      title: name.toLowerCase().replace('_', ' '),
+    });
+  });
+  
   await prismaClient.role.createMany({
-    data: [
-      {
-        name: 'ADMIN',
-        title: 'Admin',
-      },
-      {
-        name: 'USER',
-        title: 'User',
-      },
-    ],
+    data: []
   });
 
   //  find base privileges
@@ -66,6 +58,7 @@ export async function roleSeed() {
       name: RoleName.ADMIN,
     },
   });
+  
   if (adminRole) {
     // Attach all privileges to admin role
     await prismaClient.rolePrivilege.createMany({
