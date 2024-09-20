@@ -1,6 +1,7 @@
 import { postSeed } from './post-seed';
 import { roleSeed } from './role-seed';
 import { userSeed } from './user-seed';
+import { workSpaceSeed } from './workspace-seed';
 async function main() {
   try {
     await roleSeed();
@@ -21,6 +22,13 @@ async function main() {
     console.log('Post Seed Success');
   } catch (error) {
     console.error('Failed Post Seed', error);
+  }
+
+  try {
+    await workSpaceSeed();
+    console.log('Workspace Success');
+  } catch (error) {
+    console.error('Failed workspace Seed', error);
   }
 }
 

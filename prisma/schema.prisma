@@ -32,6 +32,7 @@ enum PrivilegeGroup {
 }
 
 enum RoleName {
+  SUPER_ADMIN
   ADMIN
   USER
 }

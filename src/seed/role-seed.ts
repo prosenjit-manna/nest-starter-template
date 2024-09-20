@@ -34,7 +34,7 @@ export async function roleSeed() {
 
   // Create roles
   const rolesData: Prisma.RoleCreateManyInput | Prisma.RoleCreateManyInput[] = [];
-  [RoleName.ADMIN, RoleName.USER].forEach((name) => {
+  [RoleName.SUPER_ADMIN, RoleName.ADMIN, RoleName.USER].forEach((name) => {
     rolesData.push({
       name,
       title: name.toLowerCase().replace('_', ' '),
@@ -51,6 +51,25 @@ export async function roleSeed() {
       type: PrivilegeType.BASE,
     },
   });
+
+
+  // find super admin role
+  const superAdminRole = await prismaClient.role.findFirst({
+    where: {
+      name: RoleName.SUPER_ADMIN,
+    },
+  });
+  
+  if (superAdminRole) {
+    // Attach all privileges to super admin role
+    await prismaClient.rolePrivilege.createMany({
+      data: basePrivileges.map((privilege) => ({
+        roleId: superAdminRole.id,
+        privilegeId: privilege.id,
+      })),
+    });
+  }
+
 
   // find admin role
   const adminRole = await prismaClient.role.findFirst({
