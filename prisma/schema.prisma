@@ -42,6 +42,11 @@ enum UserType {
   USER
 }
 
+enum userStatus {
+  ACTIVE
+  INACTIVE
+}
+
 model Privilege {
   id        String          @id @default(uuid())
   name      PrivilegeName
@@ -91,6 +96,7 @@ model User {
   email               String                @unique
   name                String?
   password            String?
+  userStatus         userStatus             @default(ACTIVE)
   userType            UserType              @default(USER)
   posts               Post[]
   roles               UserRole[]            @relation(name: "userRoleRleation")

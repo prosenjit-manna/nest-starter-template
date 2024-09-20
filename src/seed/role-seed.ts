@@ -42,7 +42,7 @@ export async function roleSeed() {
   });
   
   await prismaClient.role.createMany({
-    data: []
+    data: rolesData
   });
 
   //  find base privileges

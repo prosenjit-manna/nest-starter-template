@@ -2,6 +2,8 @@ import { PrismaClient, RoleName, UserType } from '@prisma/client';
 import appEnv from 'src/env';
 const prismaClient = new PrismaClient();
 import * as bcrypt from 'bcrypt';
+import { faker } from '@faker-js/faker';
+
 export async function userSeed() {
   // Delete all users
   await prismaClient.user.deleteMany();
@@ -21,6 +23,7 @@ export async function userSeed() {
 
   await prismaClient.user.create({
     data: {
+      name: faker.person.fullName(),
       email: adminEmail,
       password: hashedPassword,
       userType: UserType.SUPER_ADMIN,
