@@ -48,6 +48,11 @@ enum userStatus {
   INACTIVE
 }
 
+enum workspaceStatus {
+  ACTIVE
+  INACTIVE
+}
+
 model Privilege {
   id        String          @id @default(uuid())
   name      PrivilegeName
@@ -113,6 +118,7 @@ model Workspace {
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @updatedAt
   deletedAt           DateTime?
+  workspaceStatus     workspaceStatus       @default(ACTIVE)
   workspaceMembership WorkspaceMembership[] @relation(name: "workspaceIdMembershipRelation")
 }
 
