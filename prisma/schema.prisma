@@ -118,9 +118,9 @@ model Workspace {
 
 model WorkspaceMembership {
   id          String    @id @default(uuid())
-  user        User      @relation(name: "userIdMembershipRelation", fields: [userId], references: [id])
+  user        User      @relation(name: "userIdMembershipRelation", fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  workspace   Workspace @relation(name: "workspaceIdMembershipRelation", fields: [workspaceId], references: [id])
+  workspace   Workspace @relation(name: "workspaceIdMembershipRelation", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

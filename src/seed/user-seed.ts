@@ -47,7 +47,7 @@ export async function userSeed() {
   }
 
   // Create Admin users
-  _.range(0, 2).forEach(async (i) => {
+  for (const i of _.range(0, 2)) {
     const email = `${appEnv.SEED_EMAIL.split('@')[0]}+admin-${i}@${appEnv.SEED_EMAIL.split('@')[1]}`;
     await prismaClient.user.create({
       data: {
@@ -57,7 +57,8 @@ export async function userSeed() {
         userType: UserType.ADMIN,
       },
     });
-  });
+  }
+  
 
 
   // get admin roles
@@ -81,5 +82,42 @@ export async function userSeed() {
       });
     });
   }
+
+
+  // Create  users
+  for (const i of _.range(0, 2)) {
+    const email = `${appEnv.SEED_EMAIL.split('@')[0]}+user-${i}@${appEnv.SEED_EMAIL.split('@')[1]}`;
+    await prismaClient.user.create({
+      data: {
+        name: faker.person.fullName(),
+        email,
+        password: hashedPassword,
+        userType: UserType.USER,
+      },
+    });
+  }
+  
+  // get user role
+  const userRole = await prismaClient.role.findFirst({
+    where: { name: RoleName.USER },
+  });
+
+  // Get  Users
+  const users = await prismaClient.user.findMany({
+    where: { userType: UserType.USER },
+  });
+
+   // Attach Role 
+   if (users && userRole) {
+    users.forEach(async (user) => {
+      await prismaClient.userRole.create({
+        data: {
+          userId: user?.id,
+          roleId: userRole?.id,
+        },
+      });
+    });
+  }
+
   
 }

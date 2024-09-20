@@ -88,4 +88,34 @@ export async function roleSeed() {
     });
   }
 
+
+  const userRolePrivileges = await prismaClient.privilege.findMany({
+    where: {
+      type: PrivilegeType.BASE,
+      group: {
+        in: [PrivilegeGroup.POST, PrivilegeGroup.USER],
+      },
+      name: {
+        in: [PrivilegeName.READ],
+      }
+    },
+  });
+
+  // find user role
+  const userRole = await prismaClient.role.findFirst({
+    where: {
+      name: RoleName.USER,
+    },
+  });
+  
+  if (userRole) {
+    // Attach all privileges to admin role
+    await prismaClient.rolePrivilege.createMany({
+      data: userRolePrivileges.map((privilege) => ({
+        roleId: userRole.id,
+        privilegeId: privilege.id,
+      })),
+    });
+  }
+
 }

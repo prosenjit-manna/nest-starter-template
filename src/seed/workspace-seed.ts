@@ -28,6 +28,7 @@ export async function workSpaceSeed() {
     },
   });
 
+
   // Attach membership
   const membershipData:
     | Prisma.WorkspaceMembershipCreateManyInput
