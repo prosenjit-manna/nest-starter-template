@@ -32,12 +32,10 @@ export async function workSpaceSeed() {
   const membershipData:
     | Prisma.WorkspaceMembershipCreateManyInput
     | Prisma.WorkspaceMembershipCreateManyInput[] = [];
-  adminUser.forEach((user) => {
-    workspaces.forEach((workspace) => {
-      membershipData.push({
-        workspaceId: workspace.id,
-        userId: user.id,
-      });
+  adminUser.forEach((user, i) => {
+    membershipData.push({
+      workspaceId: workspaces[i].id,
+      userId: user.id,
     });
   });
   await prismaClient.workspaceMembership.createMany({
