@@ -5,6 +5,7 @@ export const appEnv = cleanEnv(process.env, {
   ADMIN_EMAIL: email({ default: 'admin@example.com' }),
   NODE_ENV: str({ default: 'development', choices: ['development', 'test', 'production', 'staging'] }),
   SEED_PASSWORD: str({ default: 'SamLauncher@123' }),
+  SEED_EMAIL: email({ default: 'example@exanple.com' }),
   JSON_TOKEN_SECRET: str({ default: 'SamLauncher@123' }),
 })
 

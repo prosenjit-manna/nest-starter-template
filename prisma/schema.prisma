@@ -13,21 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Role {
-  id        String      @id @default(uuid())
-  name      String      @unique
-  UserRole  UserPrivilege[]
-  Privilege Privilege[]
-}
-
-model UserPrivilege {
-  id     String  @id @default(uuid())
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String?
-  role   Role?   @relation(fields: [roleId], references: [id])
-  roleId String?
-}
-
 enum PrivilegeType {
   CUSTOM
   DEFAULT
@@ -46,25 +31,50 @@ enum PrivilegeGroup {
   USER
 }
 
+enum RoleName {
+  ADMIN
+  USER
+}
+
 model Privilege {
-  id     String        @id @default(uuid())
-  name   PrivilegeName
-  group  PrivilegeGroup
-  type   PrivilegeType? @default(DEFAULT)
-  user   User?         @relation(fields: [usreId], references: [id])
-  usreId String?
-  role   Role?         @relation(fields: [roleId], references: [id])
-  roleId String?
+  id    String          @id @default(uuid())
+  name  PrivilegeName
+  group PrivilegeGroup
+  type  PrivilegeType?  @default(BASE)
+  roles RolePrivilege[] @relation("privilegeRelation")
+}
+
+model Role {
+  id         String          @id @default(uuid())
+  name       RoleName        @default(USER)
+  title      String
+  privileges RolePrivilege[] @relation("rolePrivelegeRelation")
+  users   UserRole[] @relation("roleUserRelation")
+}
+
+model RolePrivilege {
+  id          String    @id @default(uuid())
+  role        Role      @relation(name: "rolePrivelegeRelation", fields: [roleId], references: [id], onDelete: Cascade)
+  roleId      String
+  privilege   Privilege @relation(name: "privilegeRelation", fields: [privilegeId], references: [id], onDelete: Cascade)
+  privilegeId String
+}
+
+model UserRole {
+  id     String @id @default(uuid())
+  user   User   @relation(name: "userRoleRleation", fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  role   Role   @relation(name: "roleUserRelation", fields: [roleId], references: [id], onDelete: Cascade)
+  roleId String
 }
 
 model User {
-  id        String      @id @default(uuid())
-  email     String      @unique
-  name      String?
-  password  String?
-  posts     Post[]
-  UserRole  UserPrivilege[]
-  Privilege Privilege[]
+  id       String     @id @default(uuid())
+  email    String     @unique
+  name     String?
+  password String?
+  posts    Post[]
+  roles    UserRole[] @relation(name: "userRoleRleation")
 }
 
 model Post {
