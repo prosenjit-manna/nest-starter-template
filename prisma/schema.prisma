@@ -36,12 +36,21 @@ enum RoleName {
   USER
 }
 
+enum UserType {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
 model Privilege {
-  id    String          @id @default(uuid())
-  name  PrivilegeName
-  group PrivilegeGroup
-  type  PrivilegeType?  @default(BASE)
-  roles RolePrivilege[] @relation("privilegeRelation")
+  id        String          @id @default(uuid())
+  name      PrivilegeName
+  group     PrivilegeGroup
+  type      PrivilegeType?  @default(BASE)
+  roles     RolePrivilege[] @relation("privilegeRelation")
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  deletedAt DateTime?
 }
 
 model Role {
@@ -49,7 +58,10 @@ model Role {
   name       RoleName        @default(USER)
   title      String
   privileges RolePrivilege[] @relation("rolePrivelegeRelation")
-  users   UserRole[] @relation("roleUserRelation")
+  users      UserRole[]      @relation("roleUserRelation")
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  deletedAt  DateTime?
 }
 
 model RolePrivilege {
@@ -58,30 +70,64 @@ model RolePrivilege {
   roleId      String
   privilege   Privilege @relation(name: "privilegeRelation", fields: [privilegeId], references: [id], onDelete: Cascade)
   privilegeId String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
 }
 
 model UserRole {
-  id     String @id @default(uuid())
-  user   User   @relation(name: "userRoleRleation", fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-  role   Role   @relation(name: "roleUserRelation", fields: [roleId], references: [id], onDelete: Cascade)
-  roleId String
+  id        String    @id @default(uuid())
+  user      User      @relation(name: "userRoleRleation", fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  role      Role      @relation(name: "roleUserRelation", fields: [roleId], references: [id], onDelete: Cascade)
+  roleId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
 
 model User {
-  id       String     @id @default(uuid())
-  email    String     @unique
-  name     String?
-  password String?
-  posts    Post[]
-  roles    UserRole[] @relation(name: "userRoleRleation")
+  id                  String                @id @default(uuid())
+  email               String                @unique
+  name                String?
+  password            String?
+  userType            UserType              @default(USER)
+  posts               Post[]
+  roles               UserRole[]            @relation(name: "userRoleRleation")
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  deletedAt           DateTime?
+  workspaceMembership WorkspaceMembership[] @relation(name: "userIdMembershipRelation")
+}
+
+model Workspace {
+  id                  String                @id @default(uuid())
+  name                String
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  deletedAt           DateTime?
+  workspaceMembership WorkspaceMembership[] @relation(name: "workspaceIdMembershipRelation")
+}
+
+model WorkspaceMembership {
+  id          String    @id @default(uuid())
+  user        User      @relation(name: "userIdMembershipRelation", fields: [userId], references: [id])
+  userId      String
+  workspace   Workspace @relation(name: "workspaceIdMembershipRelation", fields: [workspaceId], references: [id])
+  workspaceId String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
 }
 
 model Post {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   title     String
   content   String?
-  published Boolean? @default(false)
-  author    User?    @relation(fields: [authorId], references: [id])
+  published Boolean?  @default(false)
+  author    User?     @relation(fields: [authorId], references: [id])
   authorId  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }

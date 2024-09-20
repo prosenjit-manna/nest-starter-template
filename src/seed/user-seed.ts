@@ -1,4 +1,4 @@
-import { PrismaClient, RoleName } from '@prisma/client';
+import { PrismaClient, RoleName, UserType } from '@prisma/client';
 import appEnv from 'src/env';
 const prismaClient = new PrismaClient();
 import * as bcrypt from 'bcrypt';
@@ -15,7 +15,7 @@ export async function userSeed() {
 
 
   // Create Admin users
-  const adminEmail = `${appEnv.SEED_EMAIL.split('@')[0]}+admin@${appEnv.SEED_EMAIL.split('@')[1]}`;
+  const adminEmail = `${appEnv.SEED_EMAIL.split('@')[0]}+super-admin@${appEnv.SEED_EMAIL.split('@')[1]}`;
   
   const hashedPassword = bcrypt.hashSync(appEnv.SEED_PASSWORD, 10);
 
@@ -23,6 +23,7 @@ export async function userSeed() {
     data: {
       email: adminEmail,
       password: hashedPassword,
+      userType: UserType.SUPER_ADMIN,
     },
   });
 
