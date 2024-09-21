@@ -26,3 +26,6 @@
 - Google analytics 
 - Documentation 
 - E2E
+
+## Docs 
+- Development notes - docs/development.md
