@@ -8,11 +8,6 @@ declare global {
         id: string;
         email: string;
         name: string | null;
-        UserRole: {
-          id: string;
-          userId: string | null;
-          roleId: string | null;
-        }[];
       } | null;
     }
   }
