@@ -14,6 +14,8 @@
 - Multi tenancy
 - Email Template 
 - File manager 
+- Subscription 
+- Payment gateway implementation 
 - DB based translation 
 - Audit 
 - App notification 
