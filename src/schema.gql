@@ -48,6 +48,10 @@ type LoginResponse {
   token: String!
 }
 
+type SignupResponse {
+  id: String!
+}
+
 type Query {
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
   currentUser: UserResponse!
@@ -84,6 +88,7 @@ input LoginInput {
 type Mutation {
   createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   createUser(createUserInput: CreateUserInput!): CreateUserResponse!
+  signup(signupInput: SignupInput!): SignupResponse!
 }
 
 input CreatePostInput {
@@ -96,4 +101,9 @@ input CreatePostInput {
 input CreateUserInput {
   email: String!
   name: String
+}
+
+input SignupInput {
+  email: String!
+  password: String!
 }
