@@ -103,6 +103,8 @@ model User {
   name                String?
   password            String?
   verificationToken    String?
+  refreshToken  String? 
+  refreshTokenExpiry DateTime?
   userStatus          userStatus            @default(ACTIVE)
   userType            UserType              @default(USER)
   posts               Post[]

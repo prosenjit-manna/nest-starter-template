@@ -52,6 +52,11 @@ type SignupResponse {
   id: String!
 }
 
+type VerifyEmailResponse {
+  token: String!
+  refreshToken: String!
+}
+
 type Query {
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
   currentUser: UserResponse!
@@ -89,6 +94,8 @@ type Mutation {
   createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   createUser(createUserInput: CreateUserInput!): CreateUserResponse!
   signup(signupInput: SignupInput!): SignupResponse!
+  verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
+  refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
 }
 
 input CreatePostInput {
@@ -106,4 +113,12 @@ input CreateUserInput {
 input SignupInput {
   email: String!
   password: String!
+}
+
+input VerifyEmailInput {
+  token: String!
+}
+
+input RefreshAccessTokenInput {
+  refreshToken: String!
 }
