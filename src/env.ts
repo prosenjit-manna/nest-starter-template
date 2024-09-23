@@ -8,7 +8,6 @@ export const appEnv = cleanEnv(process.env, {
   SEED_PASSWORD: str({ default: 'SamLauncher@123' }),
   SEED_EMAIL: email({ default: 'example@exanple.com' }),
   JSON_TOKEN_SECRET: str({ default: 'SamLauncher@123' }),
-  JSON_REFRESH_TOKEN_EXPIRY: str({ default: '7d' }),
   CORS_ORIGIN: str({ default: '*', desc: 'Comma separated list of origins examples http://localhost:4000,http://localhost:3000' }),
   BACKEND_URL: str({ default: 'http://localhost' }),
   FRONTEND_URL: str({ default: 'http://localhost:3000' }),

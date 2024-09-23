@@ -46,6 +46,7 @@ type CreateUserResponse {
 type LoginResponse {
   id: String!
   token: String!
+  refreshToken: String!
 }
 
 type SignupResponse {

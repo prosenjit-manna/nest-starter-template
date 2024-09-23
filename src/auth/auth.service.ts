@@ -14,6 +14,7 @@ import { VerifyEmailInput } from './verify-email-input.dto';
 import { VerifyEmailResponse } from './verify-email-response.dto';
 import { User } from '@prisma/client';
 import { RefreshAccessTokenInput } from './refresh-access-token.dto';
+import { addDays } from 'date-fns';
 
 @Resolver()
 export class AuthService {
@@ -29,14 +30,10 @@ export class AuthService {
       { secret: appEnv.JSON_TOKEN_SECRET },
     );
 
-    const refreshToken = await this.jwtService.signAsync(
-      { userId: user.id },
-      {
-        secret: appEnv.JSON_TOKEN_SECRET,
-      },
-    );
+    const refreshToken =  await bcrypt.hash(randomBytes(5), 10);
+    const expiryDate = addDays(new Date(), 7).toISOString();
 
-    return { token, refreshToken };
+    return { token, refreshToken, expiryDate };
   }
 
   @Query(() => LoginResponse)
@@ -63,11 +60,22 @@ export class AuthService {
       throw new Error('Invalid email or password');
     }
 
-    const token = await this.generateToken(user);
+    const {token, expiryDate, refreshToken} = await this.generateToken(user);
+
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        refreshToken: refreshToken,
+        refreshTokenExpiry: expiryDate,
+      }
+    });
 
     return {
       id: user?.id,
-      token: token,
+      token,
+      refreshToken
     };
   }
 
@@ -122,13 +130,14 @@ export class AuthService {
       throw new Error('Invalid token');
     }
 
-    const { token, refreshToken } =
+    const { token, refreshToken, expiryDate } =
       await this.generateToken(user);
 
     await this.prisma.user.update({
       where: { id: user.id },
       data: {
         refreshToken: refreshToken,
+        refreshTokenExpiry: expiryDate,
       },
     });
 
@@ -150,21 +159,17 @@ export class AuthService {
       throw new Error('Invalid refresh token');
     }
 
-    const isValid = await bcrypt.compare(
-      refreshAccessToken.refreshToken,
-      String(user?.refreshToken),
-    );
-
-    if (!isValid) {
+    if (!user ||  user.refreshTokenExpiry && new Date() > user.refreshTokenExpiry) {
       throw new Error('Invalid refresh token');
     }
 
-    const { token, refreshToken } = await this.generateToken(user);
+    const { token, refreshToken, expiryDate } = await this.generateToken(user);
 
     await this.prisma.user.update({
       where: { id: user.id },
       data: {
         refreshToken: refreshToken,
+        refreshTokenExpiry: expiryDate
       },
     });
 
