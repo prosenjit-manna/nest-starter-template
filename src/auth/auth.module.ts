@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
 import { AuthService } from './auth.service';
 import appEnv from 'src/env';
+import { MailerModule } from 'src/mailer/mailer.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import appEnv from 'src/env';
       secret: appEnv.JSON_TOKEN_SECRET,
       signOptions: { expiresIn: '60s' },
     }),
+    MailerModule
   ],
   providers: [AuthService, PrismaService, JwtService],
 })

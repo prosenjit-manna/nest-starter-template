@@ -9,6 +9,20 @@ export const appEnv = cleanEnv(process.env, {
   SEED_EMAIL: email({ default: 'example@exanple.com' }),
   JSON_TOKEN_SECRET: str({ default: 'SamLauncher@123' }),
   CORS_ORIGIN: str({ default: '*', desc: 'Comma separated list of origins examples http://localhost:4000,http://localhost:3000' }),
+  BACKEND_URL: str({ default: 'http://localhost' }),
+  FRONTEND_URL: str({ default: 'http://localhost:3000' }),
+
+
+   // SMTP
+   SMTP_HOST: str({ desc: 'SMTP HOST' }),
+   SMTP_USER: str({ desc: 'SMTP User' }),
+   SMTP_PASSWORD: str({ desc: 'SMTP Password' }),
+   SMTP_PORT: num({ desc: 'SMTP Port' }),
+   SMTP_SENDER: str({ desc: 'Sender Email' }),
+
+  //  Mail sending
+  MAIL_FROM_USER: str({ desc: 'Mail from user' }),
+  MAIL_FROM_EMAIL: str({ desc: 'Mail from email' }),
 })
 
 // Read an environment variable, which is validated and cleaned during

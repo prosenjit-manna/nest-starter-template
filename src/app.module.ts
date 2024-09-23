@@ -8,9 +8,13 @@ import { join } from 'path';
 import { PrismaService } from './prisma.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'), // path to public directory
+    }),
     PostModule,
     UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
