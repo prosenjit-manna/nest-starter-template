@@ -37,11 +37,6 @@ type CreateUserResponse {
   id: String!
 }
 
-type VerifyEmailResponse {
-  token: String!
-  refreshToken: String!
-}
-
 type PassWordResetRequestResponse {
   message: String!
 }
@@ -58,6 +53,11 @@ type LoginResponse {
 
 type SignupResponse {
   id: String!
+}
+
+type VerifyEmailResponse {
+  token: String!
+  refreshToken: String!
 }
 
 type Query {
@@ -96,11 +96,11 @@ input LoginInput {
 type Mutation {
   createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   createUser(createUserInput: CreateUserInput!): CreateUserResponse!
-  verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
-  refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
   requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
   resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
   signup(signupInput: SignupInput!): SignupResponse!
+  verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
+  refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
 }
 
 input CreatePostInput {
@@ -115,14 +115,6 @@ input CreateUserInput {
   name: String
 }
 
-input VerifyEmailInput {
-  token: String!
-}
-
-input RefreshAccessTokenInput {
-  refreshToken: String!
-}
-
 input PasswordResetRequestInput {
   email: String!
 }
@@ -134,4 +126,12 @@ input PasswordResetInput {
 input SignupInput {
   email: String!
   password: String!
+}
+
+input VerifyEmailInput {
+  token: String!
+}
+
+input RefreshAccessTokenInput {
+  refreshToken: String!
 }
