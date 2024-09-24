@@ -2,12 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { Args, Mutation } from '@nestjs/graphql';
 import { MailerService } from 'src/mailer/mailer.service';
 import { PrismaService } from 'src/prisma.service';
-import { TokenService } from '../token.service';
-import { SignupResponse } from './singup-response.dto';
+import { SignupResponse } from './signup-response.dto';
 import { SignupInput } from './signup-input.dto';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
-import { VerifyRegisterEmailContent } from '../verify-register-email-content.interface';
+import { VerifyRegisterEmailContent } from './verify-register-email-content.interface';
 import appEnv from 'src/env';
 
 @Injectable()

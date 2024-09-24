@@ -9,6 +9,7 @@ import appEnv from 'src/env';
 import { MailerModule } from 'src/mailer/mailer.module';
 import { LoginService } from './login/login.service';
 import { SignupService } from './signup/signup.service';
+import { VerifyEmailService } from './verify-email/verify-email.service';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { SignupService } from './signup/signup.service';
     PasswordResetService,
     TokenService,
     LoginService,
-    SignupService
+    SignupService,
+    VerifyEmailService,
   ],
 })
 export class AuthModule {}
