@@ -1,3 +1,4 @@
+import { RoleModule } from './roles/role.module';
 import { PostModule } from './post/post.module';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { Module } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
+    RoleModule,
     PostModule,
     UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -30,6 +32,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
   ],
   controllers: [],
-  providers: [PrismaService],
+  providers: [ PrismaService],
 })
 export class AppModule {}

@@ -2,14 +2,25 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type CreatePostResponse {
-  id: Float!
-}
-
 type baseListResponse {
   totalPage: Float!
   currentPage: Float!
   perPage: Float!
+}
+
+type RoleResponse {
+  title: String!
+  name: String!
+  id: String!
+}
+
+type RoleListResponse {
+  role: [RoleResponse!]!
+  pagination: baseListResponse!
+}
+
+type CreatePostResponse {
+  id: Float!
 }
 
 type PostResponse {
@@ -61,10 +72,32 @@ type VerifyEmailResponse {
 }
 
 type Query {
+  roleList(roleListInput: RoleListInput): RoleListResponse!
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
   currentUser: CurrentUserResponse!
   getUsers: [CurrentUserResponse!]!
   login(loginInput: LoginInput!): LoginResponse!
+}
+
+input RoleListInput {
+  page: Int
+  pageSize: Int
+  orderBy: Order = DESC
+  title: String
+  authorId: Int
+  orderByField: roleOrderByField = id
+}
+
+enum Order {
+  ASC
+  DESC
+}
+
+enum roleOrderByField {
+  id
+  title
+  authorId
+  published
 }
 
 input GetPostListInput {
@@ -74,11 +107,6 @@ input GetPostListInput {
   title: String
   authorId: Int
   orderByField: orderByField = id
-}
-
-enum Order {
-  ASC
-  DESC
 }
 
 enum orderByField {

@@ -4,7 +4,7 @@ export function paginationInputTransformer(options: {
   page?: number;
   pageSize?: number;
   totalRowCount?: number;
-}): { skip: number; page: number; perPage: number, totalPage?: number} {
+}): { skip: number; page: number; perPage: number, totalPage: number} {
   let skip = 0;
   const page = Number(options?.page) || 0;
   const perPage = Number(options?.pageSize) || appConfig.pageSize;
@@ -18,6 +18,6 @@ export function paginationInputTransformer(options: {
     skip,
     page: page ? page : page + 1,
     perPage: perPage,
-    totalPage: Math.ceil(Number(options?.totalRowCount) / perPage),
+    totalPage: Math.ceil(Number(options?.totalRowCount) / perPage) || 0,
   };
 }
