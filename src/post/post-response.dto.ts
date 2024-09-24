@@ -4,7 +4,7 @@ import { Field, ObjectType } from "@nestjs/graphql";
 export class PostResponse {
   @Field() title: string;
   @Field() content: string;
-  @Field() id: number;
+  @Field() id: string;
   @Field() published: boolean;
-  @Field() authorId: number;
+  @Field() authorId: string;
 }

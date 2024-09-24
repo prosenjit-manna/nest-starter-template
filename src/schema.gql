@@ -26,14 +26,18 @@ type RoleCreateResponse {
 type PostResponse {
   title: String!
   content: String!
-  id: Float!
+  id: String!
   published: Boolean!
-  authorId: Float!
+  authorId: String!
 }
 
 type PostListResponse {
   posts: [PostResponse!]!
   pagination: baseListResponse!
+}
+
+type UpdatePostResponse {
+  id: String!
 }
 
 type CurrentUserResponse {
@@ -120,6 +124,7 @@ input LoginInput {
 
 type Mutation {
   createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
+  updatePost(postId: String!, updatePostInput: UpdatePostInput!): UpdatePostResponse!
   createUser(createUserInput: CreateUserInput!): CreateUserResponse!
   requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
   resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
@@ -138,6 +143,13 @@ enum RoleName {
   ADMIN
   USER
   CUSTOM
+}
+
+input UpdatePostInput {
+  title: String
+  content: String
+  published: Boolean! = false
+  authorId: String
 }
 
 input CreateUserInput {
