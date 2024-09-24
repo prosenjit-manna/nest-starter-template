@@ -12,31 +12,24 @@ type baseListResponse {
   perPage: Float!
 }
 
-type UserRole {
-  id: String!
-  userId: String!
-  roleId: String!
-}
-
-type UserResponse {
-  email: String!
-  name: String!
-  id: String!
-  UserRole: [UserRole!]!
-}
-
 type PostResponse {
   title: String!
   content: String!
   id: Float!
   published: Boolean!
   authorId: Float!
-  author: UserResponse!
 }
 
 type PostListResponse {
   posts: [PostResponse!]!
   pagination: baseListResponse!
+}
+
+type CurrentUserResponse {
+  email: String!
+  name: String
+  id: String!
+  userType: String!
 }
 
 type CreateUserResponse {
@@ -60,8 +53,8 @@ type VerifyEmailResponse {
 
 type Query {
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
-  currentUser: UserResponse!
-  getUsers: [UserResponse!]!
+  currentUser: CurrentUserResponse!
+  getUsers: [CurrentUserResponse!]!
   login(loginInput: LoginInput!): LoginResponse!
 }
 
