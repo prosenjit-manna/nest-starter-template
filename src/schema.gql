@@ -84,7 +84,6 @@ input RoleListInput {
   pageSize: Int
   orderBy: Order = DESC
   title: String
-  authorId: Int
   orderByField: roleOrderByField = id
 }
 
@@ -96,8 +95,6 @@ enum Order {
 enum roleOrderByField {
   id
   title
-  authorId
-  published
 }
 
 input GetPostListInput {
