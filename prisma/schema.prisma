@@ -103,6 +103,7 @@ model User {
   name                String?
   password            String?
   verificationToken   String?
+  passwordResetToken  String?
   isVerified          Boolean               @default(false)
   userStatus          userStatus            @default(ACTIVE)
   userType            UserType              @default(USER)

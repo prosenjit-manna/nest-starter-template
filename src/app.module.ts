@@ -15,7 +15,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     PostModule,
     UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
-      
       driver: ApolloDriver,
       introspection: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -25,7 +24,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
     AuthModule,
 
-    // Always place to bottom 
+    // Always place to bottom
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),

@@ -16,7 +16,6 @@ import { VerifyEmailResponse } from './verify-email-response.dto';
 import { User } from '@prisma/client';
 import { RefreshAccessTokenInput } from './refresh-access-token.dto';
 import { addDays } from 'date-fns';
-import loginResolver from './login-resolver';
 
 @Resolver()
 export class AuthService {
@@ -45,7 +44,56 @@ export class AuthService {
     loginInput: LoginInput,
   ) {
     const ip = req.headers['x-forwarded-for'] || req.ip;
-    return loginResolver({ loginInput, prisma: this.prisma, generateToken: this.generateToken.bind(this), ip });
+    
+    const user = await this.prisma.user.findFirst({
+      where: {
+        email: loginInput.email,
+      },
+    });
+  
+    if (!user) {
+      throw new Error('Invalid email or password');
+    }
+  
+    if (!user.isVerified) {
+      throw new Error('Account not verified');
+    }
+  
+    const isPasswordValid = await bcrypt.compare(
+      loginInput.password,
+      String(user?.password),
+    );
+  
+    if (!isPasswordValid) {
+      throw new Error('Invalid email or password');
+    }
+  
+    const { token, expiryDate, refreshToken } = await this.generateToken(user);
+  
+    await this.prisma.session.create({
+      data: {
+        userId: user.id,
+        refreshToken: refreshToken,
+        refreshTokenExpiry: expiryDate,
+        ipAddress: ip?.toString(),
+      },
+    });
+  
+    // Clear expired sessions
+    // For improve performance
+    await this.prisma.session.deleteMany({
+      where: {
+        refreshTokenExpiry: {
+          lt: new Date(),
+        },
+      },
+    });
+  
+    return {
+      id: user?.id,
+      token,
+      refreshToken,
+    };
   }
 
   @Mutation(() => SignupResponse)

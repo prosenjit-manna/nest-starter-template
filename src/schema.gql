@@ -52,6 +52,10 @@ type VerifyEmailResponse {
   refreshToken: String!
 }
 
+type PassWordResetResponse {
+  message: String!
+}
+
 type Query {
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
   currentUser: CurrentUserResponse!
@@ -91,6 +95,8 @@ type Mutation {
   signup(signupInput: SignupInput!): SignupResponse!
   verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
   refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
+  requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetResponse!
+  resetPassword(resetPassword: PasswordResetRequestInput!): PassWordResetResponse!
 }
 
 input CreatePostInput {
@@ -116,4 +122,8 @@ input VerifyEmailInput {
 
 input RefreshAccessTokenInput {
   refreshToken: String!
+}
+
+input PasswordResetRequestInput {
+  email: String!
 }
