@@ -11,7 +11,7 @@ export const appEnv = cleanEnv(process.env, {
   CORS_ORIGIN: str({ default: '*', desc: 'Comma separated list of origins examples http://localhost:4000,http://localhost:3000' }),
   BACKEND_URL: str({ default: 'http://localhost' }),
   FRONTEND_URL: str({ default: 'http://localhost:3000' }),
-
+  ACCESS_TOKEN_EXPIRY: str({ default: '30m' }),
 
    // SMTP
    SMTP_HOST: str({ desc: 'SMTP HOST' }),

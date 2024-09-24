@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
 import { AuthService } from './auth.service';
+import { TokenService } from './token.service';
 import { PasswordResetService } from './password-reset/password-reset.service';
 import appEnv from 'src/env';
 import { MailerModule } from 'src/mailer/mailer.module';
@@ -16,6 +17,6 @@ import { MailerModule } from 'src/mailer/mailer.module';
     }),
     MailerModule
   ],
-  providers: [AuthService, PrismaService, JwtService, PasswordResetService],
+  providers: [AuthService, PrismaService, JwtService, PasswordResetService, TokenService],
 })
 export class AuthModule {}

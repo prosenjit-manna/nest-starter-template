@@ -5,6 +5,4 @@ export class PasswordResetInput {
   @Field(() => String)
   password: string;
 
-  @Field(() => String)
-  token: string;
 }

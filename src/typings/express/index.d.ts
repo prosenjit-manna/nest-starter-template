@@ -8,7 +8,16 @@ declare global {
         id: string;
         email: string;
         name: string | null;
-      } | null;
+        password: string | null;
+        verificationToken: string | null;
+        passwordResetToken: string | null;
+        isVerified: boolean;
+        userStatus: $Enums.userStatus;
+        userType: $Enums.UserType;
+        createdAt: Date;
+        updatedAt: Date;
+        deletedAt: Date | null;
+    } | null
     }
   }
 }

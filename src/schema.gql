@@ -38,9 +38,9 @@ type CreateUserResponse {
 }
 
 type LoginResponse {
-  id: String!
   token: String!
   refreshToken: String!
+  id: String!
 }
 
 type SignupResponse {
@@ -50,6 +50,10 @@ type SignupResponse {
 type VerifyEmailResponse {
   token: String!
   refreshToken: String!
+}
+
+type PassWordResetRequestResponse {
+  message: String!
 }
 
 type PassWordResetResponse {
@@ -95,8 +99,8 @@ type Mutation {
   signup(signupInput: SignupInput!): SignupResponse!
   verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
   refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
-  requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetResponse!
-  resetPassword(resetPassword: PasswordResetRequestInput!): PassWordResetResponse!
+  requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
+  resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
 }
 
 input CreatePostInput {
@@ -126,4 +130,8 @@ input RefreshAccessTokenInput {
 
 input PasswordResetRequestInput {
   email: String!
+}
+
+input PasswordResetInput {
+  password: String!
 }
