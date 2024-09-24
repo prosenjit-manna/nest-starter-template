@@ -6,5 +6,5 @@ dotenv.config();
 export const appEnv = cleanEnv(process.env, {
   NODE_ENV: str({ default: 'development', choices: ['development', 'production', 'test'] }),
 
-  API_BASE_URL: str({ default: 'https://jsonplaceholder.typicode.com' }),
+  API_BASE_URL: str({ default: 'http://localhost:4000' }),
 });
