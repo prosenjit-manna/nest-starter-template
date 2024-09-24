@@ -7,12 +7,14 @@ export default async function loginResolver({
   loginInput,
   prisma,
   generateToken,
+  ip,
 }: {
   loginInput: LoginInput;
   prisma: PrismaService;
   generateToken: (
     user: User,
   ) => Promise<{ token: string; expiryDate: string; refreshToken: string }>;
+  ip: string | string[] | undefined;
 }) {
   const user = await prisma.user.findFirst({
     where: {
@@ -44,6 +46,7 @@ export default async function loginResolver({
       userId: user.id,
       refreshToken: refreshToken,
       refreshTokenExpiry: expiryDate,
+      ipAddress: ip?.toString(),
     },
   });
 

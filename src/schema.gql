@@ -30,6 +30,7 @@ type CurrentUserResponse {
   name: String
   id: String!
   userType: String!
+  sessionCount: Float!
 }
 
 type CreateUserResponse {

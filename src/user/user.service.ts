@@ -19,13 +19,21 @@ export class UserService {
     const user = await this.prisma.user.findFirst({ 
       where: {
         id: req.jwt.userId
+      },
+      include: {
+        session: true
       }
     });
 
     if (!user) {
       throw new Error('User not found');
     }
-    return user;
+
+
+    return  {
+      ...user,
+      sessionCount: user.session.length
+    };
   }
 
  

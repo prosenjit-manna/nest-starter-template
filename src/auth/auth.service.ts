@@ -1,4 +1,5 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Request } from 'express';
 import { PrismaService } from 'src/prisma.service';
 import { LoginResponse } from './login-response.dto';
 import { LoginInput } from './login-input.dto';
@@ -39,10 +40,12 @@ export class AuthService {
 
   @Query(() => LoginResponse)
   async login(
+    @Context('req') req: Request,
     @Args('loginInput')
     loginInput: LoginInput,
   ) {
-    return loginResolver({ loginInput, prisma: this.prisma, generateToken: this.generateToken.bind(this) });
+    const ip = req.headers['x-forwarded-for'] || req.ip;
+    return loginResolver({ loginInput, prisma: this.prisma, generateToken: this.generateToken.bind(this), ip });
   }
 
   @Mutation(() => SignupResponse)

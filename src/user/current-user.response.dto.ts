@@ -2,18 +2,6 @@ import { Field, ObjectType } from "@nestjs/graphql";
 import { UserType } from "@prisma/client";
 
 @ObjectType()
-export class UserRole {
-  @Field(() => String)
-  id: string;
-
-  @Field(() => String)
-  userId: string;
-
-  @Field(() => String)
-  roleId: string;
-}
-
-@ObjectType()
 export class CurrentUserResponse {
   @Field(() => String) 
   email: string;
@@ -27,6 +15,7 @@ export class CurrentUserResponse {
   @Field(() => String) 
   userType: UserType;
 
-  
+  @Field(() => Number) 
+  sessionCount: number;
 
 }
