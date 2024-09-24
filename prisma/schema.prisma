@@ -102,7 +102,11 @@ model User {
   email               String                @unique
   name                String?
   password            String?
-  userStatus         userStatus             @default(ACTIVE)
+  verificationToken    String?
+  isVerified Boolean @default(false)
+  refreshToken  String? 
+  refreshTokenExpiry DateTime?
+  userStatus          userStatus            @default(ACTIVE)
   userType            UserType              @default(USER)
   posts               Post[]
   roles               UserRole[]            @relation(name: "userRoleRleation")

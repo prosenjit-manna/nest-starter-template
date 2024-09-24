@@ -8,12 +8,14 @@ import { join } from 'path';
 import { PrismaService } from './prisma.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
     PostModule,
     UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
+      
       driver: ApolloDriver,
       introspection: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -22,6 +24,11 @@ import { AuthModule } from './auth/auth.module';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     AuthModule,
+
+    // Always place to bottom 
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
   ],
   controllers: [],
   providers: [PrismaService],
