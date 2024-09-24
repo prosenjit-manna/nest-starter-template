@@ -1,12 +1,5 @@
-import { Args,  Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { PrismaService } from 'src/prisma.service';
-import * as bcrypt from 'bcrypt';
-import { randomBytes } from 'crypto';
-import appEnv from 'src/env';
-import { SignupResponse } from './singup-response.dto';
-import { SignupInput } from './signup-input.dto';
-import { MailerService } from 'src/mailer/mailer.service';
-import { VerifyRegisterEmailContent } from './verify-register-email-content.interface';
 import { VerifyEmailInput } from './verify-email-input.dto';
 import { VerifyEmailResponse } from './verify-email-response.dto';
 import { User } from '@prisma/client';
@@ -17,49 +10,8 @@ import { TokenService } from './token.service';
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private readonly mailerService: MailerService,
     private readonly tokenService: TokenService,
   ) {}
-
-
-
-  @Mutation(() => SignupResponse)
-  async signup(
-    @Args('signupInput')
-    singUpInput: SignupInput,
-  ) {
-    const hashedPassword = await bcrypt.hash(singUpInput.password, 10);
-    const verifyToken = await bcrypt.hash(randomBytes(5), 10);
-
-    const verifyEmailContent: VerifyRegisterEmailContent = {
-      verifyURl: `${appEnv.FRONTEND_URL}${appEnv.SIGNUP_VERIFY_URL}${verifyToken}`,
-    };
-    
-    this.mailerService.sendMail({
-      to: singUpInput.email,
-      subject: 'Welcome',
-      templateName: 'welcome',
-      context: verifyEmailContent,
-    });
-
-    const result = await this.prisma.user.findFirst({
-      where: { email: singUpInput.email },
-    });
-
-    if (result) {
-      throw new Error('User already exists');
-    }
-
-    const user = await this.prisma.user.create({
-      data: {
-        email: singUpInput.email,
-        password: hashedPassword,
-        verificationToken: verifyToken,
-      },
-    });
-
-    return { id: user.id };
-  }
 
   @Mutation(() => VerifyEmailResponse)
   async verifyEmail(
@@ -89,12 +41,12 @@ export class AuthService {
     const { token, refreshToken, expiryDate } =
       await this.tokenService.generateToken(user);
 
-      await this.prisma.session.create({ 
-        data: {
-          userId: user.id,
-          refreshTokenExpiry: expiryDate
-        }
-      })
+    await this.prisma.session.create({
+      data: {
+        userId: user.id,
+        refreshTokenExpiry: expiryDate,
+      },
+    });
 
     return { token: token, refreshToken: refreshToken };
   }
@@ -114,28 +66,30 @@ export class AuthService {
       throw new Error('Session Invalid');
     }
 
-
-    if (!session ||  session.refreshTokenExpiry && new Date() > session.refreshTokenExpiry) {
+    if (
+      !session ||
+      (session.refreshTokenExpiry && new Date() > session.refreshTokenExpiry)
+    ) {
       throw new Error('Session Token Expired');
     }
 
-    const user = await this.prisma.user.findFirst({
+    const user = (await this.prisma.user.findFirst({
       where: {
         id: session.userId,
       },
-    }) as unknown as User;
+    })) as unknown as User;
 
-
-    const { token, refreshToken, expiryDate } = await this.tokenService.generateToken(user);
+    const { token, refreshToken, expiryDate } =
+      await this.tokenService.generateToken(user);
 
     await this.prisma.session.update({
       where: {
-        id: session.id
+        id: session.id,
       },
       data: {
         refreshToken: refreshToken,
-        refreshTokenExpiry: expiryDate
-      }
+        refreshTokenExpiry: expiryDate,
+      },
     });
 
     return { token: token, refreshToken: refreshToken };

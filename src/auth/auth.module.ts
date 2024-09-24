@@ -8,6 +8,7 @@ import { PasswordResetService } from './password-reset/password-reset.service';
 import appEnv from 'src/env';
 import { MailerModule } from 'src/mailer/mailer.module';
 import { LoginService } from './login/login.service';
+import { SignupService } from './signup/signup.service';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { LoginService } from './login/login.service';
     PasswordResetService,
     TokenService,
     LoginService,
+    SignupService
   ],
 })
 export class AuthModule {}
