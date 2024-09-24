@@ -1,5 +1,5 @@
 tmp
-
+e2e/node_modules
 # compiled output
 /dist
 /node_modules
