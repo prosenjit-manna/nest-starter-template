@@ -12,9 +12,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'), // path to public directory
-    }),
     PostModule,
     UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -27,6 +24,11 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     AuthModule,
+
+    // Always place to bottom 
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
   ],
   controllers: [],
   providers: [PrismaService],
