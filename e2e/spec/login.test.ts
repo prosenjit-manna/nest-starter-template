@@ -1,24 +1,16 @@
-import { LOGIN_QUERY } from '../graphql/auth/login/login-query.gql';
-import { graphQlApi } from '../lib/graphql-api';
+import { loginAndGetToken } from "../page/login";
 
-let authToken: string | null = null;
-describe('sum module', () => {
-  test('get users', async () => {
-    const response = await graphQlApi.query({
-      query: LOGIN_QUERY,
-      variables: {
-        loginInput: {
-          email: "example+super-admin@exanple.com",
-          password: "SamLauncher@123",
-        },
-      },
-    });
-    console.log(response.data);
-    expect(response.data.login.status).toBe('200');
 
-    authToken = response.data?.login?.token;
+describe('Login module', () => {
+  let authToken: string | null = null; 
 
-    console.log('Auth Token:', authToken);
-    expect(authToken).toBeDefined();
+  beforeAll(async () => {
+    authToken = await loginAndGetToken("example+admin-1@exanple.com", "SamLauncher@123");
   });
+
+  test('verify token usage', () => {
+    expect(authToken).toBeDefined();
+    console.log('Stored token:', authToken);
+  });
+
 });
