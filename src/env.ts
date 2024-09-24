@@ -12,6 +12,7 @@ export const appEnv = cleanEnv(process.env, {
   BACKEND_URL: str({ default: 'http://localhost' }),
   FRONTEND_URL: str({ default: 'http://localhost:3000' }),
   ACCESS_TOKEN_EXPIRY: str({ default: '30m' }),
+  REFRESH_TOKEN_EXPIRY: num({ default: 7 }),
 
    // SMTP
    SMTP_HOST: str({ desc: 'SMTP HOST' }),

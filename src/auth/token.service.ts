@@ -18,7 +18,7 @@ export class TokenService {
     );
 
     const refreshToken = await bcrypt.hash(randomBytes(5), 10);
-    const expiryDate = addDays(new Date(), 7).toISOString();
+    const expiryDate = addDays(new Date(), appEnv.REFRESH_TOKEN_EXPIRY).toISOString();
 
     return { token, refreshToken, expiryDate };
   }
