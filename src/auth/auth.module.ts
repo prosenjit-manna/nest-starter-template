@@ -1,4 +1,4 @@
-import {  Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
@@ -7,16 +7,23 @@ import { TokenService } from './token.service';
 import { PasswordResetService } from './password-reset/password-reset.service';
 import appEnv from 'src/env';
 import { MailerModule } from 'src/mailer/mailer.module';
+import { LoginService } from './login/login.service';
 
 @Module({
   imports: [
     JwtModule.register({
       global: true,
       secret: appEnv.JSON_TOKEN_SECRET,
-      signOptions: { expiresIn: '60s' },
     }),
-    MailerModule
+    MailerModule,
   ],
-  providers: [AuthService, PrismaService, JwtService, PasswordResetService, TokenService],
+  providers: [
+    AuthService,
+    PrismaService,
+    JwtService,
+    PasswordResetService,
+    TokenService,
+    LoginService,
+  ],
 })
 export class AuthModule {}

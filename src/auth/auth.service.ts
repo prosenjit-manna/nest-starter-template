@@ -1,8 +1,5 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Request } from 'express';
+import { Args,  Mutation, Resolver } from '@nestjs/graphql';
 import { PrismaService } from 'src/prisma.service';
-import { LoginResponse } from './login-response.dto';
-import { LoginInput } from './login-input.dto';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import appEnv from 'src/env';
@@ -25,64 +22,6 @@ export class AuthService {
   ) {}
 
 
-  @Query(() => LoginResponse)
-  async login(
-    @Context('req') req: Request,
-    @Args('loginInput')
-    loginInput: LoginInput,
-  ) {
-    const ip = req.headers['x-forwarded-for'] || req.ip;
-    
-    const user = await this.prisma.user.findFirst({
-      where: {
-        email: loginInput.email,
-      },
-    });
-  
-    if (!user) {
-      throw new Error('Invalid email or password');
-    }
-  
-    if (!user.isVerified) {
-      throw new Error('Account not verified');
-    }
-  
-    const isPasswordValid = await bcrypt.compare(
-      loginInput.password,
-      String(user?.password),
-    );
-  
-    if (!isPasswordValid) {
-      throw new Error('Invalid email or password');
-    }
-  
-    const { token, expiryDate, refreshToken } = await this.tokenService.generateToken(user);
-  
-    await this.prisma.session.create({
-      data: {
-        userId: user.id,
-        refreshToken: refreshToken,
-        refreshTokenExpiry: expiryDate,
-        ipAddress: ip?.toString(),
-      },
-    });
-  
-    // Clear expired sessions
-    // For improve performance
-    await this.prisma.session.deleteMany({
-      where: {
-        refreshTokenExpiry: {
-          lt: new Date(),
-        },
-      },
-    });
-  
-    return {
-      id: user?.id,
-      token,
-      refreshToken,
-    };
-  }
 
   @Mutation(() => SignupResponse)
   async signup(

@@ -37,12 +37,6 @@ type CreateUserResponse {
   id: String!
 }
 
-type LoginResponse {
-  token: String!
-  refreshToken: String!
-  id: String!
-}
-
 type SignupResponse {
   id: String!
 }
@@ -58,6 +52,12 @@ type PassWordResetRequestResponse {
 
 type PassWordResetResponse {
   message: String!
+}
+
+type LoginResponse {
+  token: String!
+  refreshToken: String!
+  id: String!
 }
 
 type Query {
