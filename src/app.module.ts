@@ -32,6 +32,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
   ],
   controllers: [],
-  providers: [ PrismaService],
+  providers: [PrismaService],
 })
 export class AppModule {}

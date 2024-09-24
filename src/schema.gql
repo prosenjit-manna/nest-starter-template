@@ -19,10 +19,6 @@ type RoleListResponse {
   pagination: baseListResponse!
 }
 
-type CreatePostResponse {
-  id: Float!
-}
-
 type PostResponse {
   title: String!
   content: String!
@@ -119,20 +115,12 @@ input LoginInput {
 }
 
 type Mutation {
-  createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   createUser(createUserInput: CreateUserInput!): CreateUserResponse!
   requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
   resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
   signup(signupInput: SignupInput!): SignupResponse!
   verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
   refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
-}
-
-input CreatePostInput {
-  title: String!
-  content: String
-  published: Boolean! = false
-  authorId: Int!
 }
 
 input CreateUserInput {
