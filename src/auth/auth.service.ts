@@ -66,13 +66,21 @@ export class AuthService {
 
     const {token, expiryDate, refreshToken} = await this.generateToken(user);
 
-    await this.prisma.user.update({
-      where: {
-        id: user.id,
-      },
+    await this.prisma.session.create({ 
       data: {
+        userId: user.id,
         refreshToken: refreshToken,
-        refreshTokenExpiry: expiryDate,
+        refreshTokenExpiry: expiryDate
+      }
+    })
+
+    // Clear expired sessions
+    // For improve performance
+    await this.prisma.session.deleteMany({
+      where: {
+        refreshTokenExpiry: {
+          lt: new Date()
+        }
       }
     });
 
@@ -134,16 +142,25 @@ export class AuthService {
       throw new Error('Invalid token');
     }
 
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        verificationToken: null,
+        isVerified: true,
+      },
+    });
+
     const { token, refreshToken, expiryDate } =
       await this.generateToken(user);
 
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: {
-        refreshToken: refreshToken,
-        refreshTokenExpiry: expiryDate,
-      },
-    });
+      await this.prisma.session.create({ 
+        data: {
+          userId: user.id,
+          refreshTokenExpiry: expiryDate
+        }
+      })
 
     return { token: token, refreshToken: refreshToken };
   }
@@ -153,28 +170,38 @@ export class AuthService {
     @Args('refreshAccessTokenInput')
     refreshAccessToken: RefreshAccessTokenInput,
   ) {
-    const user = await this.prisma.user.findFirst({
+    const session = await this.prisma.session.findFirst({
       where: {
         refreshToken: refreshAccessToken.refreshToken,
       },
     });
 
-    if (!user) {
-      throw new Error('Invalid refresh token');
+    if (!session) {
+      throw new Error('Session Invalid');
     }
 
-    if (!user ||  user.refreshTokenExpiry && new Date() > user.refreshTokenExpiry) {
-      throw new Error('Invalid refresh token');
+
+    if (!session ||  session.refreshTokenExpiry && new Date() > session.refreshTokenExpiry) {
+      throw new Error('Session Token Expired');
     }
+
+    const user = await this.prisma.user.findFirst({
+      where: {
+        id: session.userId,
+      },
+    }) as unknown as User;
+
 
     const { token, refreshToken, expiryDate } = await this.generateToken(user);
 
-    await this.prisma.user.update({
-      where: { id: user.id },
+    await this.prisma.session.update({
+      where: {
+        id: session.id
+      },
       data: {
         refreshToken: refreshToken,
         refreshTokenExpiry: expiryDate
-      },
+      }
     });
 
     return { token: token, refreshToken: refreshToken };
