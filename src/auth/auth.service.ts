@@ -51,6 +51,10 @@ export class AuthService {
       throw new Error('Invalid email or password');
     }
 
+    if (!user.isVerified) {
+      throw new Error('Account not verified');
+    }
+
     const isPasswordValid = await bcrypt.compare(
       loginInput.password,
       String(user?.password),
