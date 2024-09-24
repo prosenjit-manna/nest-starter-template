@@ -19,6 +19,10 @@ type RoleListResponse {
   pagination: baseListResponse!
 }
 
+type RoleCreateResponse {
+  id: String!
+}
+
 type PostResponse {
   title: String!
   content: String!
@@ -115,12 +119,25 @@ input LoginInput {
 }
 
 type Mutation {
+  createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
   createUser(createUserInput: CreateUserInput!): CreateUserResponse!
   requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
   resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
   signup(signupInput: SignupInput!): SignupResponse!
   verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
   refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
+}
+
+input RoleCreateInput {
+  title: String!
+  name: RoleName! = CUSTOM
+}
+
+enum RoleName {
+  SUPER_ADMIN
+  ADMIN
+  USER
+  CUSTOM
 }
 
 input CreateUserInput {
