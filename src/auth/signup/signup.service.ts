@@ -28,12 +28,7 @@ export class SignupService {
       verifyURl: `${appEnv.FRONTEND_URL}${appEnv.SIGNUP_VERIFY_URL}${verifyToken}`,
     };
 
-    this.mailerService.sendMail({
-      to: singUpInput.email,
-      subject: 'Welcome',
-      templateName: 'welcome',
-      context: verifyEmailContent,
-    });
+  
 
     const result = await this.prisma.user.findFirst({
       where: { email: singUpInput.email },
@@ -49,6 +44,13 @@ export class SignupService {
         password: hashedPassword,
         verificationToken: verifyToken,
       },
+    });
+
+    this.mailerService.sendMail({
+      to: singUpInput.email,
+      subject: 'Welcome',
+      templateName: 'welcome',
+      context: verifyEmailContent,
     });
 
     return { id: user.id };
