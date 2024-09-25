@@ -11,7 +11,8 @@ export const appEnv = cleanEnv(process.env, {
   CORS_ORIGIN: str({ default: '*', desc: 'Comma separated list of origins examples http://localhost:4000,http://localhost:3000' }),
   BACKEND_URL: str({ default: 'http://localhost' }),
   FRONTEND_URL: str({ default: 'http://localhost:3000' }),
-
+  ACCESS_TOKEN_EXPIRY: str({ default: '30m' }),
+  REFRESH_TOKEN_EXPIRY: num({ default: 7 }),
 
    // SMTP
    SMTP_HOST: str({ desc: 'SMTP HOST' }),
@@ -27,6 +28,7 @@ export const appEnv = cleanEnv(process.env, {
 
   // FRONTEND_URL
   SIGNUP_VERIFY_URL: str({ default: '/verify-email/', desc: 'Signup verify url' }),
+  PASSWORD_RESET_URL: str({ default: '/password-reset/', desc: 'Password Reset URL' }),
 })
 
 // Read an environment variable, which is validated and cleaned during

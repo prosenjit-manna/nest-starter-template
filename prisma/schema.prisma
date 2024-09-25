@@ -35,6 +35,7 @@ enum RoleName {
   SUPER_ADMIN
   ADMIN
   USER
+  CUSTOM
 }
 
 enum UserType {
@@ -102,10 +103,9 @@ model User {
   email               String                @unique
   name                String?
   password            String?
-  verificationToken    String?
-  isVerified Boolean @default(false)
-  refreshToken  String? 
-  refreshTokenExpiry DateTime?
+  verificationToken   String?
+  passwordResetToken  String?
+  isVerified          Boolean               @default(false)
   userStatus          userStatus            @default(ACTIVE)
   userType            UserType              @default(USER)
   posts               Post[]
@@ -114,6 +114,21 @@ model User {
   updatedAt           DateTime              @updatedAt
   deletedAt           DateTime?
   workspaceMembership WorkspaceMembership[] @relation(name: "userIdMembershipRelation")
+  session             Session[]  @relation(name: "userSessionRelation")
+}
+
+model Session {
+  id     String  @id @default(uuid())
+  user   User @relation(name: "userSessionRelation", fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  ipAddress          String?
+
+  refreshToken       String?
+  refreshTokenExpiry DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Workspace {
