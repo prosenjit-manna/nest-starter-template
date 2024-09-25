@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { SIGN_UP_MUTATION } from '../../../graphql/auth/sign-up/sign-up-mutation.gql';
-import { VERIFY_EMAIL_MUTATION } from '../../../graphql/auth/verify-email/verify-email-mutation.gql';
-import { graphQlApi } from '../../../lib/graphql-api';
+import { SIGN_UP_MUTATION } from '../../../../graphql/auth/sign-up/sign-up-mutation.gql';
+import { VERIFY_EMAIL_MUTATION } from '../../../../graphql/auth/verify-email/verify-email-mutation.gql';
+import { graphQlApi } from '@/lib/graphql-api';
 import { faker } from '@faker-js/faker';
 
 describe('User Sign up', () => {
