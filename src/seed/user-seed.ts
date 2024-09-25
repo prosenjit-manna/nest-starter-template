@@ -28,6 +28,7 @@ export async function userSeed() {
       email: adminEmail,
       password: hashedPassword,
       userType: UserType.SUPER_ADMIN,
+      isVerified: true,
     },
   });
 
@@ -55,6 +56,7 @@ export async function userSeed() {
         email,
         password: hashedPassword,
         userType: UserType.ADMIN,
+        isVerified: true,
       },
     });
   }
@@ -93,6 +95,7 @@ export async function userSeed() {
         email,
         password: hashedPassword,
         userType: UserType.USER,
+        isVerified: true,
       },
     });
   }
