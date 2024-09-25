@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { SIGN_UP_MUTATION } from '../../../graphql/auth/sign-up/sign-up-mutation.gql';
-import { VERIFY_EMAIL_MUTATION } from '../../../graphql/auth/verify-email/verify-email-mutation.gql';
+import { SIGN_UP_MUTATION } from '@/graphql/auth/sign-up/sign-up-mutation.gql';
+import { VERIFY_EMAIL_MUTATION } from '@/graphql/auth/verify-email/verify-email-mutation.gql';
 import { graphQlApi } from '@/lib/graphql-api';
 import { faker } from '@faker-js/faker';
 
@@ -54,8 +54,7 @@ describe('User Sign up', () => {
 
     const fetchMessageURL = `https://mailinator.com/api/v2/domains/private/messages/${messageId}?token=${apiToken}`;
 
-    try {
-      const messageResponse = await axios.get(fetchMessageURL);
+    const messageResponse = await axios.get(fetchMessageURL);
       const urlRegex = /href="(http:\/\/[^"]*)"/;
       const match = messageResponse.data.parts[0].body.match(urlRegex);
       if (match) {
@@ -63,9 +62,6 @@ describe('User Sign up', () => {
         onboardingToken = invitationLink.substring(35);
         expect(invitationLink).toContain('verify-email');
       }
-    } catch (error: any) {
-      console.error('Error setting up the request:', error.message);
-    }
   });
 
   test('Verify the email with onboarding token', async () => {
