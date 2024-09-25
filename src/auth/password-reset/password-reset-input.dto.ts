@@ -1,9 +1,8 @@
 import { Field, InputType } from '@nestjs/graphql';
 
-
-
 @InputType()
-export class VerifyEmailInput {
+export class PasswordResetInput {
   @Field(() => String)
-  token: string;
+  password: string;
+
 }

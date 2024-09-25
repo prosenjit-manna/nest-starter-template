@@ -2,36 +2,33 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type CreatePostResponse {
-  id: Float!
-}
-
 type baseListResponse {
   totalPage: Float!
   currentPage: Float!
   perPage: Float!
 }
 
-type UserRole {
-  id: String!
-  userId: String!
-  roleId: String!
-}
-
-type UserResponse {
-  email: String!
+type RoleResponse {
+  title: String!
   name: String!
   id: String!
-  UserRole: [UserRole!]!
+}
+
+type RoleListResponse {
+  role: [RoleResponse!]!
+  pagination: baseListResponse!
+}
+
+type RoleCreateResponse {
+  id: String!
 }
 
 type PostResponse {
   title: String!
   content: String!
-  id: Float!
+  id: String!
   published: Boolean!
-  authorId: Float!
-  author: UserResponse!
+  authorId: String!
 }
 
 type PostListResponse {
@@ -39,14 +36,34 @@ type PostListResponse {
   pagination: baseListResponse!
 }
 
+type UpdatePostResponse {
+  id: String!
+}
+
+type CurrentUserResponse {
+  email: String!
+  name: String
+  id: String!
+  userType: String!
+  sessionCount: Float!
+}
+
 type CreateUserResponse {
   id: String!
 }
 
+type PassWordResetRequestResponse {
+  message: String!
+}
+
+type PassWordResetResponse {
+  message: String!
+}
+
 type LoginResponse {
-  id: String!
   token: String!
   refreshToken: String!
+  id: String!
 }
 
 type SignupResponse {
@@ -59,10 +76,29 @@ type VerifyEmailResponse {
 }
 
 type Query {
+  roleList(roleListInput: RoleListInput): RoleListResponse!
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
-  currentUser: UserResponse!
-  getUsers: [UserResponse!]!
+  currentUser: CurrentUserResponse!
+  getUsers: [CurrentUserResponse!]!
   login(loginInput: LoginInput!): LoginResponse!
+}
+
+input RoleListInput {
+  page: Int
+  pageSize: Int
+  orderBy: Order = DESC
+  title: String
+  orderByField: roleOrderByField = id
+}
+
+enum Order {
+  ASC
+  DESC
+}
+
+enum roleOrderByField {
+  id
+  title
 }
 
 input GetPostListInput {
@@ -72,11 +108,6 @@ input GetPostListInput {
   title: String
   authorId: Int
   orderByField: orderByField = id
-}
-
-enum Order {
-  ASC
-  DESC
 }
 
 enum orderByField {
@@ -92,23 +123,46 @@ input LoginInput {
 }
 
 type Mutation {
-  createPost(createPostInput: CreatePostInput!): CreatePostResponse!
+  createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
+  updatePost(postId: String!, updatePostInput: UpdatePostInput!): UpdatePostResponse!
   createUser(createUserInput: CreateUserInput!): CreateUserResponse!
+  requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
+  resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
   signup(signupInput: SignupInput!): SignupResponse!
   verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
   refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
 }
 
-input CreatePostInput {
+input RoleCreateInput {
   title: String!
+  name: RoleName! = CUSTOM
+}
+
+enum RoleName {
+  SUPER_ADMIN
+  ADMIN
+  USER
+  CUSTOM
+}
+
+input UpdatePostInput {
+  title: String
   content: String
   published: Boolean! = false
-  authorId: Int!
+  authorId: String
 }
 
 input CreateUserInput {
   email: String!
   name: String
+}
+
+input PasswordResetRequestInput {
+  email: String!
+}
+
+input PasswordResetInput {
+  password: String!
 }
 
 input SignupInput {
