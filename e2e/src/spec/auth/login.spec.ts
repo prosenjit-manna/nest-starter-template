@@ -1,7 +1,7 @@
-import { appEnv } from "../lib/app-env";
+import { appEnv } from "../../lib/app-env";
 import { PrismaClient, UserType } from '@prisma/client';
-import { GraphQlApi } from '../lib/graphql-api';
-import { CURRENT_USER_QUERY } from '../graphql/auth/current-user.gql';
+import { GraphQlApi } from '../../lib/graphql-api';
+import { CURRENT_USER_QUERY } from '../../graphql/auth/current-user.gql';
 
 
 describe('Login module', () => {
