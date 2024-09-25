@@ -1,16 +1,22 @@
+import { appEnv } from "../lib/app-env";
 import { loginAndGetToken } from "../page/login";
+import { PrismaClient, UserType } from '@prisma/client';
 
 
 describe('Login module', () => {
-  let authToken: string | null = null; 
-
-  beforeAll(async () => {
-    authToken = await loginAndGetToken("example+admin-1@exanple.com", "SamLauncher@123");
-  });
-
-  test('verify token usage', () => {
-    expect(authToken).toBeDefined();
-    console.log('Stored token:', authToken);
-  });
+  [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER].forEach((type) => {
+    test('Super Admin Login', async () => {
+      const dbClient = new PrismaClient();
+      const user = await dbClient.user.findFirst({
+        where: {
+          userType: type,
+        },
+      })
+      if (!user) {
+        return;
+      }
+      await loginAndGetToken(user?.email, appEnv.SEED_PASSWORD);
+    });
+  })
 
 });
