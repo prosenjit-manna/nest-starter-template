@@ -17,6 +17,6 @@ export async function loginAndGetToken(email: string, password: string): Promise
   expect(response.error).toBeUndefined();
   
 
-  expect(response.data.login.token).toBe('string');
+  expect(typeof response.data.login.token).toBe('string');
   return response.data;
 }
