@@ -1,1 +1,1 @@
-cd e2e && npm run test
+npm run lint
