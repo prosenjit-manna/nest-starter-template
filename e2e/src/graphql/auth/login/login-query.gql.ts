@@ -5,6 +5,7 @@ export const LOGIN_QUERY = graphql(`
     login(loginInput: $loginInput) {
       id
       token
+      refreshToken
     }
   }
 `);
