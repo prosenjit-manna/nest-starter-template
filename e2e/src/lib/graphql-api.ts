@@ -20,6 +20,14 @@ export class GraphQlApi {
     this.graphql = new ApolloClient({
       link: ApolloLink.from([this.authLink(), this.httpLink()]),
       cache: new InMemoryCache(),
+      defaultOptions: {
+        query: {
+          errorPolicy: 'all',  // or 'ignore', 'none'
+        },
+        mutate: {
+          errorPolicy: 'all',  // or 'ignore', 'none'
+        },
+      },
     });
   }
 
