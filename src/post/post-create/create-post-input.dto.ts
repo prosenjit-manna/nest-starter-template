@@ -1,4 +1,4 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { MaxLength } from 'class-validator';
 
 @InputType()
@@ -14,7 +14,7 @@ export class CreatePostInput {
   @Field(() => Boolean)
   published: boolean = false;
 
-  @Field(() => Int, { nullable: false })
+  @Field(() => String, { nullable: false })
   authorId: string;
   
 }
