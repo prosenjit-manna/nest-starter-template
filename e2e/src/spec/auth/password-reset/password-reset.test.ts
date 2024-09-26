@@ -1,15 +1,14 @@
 import { PASSWORD_RESET_MUTATION } from '@/graphql/auth/password-reset/password-reset-mutation.gql';
 import { REQUEST_PASSWORD_RESET_MUTATION } from '@/graphql/auth/password-reset/request-password-reset-mutation.gql';
-import { graphQlApi } from '@/lib/graphql-api';
+import { GraphQlApi } from '@/lib/graphql-api';
 import { PrismaClient } from '@prisma/client';
 import axios from 'axios';
+import { waitForTime } from '@/lib/wait-for-time';
 
 describe('Password Reset', () => {
   let messageId: string;
   let invitationLink: string;
   let authToken: string;
-  const sleep = (timeout: number) =>
-    new Promise((resolve) => setTimeout(resolve, timeout));
 
   test('Request Password Reset', async () => {
     const prisma = new PrismaClient();
@@ -17,7 +16,7 @@ describe('Password Reset', () => {
 
     if (!user) return;
 
-    const passwordResetResponse = await graphQlApi.mutate({
+    const passwordResetResponse = await GraphQlApi.mutate({
       mutation: REQUEST_PASSWORD_RESET_MUTATION,
       variables: {
         passwordReset: {
@@ -30,7 +29,7 @@ describe('Password Reset', () => {
       'Password reset email sent',
     );
 
-    await sleep(4000);
+    await waitForTime();
   });
 
   test('Fetch emails from the inbox and extract the invitation link', async () => {

@@ -6,7 +6,6 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client';
-import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { appEnv } from './app-env';
 import { setContext } from '@apollo/client/link/context';
 import { LOGIN_QUERY } from '../graphql/auth/login/login-query.gql';
@@ -21,48 +20,6 @@ export class GraphQlApi {
       link: ApolloLink.from([this.authLink(), this.httpLink()]),
       cache: new InMemoryCache(),
     });
-
-    // export const graphQlApi = (token: string) => {
-    //   const baseApiURL = appEnv.API_BASE_URL;
-
-    //   const httpLink = new BatchHttpLink({
-    //     uri: baseApiURL + '/graphql',
-    //     batchMax: 1,
-    //     batchInterval: 100,
-    //     fetch,
-    //   });
-
-    //   const header: any = {};
-
-    //   if (token) {
-    //     header.authorization = `Bearer ${token}`;
-    //   }
-
-    //   const authLink = setContext((_, { headers }) => {
-    //     return {
-    //       headers: {
-    //         ...headers,
-    //         ...header,
-    //       },
-    //     };
-    //   });
-
-    //   return new ApolloClient({
-    //     link: authLink.concat(httpLink),
-    //     uri: `${appEnv.API_BASE_URL}/graphql`,
-    //     cache: new InMemoryCache(),
-    //     defaultOptions: {
-    //       query: {
-    //         fetchPolicy: 'no-cache',
-    //         errorPolicy: 'all',
-    //       },
-    //       mutate: {
-    //         fetchPolicy: 'no-cache',
-    //         errorPolicy: 'all',
-    //       },
-    //     },
-    //   });
-    // };
   }
 
   private httpLink() {
