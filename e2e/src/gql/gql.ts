@@ -14,6 +14,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query Login($loginInput: LoginInput!) {\n    login(loginInput: $loginInput) {\n      id\n      token\n    }\n  }\n": types.LoginDocument,
+    "\n  mutation ResetPassword($resetPassword: PasswordResetInput!) {\n    resetPassword(resetPassword: $resetPassword) {\n      message\n    }\n  }\n": types.ResetPasswordDocument,
+    "\n  mutation RequestPasswordReset($passwordReset: PasswordResetRequestInput!) {\n    requestPasswordReset(passwordReset: $passwordReset) {\n      message\n    }\n  }\n": types.RequestPasswordResetDocument,
 };
 
 /**
@@ -34,6 +36,14 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query Login($loginInput: LoginInput!) {\n    login(loginInput: $loginInput) {\n      id\n      token\n    }\n  }\n"): (typeof documents)["\n  query Login($loginInput: LoginInput!) {\n    login(loginInput: $loginInput) {\n      id\n      token\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ResetPassword($resetPassword: PasswordResetInput!) {\n    resetPassword(resetPassword: $resetPassword) {\n      message\n    }\n  }\n"): (typeof documents)["\n  mutation ResetPassword($resetPassword: PasswordResetInput!) {\n    resetPassword(resetPassword: $resetPassword) {\n      message\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation RequestPasswordReset($passwordReset: PasswordResetRequestInput!) {\n    requestPasswordReset(passwordReset: $passwordReset) {\n      message\n    }\n  }\n"): (typeof documents)["\n  mutation RequestPasswordReset($passwordReset: PasswordResetRequestInput!) {\n    requestPasswordReset(passwordReset: $passwordReset) {\n      message\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

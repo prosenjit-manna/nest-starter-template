@@ -26,7 +26,7 @@ describe('Password Reset', () => {
       },
     });
 
-    expect(passwordResetResponse.data.requestPasswordReset.message).toBe(
+    expect(passwordResetResponse.data?.requestPasswordReset.message).toBe(
       'Password reset email sent',
     );
 
