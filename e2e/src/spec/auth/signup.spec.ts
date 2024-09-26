@@ -1,10 +1,12 @@
-// describe('Password Reset Functionality', () => {
-//     test('should send a password reset email to the user', () => {});
-//     test('should return an error if the email is not registered', () => {});
-//     test('should reset the password when provided with a valid token', () => {});
-//     test('should return an error if the token is invalid or expired', () => {});
-//     test('should return an error if the new password does not meet criteria', () => {});
-//   });
+describe('signup', () => {
+  test('should hash the password correctly', () => {});
+  test('should create a verification URL', () => {});
+  test('should check if the user already exists', () => {});
+  test('should throw an error if user not verified and tries to login', () => {});
+  test('should create a new user if the user does not exist', () => {});
+  test('should send a welcome email with the verification URL', () => {});
+  test('should return the user ID after successful signup', () => {});
+});
 
 import { SIGN_UP_MUTATION } from '../../graphql/auth/sign-up/sign-up-mutation.gql';
 import { VERIFY_EMAIL_MUTATION } from '../../graphql/auth/verify-email/verify-email-mutation.gql';
