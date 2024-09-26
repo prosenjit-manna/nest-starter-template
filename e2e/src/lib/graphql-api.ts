@@ -7,7 +7,6 @@ import {
   NormalizedCacheObject,
 } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
-import { setContext } from '@apollo/client/link/context';
 import { appEnv } from './app-env';
 import { setContext } from '@apollo/client/link/context';
 import { LOGIN_QUERY } from '../graphql/auth/login/login-query.gql';
