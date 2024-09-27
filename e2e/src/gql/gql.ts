@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  query CurrentUser {\n    currentUser {\n      id\n      name\n      email\n      userType\n      sessionCount\n    }\n  }\n": types.CurrentUserDocument,
     "\n  query Login($loginInput: LoginInput!) {\n    login(loginInput: $loginInput) {\n      id\n      token\n    }\n  }\n": types.LoginDocument,
+    "\n  query GetPostList($getPostListInput: GetPostListInput) {\n    getPostList(getPostListInput: $getPostListInput) {\n      pagination {\n        currentPage\n        perPage\n        totalPage\n      }\n      posts {\n        title\n        content\n        id\n        published\n        authorId\n      }\n    }\n  }\n": types.GetPostListDocument,
 };
 
 /**
@@ -39,6 +40,10 @@ export function graphql(source: "\n  query CurrentUser {\n    currentUser {\n   
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query Login($loginInput: LoginInput!) {\n    login(loginInput: $loginInput) {\n      id\n      token\n    }\n  }\n"): (typeof documents)["\n  query Login($loginInput: LoginInput!) {\n    login(loginInput: $loginInput) {\n      id\n      token\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetPostList($getPostListInput: GetPostListInput) {\n    getPostList(getPostListInput: $getPostListInput) {\n      pagination {\n        currentPage\n        perPage\n        totalPage\n      }\n      posts {\n        title\n        content\n        id\n        published\n        authorId\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetPostList($getPostListInput: GetPostListInput) {\n    getPostList(getPostListInput: $getPostListInput) {\n      pagination {\n        currentPage\n        perPage\n        totalPage\n      }\n      posts {\n        title\n        content\n        id\n        published\n        authorId\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
