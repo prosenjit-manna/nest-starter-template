@@ -1,8 +1,8 @@
 import { appEnv } from '../../lib/app-env';
 import { PrismaClient, UserType } from '@prisma/client';
 import { GraphQlApi } from '../../lib/graphql-api';
-import { REFRESH_TOKEN_MUTATION } from '../../graphql/auth/login/refresh-token.gql';
-import { CURRENT_USER_QUERY } from '../../graphql/auth/current-user.gql';
+import { REFRESH_TOKEN_MUTATION } from '../../graphql/refresh-token.gql';
+import { CURRENT_USER_QUERY } from '../../graphql/current-user.gql';
 
 describe('Refresh token module', () => {
   [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER].forEach((type) => {

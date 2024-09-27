@@ -1,7 +1,7 @@
 import { PrismaClient, UserType } from "@prisma/client";
 import { GraphQlApi } from "../../lib/graphql-api";
 import { appEnv } from "../../lib/app-env";
-import { CREATE_USER } from "../../graphql/user/create-user.gql";
+import { CREATE_USER } from "../../graphql/create-user.gql";
 import { faker } from "@faker-js/faker";
 
 describe('User List', () => {

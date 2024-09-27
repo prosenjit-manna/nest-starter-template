@@ -8,7 +8,7 @@ import {
 } from '@apollo/client';
 import { appEnv } from './app-env';
 import { setContext } from '@apollo/client/link/context';
-import { LOGIN_QUERY } from '../graphql/auth/login/login-query.gql';
+import { LOGIN_QUERY } from '../graphql/login-query.gql';
 import { LoginInput, LoginQuery } from '../gql/graphql';
 
 
