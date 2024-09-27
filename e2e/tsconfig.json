@@ -6,10 +6,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "@/*": ["./*"]
-    },
+    "forceConsistentCasingInFileNames": true
   },
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

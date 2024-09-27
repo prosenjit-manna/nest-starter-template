@@ -1,7 +1,7 @@
 import { PrismaClient, UserType } from '@prisma/client';
 import { appEnv } from '../../lib/app-env';
 import { GraphQlApi } from '../../lib/graphql-api';
-import { USER_LIST } from '../../graphql/user/get-user-list.gql';
+import { USER_LIST } from '../../graphql/get-user-list.gql';
 
 describe('User List', () => {
   [UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
