@@ -1,22 +1,27 @@
+import { SIGN_UP_MUTATION } from '../../graphql/sign-up-mutation.gql';
 import { VERIFY_EMAIL_MUTATION } from '../../graphql/verify-email-mutation.gql';
+import { LOGIN_QUERY } from '../../graphql/login-query.gql';
 import { GraphQlApi } from '../../lib/graphql-api';
 import { waitForTime } from '../../lib/wait-for-time';
 import { fetchEmailsFromInbox } from '../../lib/fetchEmails';
 import { appEnv } from '../../lib/app-env';
-import { PrismaClient } from '@prisma/client';
-import { User } from '@prisma/client';
-import { LOGIN_QUERY } from '../../graphql/login-query.gql';
-import { LoginInput, SignupInput, SignupResponse } from '../../gql/graphql';
-import { SIGN_UP_MUTATION } from '../../graphql/sign-up-mutation.gql';
+import { PrismaClient, User } from '@prisma/client';
+import {
+  LoginInput,
+  SignupInput,
+  SignupResponse,
+  VerifyEmailInput,
+  VerifyEmailResponse,
+} from '../../gql/graphql';
 
 describe('User Sign up', () => {
   let invitationLink: string;
   let onboardingToken: string;
   let addedUser: User | null;
+  let userId: string;
+  const userEmail = `automation-${crypto.randomUUID()}@team930312.testinator.com`;
   const api = new GraphQlApi();
   const prisma = new PrismaClient();
-  const userEmail = `automation-${crypto.randomUUID()}@team930312.testinator.com`;
-  let userId: string;
 
   test('Add a new user', async () => {
     const signUpData = await api.graphql.mutate({
@@ -25,13 +30,13 @@ describe('User Sign up', () => {
         signupInput: {
           email: userEmail,
           password: appEnv.SEED_PASSWORD,
-        } as  SignupInput,
+        } as SignupInput,
       },
     });
 
-    const data: SignupResponse = signUpData.data
+    const data: SignupResponse = signUpData.data;
     userId = data.id;
-    expect(signUpData.data.signup.id).not.toBe(null);
+    expect(data.id).not.toBe(null);
 
     waitForTime();
   });
@@ -77,10 +82,12 @@ describe('User Sign up', () => {
       variables: {
         verifyEmailInput: {
           token: onboardingToken,
-        },
+        } as VerifyEmailInput,
       },
     });
-    expect(verifyEmailData.data.verifyEmail.refreshToken).not.toBe(null);
+
+    const data: VerifyEmailResponse = verifyEmailData.data;
+    expect(data.refreshToken).not.toBe(null);
   });
 
   test('Should not create duplicate user and be case-insensitive ', async () => {
@@ -91,7 +98,7 @@ describe('User Sign up', () => {
           signupInput: {
             email: userEmail.toUpperCase(),
             password: appEnv.SEED_PASSWORD,
-          },
+          } as SignupInput,
         },
       }),
     ).rejects.toThrow('User already exists');
