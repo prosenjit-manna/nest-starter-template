@@ -6,7 +6,7 @@ import { faker } from "@faker-js/faker";
 
 describe('User List', () => {
   const api = new GraphQlApi();
-  const UserEmail = faker.internet.userName() + '@itobuz.com';
+  const UserEmail = `${crypto.randomUUID}@${appEnv.TESTINATOR_TEAM_ID}`;
     [UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
         const dbClient = new PrismaClient();
         beforeAll(async () => {
