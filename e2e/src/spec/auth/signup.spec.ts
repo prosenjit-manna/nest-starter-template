@@ -1,13 +1,13 @@
-import { SIGN_UP_MUTATION } from '../../graphql/auth/sign-up/sign-up-mutation.gql';
-import { VERIFY_EMAIL_MUTATION } from '../../graphql/auth/verify-email/verify-email-mutation.gql';
+import { VERIFY_EMAIL_MUTATION } from '../../graphql/verify-email-mutation.gql';
 import { GraphQlApi } from '../../lib/graphql-api';
 import { waitForTime } from '../../lib/wait-for-time';
 import { fetchEmailsFromInbox } from '../../lib/fetchEmails';
 import { appEnv } from '../../lib/app-env';
 import { PrismaClient } from '@prisma/client';
 import { User } from '@prisma/client';
-import { LOGIN_QUERY } from '../../graphql/auth/login/login-query.gql';
-import { LoginInput, SignupResponse } from '../../gql/graphql';
+import { LOGIN_QUERY } from '../../graphql/login-query.gql';
+import { LoginInput, SignupInput, SignupResponse } from '../../gql/graphql';
+import { SIGN_UP_MUTATION } from '../../graphql/sign-up-mutation.gql';
 
 describe('User Sign up', () => {
   let invitationLink: string;
@@ -25,11 +25,12 @@ describe('User Sign up', () => {
         signupInput: {
           email: userEmail,
           password: appEnv.SEED_PASSWORD,
-        },
+        } as  SignupInput,
       },
     });
 
-    userId = signUpData.data.signup.id;
+    const data: SignupResponse = signUpData.data
+    userId = data.id;
     expect(signUpData.data.signup.id).not.toBe(null);
 
     waitForTime();

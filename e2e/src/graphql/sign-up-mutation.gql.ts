@@ -1,9 +1,9 @@
-import { gql } from '@apollo/client';
+import { graphql } from "gql";
 
-export const SIGN_UP_MUTATION = gql`
+export const SIGN_UP_MUTATION = graphql(`
   mutation Signup($signupInput: SignupInput!) {
     signup(signupInput: $signupInput) {
       id
     }
   }
-`;
+`);
