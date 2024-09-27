@@ -2,6 +2,7 @@ import { PrismaClient, UserType } from '@prisma/client';
 import { appEnv } from '../../lib/app-env';
 import { GraphQlApi } from '../../lib/graphql-api';
 import { USER_LIST } from '../../graphql/get-user-list.gql';
+import { GetUsersQuery, GetUsersQueryVariables } from '../../gql/graphql';
 
 describe('User List', () => {
   [UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
@@ -23,7 +24,7 @@ describe('User List', () => {
     });
 
     test('Get  user list ', async () => {
-      const response = await api.graphql.query({
+      const response = await api.graphql.query<GetUsersQuery, GetUsersQueryVariables>({
         query: USER_LIST,
       });
       expect(response.data.getUsers.length).not.toBe(0);
