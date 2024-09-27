@@ -2,6 +2,7 @@ import { GET_POST_LIST_QUERY } from '../../graphql/posts/get-post-list-query.gql
 import { PrismaClient, UserType } from '@prisma/client';
 import { GraphQlApi } from '../../lib/graphql-api';
 import { appEnv } from '../../lib/app-env';
+import { PostListResponse } from '../../gql/graphql';
 
 describe('Get Post List', () => {
   [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER].forEach((type) => {
@@ -30,7 +31,8 @@ describe('Get Post List', () => {
         variables: {},
       });
 
-      expect(postList.data?.getPostList.posts.length).toBeGreaterThan(0);
+      const data: PostListResponse = postList.data;
+      expect(data.posts.length).toBeGreaterThan(0);
     });
 
     test('Search by title post list ', () => {});
