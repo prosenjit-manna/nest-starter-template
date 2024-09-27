@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { appEnv } from './app-env';
 
-export const fetchEmailsFromInbox = async (emailSubject: string) => {
+export async function fetchEmailsFromInbox(emailSubject: string): Promise<string | undefined> {
   let messageId;
   const apiUrl = `${appEnv.FETCH_EMAILS_INBOX}${appEnv.API_KEY}`;
 
@@ -16,13 +16,13 @@ export const fetchEmailsFromInbox = async (emailSubject: string) => {
           }
         });
       } else {
-        console.error('No messages found in the inbox');
+        throw new Error('No messages found in the inbox');
       }
     } else {
-      console.error('Unexpected response status:', mailResponse.status);
+      throw new Error(`Unexpected response status: ${mailResponse.status}`);
     }
   } catch (error: any) {
-    console.error('Error setting up the request:', error.message);
+    throw new Error(`Error setting up the request:, ${error.message}`);
   }
 
   const fetchMessageURL = `${appEnv.FETCH_SPECIFIC_EMAIL}${messageId}?token=${appEnv.API_KEY}`;

@@ -1,5 +1,5 @@
 import { appEnv } from './app-env';
 
 export const waitForTime = (timeout: number = appEnv.TIMEOUT) => {
-  new Promise((resolve) => setTimeout(resolve, timeout));
+  return new Promise((resolve) => setTimeout(resolve, timeout));
 };

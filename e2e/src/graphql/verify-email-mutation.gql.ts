@@ -1,10 +1,10 @@
-import { gql } from '@apollo/client';
+import { graphql } from "gql";
 
-export const VERIFY_EMAIL_MUTATION = gql`
+export const VERIFY_EMAIL_MUTATION = graphql(`
   mutation VerifyEmail($verifyEmailInput: VerifyEmailInput!) {
     verifyEmail(verifyEmailInput: $verifyEmailInput) {
       token
       refreshToken
     }
   }
-`;
+`);

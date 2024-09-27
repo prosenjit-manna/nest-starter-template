@@ -9,34 +9,42 @@ import { PrismaClient, User } from '@prisma/client';
 import {
   LoginInput,
   SignupInput,
+  SignupMutation,
+  SignupMutationVariables,
   SignupResponse,
   VerifyEmailInput,
+  VerifyEmailMutation,
+  VerifyEmailMutationVariables,
   VerifyEmailResponse,
 } from '../../gql/graphql';
 
 describe('User Sign up', () => {
-  let invitationLink: string;
-  let onboardingToken: string;
+  let invitationLink: string | undefined;
+  let onboardingToken: string | undefined;
   let addedUser: User | null;
-  let userId: string;
+  let userId: string | undefined;
   const userEmail = `automation-${crypto.randomUUID()}@team930312.testinator.com`;
   const api = new GraphQlApi();
   const prisma = new PrismaClient();
 
+  afterAll(async () => {
+    await prisma.$disconnect();
+  });
+
   test('Add a new user', async () => {
-    const signUpData = await api.graphql.mutate({
+    const signUpData = await api.graphql.mutate<SignupMutation, SignupMutationVariables>({
       mutation: SIGN_UP_MUTATION,
       variables: {
         signupInput: {
           email: userEmail,
           password: appEnv.SEED_PASSWORD,
-        } as SignupInput,
+        },
       },
     });
-
-    const data: SignupResponse = signUpData.data;
-    userId = data.id;
-    expect(data.id).not.toBe(null);
+    
+    const data = signUpData.data?.signup;
+    userId = data?.id;
+    expect(data?.id).not.toBe(null);
 
     waitForTime();
   });
@@ -50,7 +58,7 @@ describe('User Sign up', () => {
 
   test('Should create a verification URL', async () => {
     invitationLink = await fetchEmailsFromInbox('Welcome');
-    onboardingToken = invitationLink.substring(35);
+    onboardingToken = invitationLink?.substring(35);
     expect(invitationLink).toContain('verify-email');
   });
 
@@ -77,7 +85,7 @@ describe('User Sign up', () => {
   });
 
   test('Verify the email with onboarding token', async () => {
-    const verifyEmailData = await api.graphql.mutate({
+    const verifyEmailData = await api.graphql.mutate<VerifyEmailMutation, VerifyEmailMutationVariables>({
       mutation: VERIFY_EMAIL_MUTATION,
       variables: {
         verifyEmailInput: {
@@ -86,8 +94,8 @@ describe('User Sign up', () => {
       },
     });
 
-    const data: VerifyEmailResponse = verifyEmailData.data;
-    expect(data.refreshToken).not.toBe(null);
+    const data = verifyEmailData.data?.verifyEmail;
+    expect(data?.refreshToken).not.toBe(null);
   });
 
   test('Should not create duplicate user and be case-insensitive ', async () => {

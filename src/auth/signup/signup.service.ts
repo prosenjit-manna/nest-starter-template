@@ -30,7 +30,7 @@ export class SignupService {
   
 
     const result = await this.prisma.user.findFirst({
-      where: { email: singUpInput.email },
+      where: { email: singUpInput.email.toLowerCase() },
     });
 
     if (result) {
@@ -39,7 +39,7 @@ export class SignupService {
 
     const user = await this.prisma.user.create({
       data: {
-        email: singUpInput.email,
+        email: singUpInput.email.toLowerCase(),
         password: hashedPassword,
         verificationToken: verifyToken,
       },
