@@ -8,6 +8,8 @@ import { appEnv } from '../../lib/app-env';
 import { PrismaClient, User } from '@prisma/client';
 import {
   LoginInput,
+  LoginQuery,
+  LoginQueryVariables,
   SignupInput,
   SignupMutation,
   SignupMutationVariables,
@@ -32,7 +34,10 @@ describe('User Sign up', () => {
   });
 
   test('Add a new user', async () => {
-    const signUpData = await api.graphql.mutate<SignupMutation, SignupMutationVariables>({
+    const signUpData = await api.graphql.mutate<
+      SignupMutation,
+      SignupMutationVariables
+    >({
       mutation: SIGN_UP_MUTATION,
       variables: {
         signupInput: {
@@ -41,7 +46,7 @@ describe('User Sign up', () => {
         },
       },
     });
-    
+
     const data = signUpData.data?.signup;
     userId = data?.id;
     expect(data?.id).not.toBe(null);
@@ -69,23 +74,23 @@ describe('User Sign up', () => {
   test('Should throw an error if user not verified and tries to login', async () => {
     expect(addedUser?.isVerified).toBe(false);
 
-    const loginInput: LoginInput = {
-      email: userEmail,
-      password: appEnv.SEED_PASSWORD,
-    };
-
-    await expect(
-      api.graphql.query({
-        query: LOGIN_QUERY,
-        variables: {
-          loginInput,
+    const response = await api.graphql.query<LoginQuery, LoginQueryVariables>({
+      query: LOGIN_QUERY,
+      variables: {
+        loginInput: {
+          email: userEmail,
+          password: appEnv.SEED_PASSWORD,
         },
-      }),
-    ).rejects.toThrow('Account not verified');
+      },
+    });
+    expect(response.errors?.[0].message).toBe('Account not verified');
   });
 
   test('Verify the email with onboarding token', async () => {
-    const verifyEmailData = await api.graphql.mutate<VerifyEmailMutation, VerifyEmailMutationVariables>({
+    const verifyEmailData = await api.graphql.mutate<
+      VerifyEmailMutation,
+      VerifyEmailMutationVariables
+    >({
       mutation: VERIFY_EMAIL_MUTATION,
       variables: {
         verifyEmailInput: {
@@ -99,17 +104,20 @@ describe('User Sign up', () => {
   });
 
   test('Should not create duplicate user and be case-insensitive ', async () => {
-    await expect(
-      api.graphql.mutate({
-        mutation: SIGN_UP_MUTATION,
-        variables: {
-          signupInput: {
-            email: userEmail.toUpperCase(),
-            password: appEnv.SEED_PASSWORD,
-          } as SignupInput,
-        },
-      }),
-    ).rejects.toThrow('User already exists');
+    const signUpData = await api.graphql.mutate<
+      SignupMutation,
+      SignupMutationVariables
+    >({
+      mutation: SIGN_UP_MUTATION,
+      variables: {
+        signupInput: {
+          email: userEmail.toUpperCase(),
+          password: appEnv.SEED_PASSWORD,
+        } as SignupInput,
+      },
+    });
+
+    expect(signUpData.errors?.[0].message).toBe('User already exists');
   });
 
   test('should return the user ID after successful signup', async () => {
