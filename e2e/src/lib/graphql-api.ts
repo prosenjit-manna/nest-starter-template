@@ -48,6 +48,10 @@ export class GraphQlApi {
     });
   }
 
+  public setToken(token: string) {
+    this.token = token;
+  }
+
   async login(loginInput: LoginInput): Promise<ApolloQueryResult<LoginQuery>> {
     const response = await this.graphql.query({
       query: LOGIN_QUERY,

@@ -3,7 +3,7 @@ import { appEnv } from './app-env';
 
 export async function fetchEmailsFromInbox(emailSubject: string): Promise<string | undefined> {
   let messageId;
-  const apiUrl = `${appEnv.FETCH_EMAILS_INBOX}${appEnv.API_KEY}`;
+  const apiUrl = `${appEnv.FETCH_EMAILS_INBOX}${appEnv.TESTINATOR_API_KEY}`;
 
   try {
     const mailResponse = await axios.get(apiUrl);
@@ -22,10 +22,10 @@ export async function fetchEmailsFromInbox(emailSubject: string): Promise<string
       throw new Error(`Unexpected response status: ${mailResponse.status}`);
     }
   } catch (error: any) {
-    throw new Error(`Error setting up the request:, ${error.message}`);
+    throw new Error(`${error.message}`);
   }
 
-  const fetchMessageURL = `${appEnv.FETCH_SPECIFIC_EMAIL}${messageId}?token=${appEnv.API_KEY}`;
+  const fetchMessageURL = `${appEnv.FETCH_SPECIFIC_EMAIL}${messageId}?token=${appEnv.TESTINATOR_API_KEY}`;
 
   const messageResponse = await axios.get(fetchMessageURL);
   const urlRegex = /href="(http:\/\/[^"]*)"/;

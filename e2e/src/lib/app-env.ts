@@ -10,9 +10,10 @@ export const appEnv = cleanEnv(process.env, {
   }),
   DATABASE_URL: str({ desc: 'Please provide DB URL' }),
   SEED_PASSWORD: str({ default: 'SamLauncher@123' }),
+  TESTINATOR_TEAM_ID: str({ default: 'team930312.testinator.com' }),
   SEED_EMAIL: email({ default: 'example@team930312.testinator.com' }),
   TIMEOUT: num({ default: 5000 }),
-  API_KEY: str({ default: '6fd5ed52adf94184a9b562da180ea4f9' }),
+  TESTINATOR_API_KEY: str({ default: '6fd5ed52adf94184a9b562da180ea4f9' }),
   FETCH_EMAILS_INBOX: str({
     default: 'https://api.mailinator.com/api/v2/domains/private/inboxes?token=',
   }),

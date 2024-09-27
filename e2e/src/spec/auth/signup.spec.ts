@@ -7,17 +7,14 @@ import { fetchEmailsFromInbox } from '../../lib/fetchEmails';
 import { appEnv } from '../../lib/app-env';
 import { PrismaClient, User } from '@prisma/client';
 import {
-  LoginInput,
   LoginQuery,
   LoginQueryVariables,
   SignupInput,
   SignupMutation,
   SignupMutationVariables,
-  SignupResponse,
   VerifyEmailInput,
   VerifyEmailMutation,
   VerifyEmailMutationVariables,
-  VerifyEmailResponse,
 } from '../../gql/graphql';
 
 describe('User Sign up', () => {
@@ -25,7 +22,7 @@ describe('User Sign up', () => {
   let onboardingToken: string | undefined;
   let addedUser: User | null;
   let userId: string | undefined;
-  const userEmail = `automation-${crypto.randomUUID()}@team930312.testinator.com`;
+  const userEmail = `automation-${crypto.randomUUID()}@${appEnv.TESTINATOR_TEAM_ID}`;
   const api = new GraphQlApi();
   const prisma = new PrismaClient();
 
@@ -51,8 +48,8 @@ describe('User Sign up', () => {
     userId = data?.id;
     expect(data?.id).not.toBe(null);
 
-    waitForTime();
-  });
+    await waitForTime();
+  }, 10000);
 
   test('Should hash the password correctly', async () => {
     addedUser = await prisma.user.findUnique({
@@ -127,6 +124,6 @@ describe('User Sign up', () => {
       where: { id: userId },
     });
 
-    expect(user?.isVerified).toBe(false);
+    expect(user?.isVerified).toBe(true);
   });
 });
