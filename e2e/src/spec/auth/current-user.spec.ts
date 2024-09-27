@@ -1,7 +1,7 @@
 import { appEnv } from '../../lib/app-env';
 import { PrismaClient, UserType } from '@prisma/client';
 import { GraphQlApi } from '../../lib/graphql-api';
-import { CURRENT_USER_QUERY } from '../../graphql/auth/current-user.gql';
+import { CURRENT_USER_QUERY } from '../../graphql/current-user.gql';
 
 describe('Current user login module', () => {
   [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER].forEach((type) => {
