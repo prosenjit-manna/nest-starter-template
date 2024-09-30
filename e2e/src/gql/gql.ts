@@ -19,10 +19,6 @@ const documents = {
     types.CurrentUserDocument,
   '\n  query Login($loginInput: LoginInput!) {\n    login(loginInput: $loginInput) {\n      id\n      token\n    }\n  }\n':
     types.LoginDocument,
-  '\n  mutation CreatePost($createPostInput: CreatePostInput!) {\n    createPost(createPostInput: $createPostInput) {\n      id\n    }\n  }\n':
-    types.CreatePostDocument,
-  '\n  query GetPostList($getPostListInput: GetPostListInput) {\n    getPostList(getPostListInput: $getPostListInput) {\n      pagination {\n        currentPage\n        perPage\n        totalPage\n      }\n      posts {\n        title\n        content\n        id\n        published\n        authorId\n      }\n    }\n  }\n':
-    types.GetPostListDocument,
   '\n query GetUsers {\n  getUsers {\n    email\n    id\n  }\n}\n\n':
     types.GetUsersDocument,
   '\n  query Login($loginInput: LoginInput!) {\n    login(loginInput: $loginInput) {\n      id\n      token\n      refreshToken\n    }\n  }\n':
