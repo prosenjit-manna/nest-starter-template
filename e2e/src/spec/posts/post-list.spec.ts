@@ -1,8 +1,8 @@
-import { GET_POST_LIST_QUERY } from '../../graphql/posts/get-post-list-query.gql';
+import { GET_POST_LIST_QUERY } from '../../graphql/get-post-list-query.gql';
 import { PrismaClient, UserType } from '@prisma/client';
 import { GraphQlApi } from '../../lib/graphql-api';
 import { appEnv } from '../../lib/app-env';
-import { PostListResponse } from '../../gql/graphql';
+import { GetPostListQuery, GetPostListQueryVariables } from '../../gql/graphql';
 
 describe('Get Post List', () => {
   [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER].forEach((type) => {
@@ -26,13 +26,16 @@ describe('Get Post List', () => {
     });
 
     test(`Get post list as ${type}`, async () => {
-      const postList = await api.graphql.query({
+      const postList = await api.graphql.query<
+        GetPostListQuery,
+        GetPostListQueryVariables
+      >({
         query: GET_POST_LIST_QUERY,
         variables: {},
       });
 
-      const data: PostListResponse = postList.data;
-      expect(data.posts.length).toBeGreaterThan(0);
+      const data = postList.data;
+      expect(data.getPostList.posts.length).toBeGreaterThan(0);
     });
 
     test('Search by title post list ', () => {});

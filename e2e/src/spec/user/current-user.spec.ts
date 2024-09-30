@@ -16,7 +16,7 @@ describe('Current user login module', () => {
       if (!user) {
         return;
       }
-       await api.login({
+      await api.login({
         email: user.email,
         password: appEnv.SEED_PASSWORD,
       });
@@ -25,11 +25,8 @@ describe('Current user login module', () => {
     test('Current user login ', async () => {
       const response = await api.graphql.query({
         query: CURRENT_USER_QUERY,
-       
       });
       expect(response.data.currentUser.id).not.toBeNull();
-      
     });
-
   });
 });

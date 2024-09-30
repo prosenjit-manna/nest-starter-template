@@ -24,7 +24,10 @@ describe('User List', () => {
     });
 
     test('Get  user list ', async () => {
-      const response = await api.graphql.query<GetUsersQuery, GetUsersQueryVariables>({
+      const response = await api.graphql.query<
+        GetUsersQuery,
+        GetUsersQueryVariables
+      >({
         query: USER_LIST,
       });
       expect(response.data.getUsers.length).not.toBe(0);

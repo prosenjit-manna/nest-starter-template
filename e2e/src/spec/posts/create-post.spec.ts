@@ -1,14 +1,19 @@
-import { CREATE_POST_MUTATION } from '../../graphql/posts/create-post-mutation.gql';
+import { CREATE_POST_MUTATION } from '../../graphql/create-post-mutation.gql';
 import { PrismaClient, User, UserType } from '@prisma/client';
 import { GraphQlApi } from '../../lib/graphql-api';
 import { appEnv } from '../../lib/app-env';
 import { faker } from '@faker-js/faker';
-import { CreatePostInput, CreatePostResponse } from '../../gql/graphql';
+import {
+  CreatePostMutation,
+  CreatePostMutationVariables,
+} from '../../gql/graphql';
+
 describe('Post List', () => {
   let user: User | null;
 
   [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER].forEach((type) => {
     const api = new GraphQlApi();
+
     test(`Login as a ${type.toUpperCase()} `, async () => {
       const dbClient = new PrismaClient();
       user = await dbClient.user.findFirst({
@@ -26,8 +31,14 @@ describe('Post List', () => {
       });
       expect(response.data).toBeDefined();
     });
+
     test(`Create Post as ${type}`, async () => {
-      const createPostResponse = await api.graphql.mutate({
+      if (!user) return;
+
+      const createPostResponse = await api.graphql.mutate<
+        CreatePostMutation,
+        CreatePostMutationVariables
+      >({
         mutation: CREATE_POST_MUTATION,
         variables: {
           createPostInput: {
@@ -35,12 +46,12 @@ describe('Post List', () => {
             content: faker.lorem.paragraph(),
             published: faker.datatype.boolean(),
             title: faker.lorem.word(),
-          } as CreatePostInput,
+          },
         },
       });
 
-      const data: CreatePostResponse = createPostResponse.data;
-      expect(data.id).toBeDefined();
+      const data = createPostResponse.data;
+      expect(data?.createPost.id).toBeDefined();
     });
 
     test('Search new post in post list and exist', () => {});
