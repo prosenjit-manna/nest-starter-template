@@ -7,7 +7,7 @@ import {
   UpdatePostMutationVariables,
 } from '../../gql/graphql';
 import { faker } from '@faker-js/faker';
-describe('Post List', () => {
+describe('Update Post', () => {
   let user: User | null;
   let post: Post | null;
 

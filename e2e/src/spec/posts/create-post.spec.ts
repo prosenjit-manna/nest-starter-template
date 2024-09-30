@@ -8,7 +8,7 @@ import {
   CreatePostMutationVariables,
 } from '../../gql/graphql';
 
-describe('Post List', () => {
+describe('Create a new post', () => {
   let user: User | null;
 
   [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER].forEach((type) => {
