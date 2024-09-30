@@ -8,7 +8,7 @@ import {
 } from '@apollo/client';
 import { appEnv } from './app-env';
 import { setContext } from '@apollo/client/link/context';
-import { LOGIN_QUERY } from '../graphql/auth/login/login-query.gql';
+import { LOGIN_QUERY } from '../graphql/login-query.gql';
 import { LoginInput, LoginQuery } from '../gql/graphql';
 
 
@@ -20,6 +20,14 @@ export class GraphQlApi {
     this.graphql = new ApolloClient({
       link: ApolloLink.from([this.authLink(), this.httpLink()]),
       cache: new InMemoryCache(),
+      defaultOptions: {
+        query: {
+          errorPolicy: 'all',  // or 'ignore', 'none'
+        },
+        mutate: {
+          errorPolicy: 'all',  // or 'ignore', 'none'
+        },
+      },
     });
   }
 
@@ -38,6 +46,10 @@ export class GraphQlApi {
         },
       };
     });
+  }
+
+  public setToken(token: string) {
+    this.token = token;
   }
 
   async login(loginInput: LoginInput): Promise<ApolloQueryResult<LoginQuery>> {
