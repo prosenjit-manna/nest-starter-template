@@ -171,6 +171,7 @@ type Mutation {
   createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
   createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   updatePost(postId: String!, updatePostInput: UpdatePostInput!): UpdatePostResponse!
+  deletePost(id: String!, fromStash: Boolean): Boolean!
   createUser(createUserInput: CreateUserInput!): CreateUserResponse!
   requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
   resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
