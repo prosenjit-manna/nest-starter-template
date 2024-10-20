@@ -92,7 +92,7 @@ input RoleListInput {
   pageSize: Int
   orderBy: Order = DESC
   title: String
-  orderByField: roleOrderByField = id
+  orderByField: roleOrderByField = title
 }
 
 enum Order {
@@ -101,7 +101,7 @@ enum Order {
 }
 
 enum roleOrderByField {
-  id
+  createdAt
   title
 }
 

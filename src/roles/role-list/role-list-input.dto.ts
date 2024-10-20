@@ -3,7 +3,7 @@ import { BaseListInput } from 'src/shared/base-list/base-list-input.dto';
 
 
 export enum RoleListOrderByField {
-  id = 'id',
+  createdAt = 'createdAt',
   title = 'title',
 }
 
@@ -17,6 +17,6 @@ export class RoleListInput extends BaseListInput {
   title: string;
 
 
-  @Field(() => RoleListOrderByField, { nullable: true, defaultValue: RoleListOrderByField.id })
+  @Field(() => RoleListOrderByField, { nullable: true, defaultValue: RoleListOrderByField.title })
   orderByField?: RoleListOrderByField;
 }

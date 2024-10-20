@@ -16,37 +16,36 @@ export class RoleListService {
   @Query(() => RoleListResponse)
   async roleList(
     @Args('roleListInput', { nullable: true })
-    getPostListInput: RoleListInput,
+    roleListInput: RoleListInput,
   ): Promise<RoleListResponse> {
     const queryObject: Prisma.RoleWhereInput = {
       title: {
-        contains: getPostListInput?.title || undefined,
+        contains: roleListInput?.title || undefined,
         mode: 'insensitive',
       },
     };
 
-    const postCount = await this.prisma.role.count({
+    const rolesCount = await this.prisma.role.count({
       where: queryObject,
     });
 
     const paginationMeta = paginationInputTransformer({
-      page: getPostListInput?.page,
-      pageSize: getPostListInput?.pageSize,
-      totalRowCount: postCount,
+      page: roleListInput?.page,
+      pageSize: roleListInput?.pageSize,
+      totalRowCount: rolesCount,
     });
 
     let orderByQuery: any = {
-      id: Order.DESC,
+      createdAt: Order.DESC,
     };
 
-    if (getPostListInput?.orderByField && getPostListInput?.orderBy) {
+    if (roleListInput?.orderByField && roleListInput?.orderBy) {
       orderByQuery = {
-        [getPostListInput.orderByField as string]: getPostListInput.orderBy,
+        [roleListInput.orderByField as string]: roleListInput.orderBy,
       };
     }
-    
 
-    const posts = await this.prisma.role.findMany({
+    const roles = await this.prisma.role.findMany({
       skip: paginationMeta.skip,
       take: paginationMeta.perPage,
       orderBy: orderByQuery,
@@ -55,14 +54,13 @@ export class RoleListService {
       },
     });
 
-
     return {
-      role: posts,
+      role: roles,
       pagination: {
         currentPage: paginationMeta.page,
         totalPage: paginationMeta.totalPage,
         perPage: paginationMeta.perPage,
-      }
+      },
     };
   }
 }
