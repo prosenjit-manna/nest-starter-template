@@ -68,6 +68,17 @@ type CreatePostResponse {
   id: String!
 }
 
+type GetPostResponse {
+  id: String!
+  title: String!
+  content: String
+  published: Boolean
+  authorId: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
 type CurrentUserResponse {
   email: String!
   name: String
@@ -107,6 +118,7 @@ type Query {
   roleList(roleListInput: RoleListInput): RoleListResponse!
   listBasePrivilege: PrivilegeListResponse!
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
+  getPost(getPostInput: GetPostInput!): GetPostResponse
   currentUser: CurrentUserResponse!
   getUsers: [CurrentUserResponse!]!
   login(loginInput: LoginInput!): LoginResponse!
@@ -144,6 +156,10 @@ enum orderByField {
   title
   authorId
   published
+}
+
+input GetPostInput {
+  id: String!
 }
 
 input LoginInput {
