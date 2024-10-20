@@ -149,6 +149,7 @@ input GetPostListInput {
   title: String
   authorId: Int
   orderByField: orderByField = id
+  fromStash: Boolean = false
 }
 
 enum orderByField {

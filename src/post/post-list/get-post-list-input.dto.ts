@@ -23,4 +23,7 @@ export class GetPostListInput extends BaseListInput {
 
   @Field(() => PostListOrderByField, { nullable: true, defaultValue: PostListOrderByField.id })
   orderByField?: PostListOrderByField;
+  
+  @Field(() => Boolean, { nullable: true, defaultValue: false })
+  fromStash?: boolean;
 }
