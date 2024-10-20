@@ -13,4 +13,8 @@ export class RoleCreateInput {
 
   @Field(() => RoleName, { defaultValue: RoleName.CUSTOM })
   name: RoleName;
+
+  @Field(() => [String])
+  privileges: string[];
+  
 }

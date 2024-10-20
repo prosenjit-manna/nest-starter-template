@@ -15,7 +15,6 @@ datasource db {
 
 enum PrivilegeType {
   CUSTOM
-  DEFAULT
   BASE
 }
 
@@ -29,6 +28,7 @@ enum PrivilegeName {
 enum PrivilegeGroup {
   POST
   USER
+  ROLE
 }
 
 enum RoleName {

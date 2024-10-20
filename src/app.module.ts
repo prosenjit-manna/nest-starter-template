@@ -31,6 +31,5 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
   ],
   controllers: [],
-  providers: [],
 })
 export class AppModule {}
