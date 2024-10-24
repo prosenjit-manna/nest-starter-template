@@ -12,6 +12,9 @@ type RoleResponse {
   title: String!
   name: String!
   id: String!
+  createdAt: String!
+  updatedAt: String
+  deletedAt: String
 }
 
 type RoleListResponse {
@@ -45,6 +48,10 @@ scalar DateTime
 
 type PrivilegeListResponse {
   privilege: [PrivilegeResponse!]!
+}
+
+type RoleUpdateResponse {
+  id: String!
 }
 
 type PostResponse {
@@ -170,9 +177,11 @@ input LoginInput {
 
 type Mutation {
   createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
+  updateRole(roleUpdateInput: RoleUpdateInput!): RoleUpdateResponse!
+  deleteRole(roleDeleteInput: RoleDeleteInput): Boolean!
   createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   updatePost(postId: String!, updatePostInput: UpdatePostInput!): UpdatePostResponse!
-  deletePost(id: String!, fromStash: Boolean): Boolean!
+  deletePost(postDeleteInput: PostDeleteInput): Boolean!
   createUser(createUserInput: CreateUserInput!): CreateUserResponse!
   requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
   resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
@@ -194,6 +203,19 @@ enum RoleName {
   CUSTOM
 }
 
+input RoleUpdateInput {
+  id: String!
+  title: String!
+  name: RoleName! = CUSTOM
+  createPrivileges: [String!]!
+  removePrivileges: [String!]!
+}
+
+input RoleDeleteInput {
+  id: String!
+  fromStash: Boolean
+}
+
 input CreatePostInput {
   title: String!
   content: String
@@ -206,6 +228,11 @@ input UpdatePostInput {
   content: String
   published: Boolean! = false
   authorId: String
+}
+
+input PostDeleteInput {
+  id: String!
+  fromStash: Boolean
 }
 
 input CreateUserInput {

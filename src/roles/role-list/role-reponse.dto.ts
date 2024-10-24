@@ -5,4 +5,7 @@ export class RoleResponse {
   @Field() title: string;
   @Field() name: string;
   @Field() id: string;
+  @Field() createdAt: string;
+  @Field({ nullable: true }) updatedAt: string;
+  @Field({ nullable: true }) deletedAt: string;
 }
