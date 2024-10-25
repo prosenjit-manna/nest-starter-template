@@ -4,6 +4,15 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { Request } from 'express';
 import { PrismaService } from 'src/prisma.service';
 
+/** 
+ * Usage of this guard 
+ * 
+  @UseGuards(RoleGuard)
+  @SetMetadata('privilegeGroup', PrivilegeGroup.ROLE)
+  @SetMetadata('privilegeName', PrivilegeName.READ)
+ * 
+ */
+
 @Injectable()
 export class RoleGuard implements CanActivate {
   constructor(
@@ -51,7 +60,7 @@ export class RoleGuard implements CanActivate {
     });
     
     // console.log('rolesData', rolesData);
-    console.log('privileges', privileges);
+    // console.log('privileges', privileges);
 
     // create a array of flat privileges
     const privilegesFlatArr: any[] = [];
@@ -65,11 +74,11 @@ export class RoleGuard implements CanActivate {
       });
     });
 
-    console.log('privileges Arr', privilegesFlatArr);
+    // console.log('privileges Arr', privilegesFlatArr);
 
     // Check if user has the required privilege
     const hasPrivilege = privilegesFlatArr.some(p => p.group === privilegeGroup && p.name === privilegeName);
-    console.log('hasPrivilege', hasPrivilege);
+    // console.log('hasPrivilege', hasPrivilege);
 
    return hasPrivilege;
   }

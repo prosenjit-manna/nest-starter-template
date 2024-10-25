@@ -1,24 +1,18 @@
-import { Injectable, SetMetadata, UseGuards } from '@nestjs/common';
+import { Injectable, UseGuards } from '@nestjs/common';
 import { Args, Query } from '@nestjs/graphql';
 import { PrismaService } from 'src/prisma.service';
 import { RoleListResponse } from './role-list.response.dto';
-import { Prisma, PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { Order } from 'src/shared/base-list/base-list-input.dto';
 import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';
 import { RoleListInput } from './role-list-input.dto';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
-import { RoleGuard } from 'src/auth/role.guard';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 @UseGuards(JwtAuthGuard)
 
 export class RoleListService {
   constructor(private prisma: PrismaService) {}
-
-  @UseGuards(RoleGuard)
-  @SetMetadata('privilegeGroup', PrivilegeGroup.ROLE)
-  @SetMetadata('privilegeName', PrivilegeName.READ)
-  
   @Query(() => RoleListResponse)
   async roleList(
     @Args('roleListInput', { nullable: true })
