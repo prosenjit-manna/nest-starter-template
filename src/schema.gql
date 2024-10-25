@@ -12,10 +12,15 @@ type RoleResponse {
   title: String!
   name: String!
   id: String!
-  createdAt: String!
-  updatedAt: String
-  deletedAt: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type RoleListResponse {
   role: [RoleResponse!]!
@@ -41,17 +46,29 @@ enum type {
   BASE
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type PrivilegeListResponse {
   privilege: [PrivilegeResponse!]!
 }
 
 type RoleUpdateResponse {
   id: String!
+}
+
+type RolePrivilegeResponse {
+  group: String!
+  name: String!
+  id: String!
+  type: String!
+}
+
+type RoleGetResponse {
+  title: String!
+  name: String!
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  privilege: [RolePrivilegeResponse!]!
 }
 
 type PostResponse {
@@ -124,6 +141,7 @@ type VerifyEmailResponse {
 type Query {
   roleList(roleListInput: RoleListInput): RoleListResponse!
   listBasePrivilege: PrivilegeListResponse!
+  getRole(roleGetInput: RoleGetInput!): RoleGetResponse!
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
   getPost(getPostInput: GetPostInput!): GetPostResponse
   currentUser: CurrentUserResponse!
@@ -147,6 +165,10 @@ enum Order {
 enum roleOrderByField {
   createdAt
   title
+}
+
+input RoleGetInput {
+  id: String!
 }
 
 input GetPostListInput {
