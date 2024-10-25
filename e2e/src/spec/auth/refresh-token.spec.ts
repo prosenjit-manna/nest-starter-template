@@ -35,7 +35,6 @@ describe('Refresh token module', () => {
         },
       });
       expect(response.errors?.[0]?.message).toBe('Session Invalid');
-      
     });
 
     test('should generate a new access token when provided with a valid refresh token', async () => {
@@ -50,11 +49,10 @@ describe('Refresh token module', () => {
       expect(response.data?.refreshAccessToken.token).toBeDefined();
       expect(response.data?.refreshAccessToken.refreshToken).toBeDefined();
 
-
       // Want to check if new access token working
       const currentUserResponse = await api.graphql.query({
         query: CURRENT_USER_QUERY,
-      })
+      });
 
       expect(currentUserResponse.data).toBeDefined();
     });
@@ -70,9 +68,5 @@ describe('Refresh token module', () => {
       });
       expect(response.errors?.[0]?.message).toBe('Session Invalid');
     });
-
-   
-
-
   });
 });
