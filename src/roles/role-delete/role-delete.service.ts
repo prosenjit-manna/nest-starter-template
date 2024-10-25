@@ -15,7 +15,7 @@ export class RoleDeleteService {
   ): Promise<boolean> {
 
     const role = await this.prismaService.role.findUnique({
-      where: { id: roleDeleteInput.id, deletedAt: roleDeleteInput.fromStash ? undefined : { not: null } },
+      where: { id: roleDeleteInput.id, deletedAt: roleDeleteInput.fromStash ? { not: null } : null },
     });
 
     if (!role) {

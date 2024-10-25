@@ -15,7 +15,7 @@ export class PostDeleteService {
   ): Promise<boolean> {
 
     const post = await this.prismaService.post.findUnique({
-      where: { id: postDeleteInput.id, deletedAt: postDeleteInput.fromStash ? undefined : { not: null } },
+      where: { id: postDeleteInput.id, deletedAt: postDeleteInput.fromStash ? { not: null } : null },
     });
 
     if (!post) {
