@@ -34,7 +34,6 @@ export class RoleGetService {
       include: { privilege: true },
     });
 
-    console.log(privileges);
 
     privileges.forEach((privilege) => {
       transformPrivileges.push({
