@@ -4,14 +4,18 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { SentryModule } from '@sentry/nestjs/setup';
 
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
+
+
 
 @Module({
   imports: [
+    SentryModule.forRoot(),
     RoleModule,
     PostModule,
     UserModule,
@@ -30,6 +34,5 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       rootPath: join(__dirname, '..', 'public'),
     }),
   ],
-  controllers: [],
 })
 export class AppModule {}

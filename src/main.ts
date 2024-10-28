@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import appEnv from './env';
+import './shared/sentry/sentry-init';
 
 
 async function bootstrap() {
