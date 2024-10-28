@@ -109,6 +109,8 @@ type CurrentUserResponse {
   id: String!
   userType: String!
   sessionCount: Float!
+  roles: [String!]!
+  privilege: [RolePrivilegeResponse!]!
 }
 
 type CreateUserResponse {

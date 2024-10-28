@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { UserType } from "@prisma/client";
+import { RolePrivilegeResponse } from "src/roles/get-role/role-get-response.dto";
 
 @ObjectType()
 export class CurrentUserResponse {
@@ -17,5 +18,11 @@ export class CurrentUserResponse {
 
   @Field(() => Number) 
   sessionCount: number;
+
+  @Field(() => [String]) 
+  roles: string[];
+
+  @Field(() => [RolePrivilegeResponse])
+  privilege: RolePrivilegeResponse[];
 
 }

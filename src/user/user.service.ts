@@ -8,6 +8,7 @@ import { CreateUserResponse } from './create-user-response.dto';
 import { UseGuards, UsePipes } from '@nestjs/common';
 import { ValidationPipe } from '../validator.pipe';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { RolePrivilegeResponse } from 'src/roles/get-role/role-get-response.dto';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()
@@ -24,15 +25,41 @@ export class UserService {
         session: true
       }
     });
-
     if (!user) {
       throw new Error('User not found');
     }
 
 
+    const roles = await this.prisma.userRole.findMany({
+      where: {
+        userId: req.jwt.userId
+      }
+    });
+
+    const transformPrivileges: RolePrivilegeResponse[] = [];
+
+    const privileges = await this.prisma.rolePrivilege.findMany({
+      where: { roleId: {
+        in: roles.map(role => role.roleId)
+      } },
+      include: { privilege: true },
+    });
+    
+
+    privileges.forEach((privilege) => {
+      transformPrivileges.push({
+        id: privilege.id,
+        name: privilege.privilege.name,
+        group: privilege.privilege.group,
+        type: privilege.privilege.type || '',
+      });
+    });
+
     return  {
       ...user,
-      sessionCount: user.session.length
+      sessionCount: user.session.length,
+      privilege: transformPrivileges,
+      roles: roles.map(role => role.roleId)
     };
   }
 
