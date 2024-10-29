@@ -59,7 +59,8 @@ describe('Delete Post', () => {
 
       postId=createPostResponse.data?.createPost.id
     });
-    test(`Delete post as ${type}`, async () => {
+
+    test(`Delete post as ${type} not from stash`, async () => {
       if (postId) {
         const deletePostResponse = await api.graphql.mutate<
           DeletePostMutation,
@@ -73,8 +74,33 @@ describe('Delete Post', () => {
             },
           },
         });
-        expect(deletePostResponse.data?.deletePost).toBeDefined();
+        expect(deletePostResponse.data?.deletePost).toBe(true);
       }
     });
+     test(`Delete post as ${type} from stash`, async () => {
+       if (postId) {
+         const deletePostResponse = await api.graphql.mutate<
+           DeletePostMutation,
+           DeletePostMutationVariables
+         >({
+           mutation: DELETE_POST_MUTATION,
+           variables: {
+             postDeleteInput: {
+               id: postId,
+               fromStash: true,
+             },
+           },
+         });
+         expect(deletePostResponse.data?.deletePost).toBe(true);
+
+          const dbClient = new PrismaClient();
+         const post = await dbClient.post.findUnique({
+            where: {
+              id: postId,
+            },
+          });
+          expect(post).toBe(null)
+       }
+     });
   });
 });
