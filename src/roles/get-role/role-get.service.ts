@@ -37,7 +37,7 @@ export class RoleGetService {
 
     privileges.forEach((privilege) => {
       transformPrivileges.push({
-        id: privilege.id,
+        id: privilege.privilege.id,
         name: privilege.privilege.name,
         group: privilege.privilege.group,
         type: privilege.privilege.type || '',
