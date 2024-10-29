@@ -13,19 +13,25 @@ import { RoleGuard } from 'src/auth/role.guard';
 @UseGuards(JwtAuthGuard)
 export class RoleListService {
   constructor(private prisma: PrismaService) {}
-  @Query(() => RoleListResponse)
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.ROLE)
   @SetMetadata('privilegeName', PrivilegeName.READ)
+  @Query(() => RoleListResponse)
   async roleList(
     @Args('roleListInput', { nullable: true })
     roleListInput: RoleListInput,
   ): Promise<RoleListResponse> {
+    
     const queryObject: Prisma.RoleWhereInput = {
       title: {
         contains: roleListInput?.title || undefined,
         mode: 'insensitive',
       },
+      deletedAt: roleListInput?.fromStash ? {
+        not: {
+          not: null,
+        }
+      } : null,
     };
 
     const rolesCount = await this.prisma.role.count({

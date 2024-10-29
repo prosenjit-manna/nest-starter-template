@@ -17,7 +17,8 @@ export class PostListService {
   async getPostList(
     @Args('getPostListInput', { nullable: true })
     getPostListInput: GetPostListInput,
-  ) {
+  ): Promise<PostListResponse> {
+
     const queryObject: Prisma.PostWhereInput = {
       title: {
         contains: getPostListInput?.title || undefined,
@@ -25,7 +26,12 @@ export class PostListService {
       },
       authorId: {
         equals: getPostListInput?.authorId,
-      }
+      },
+      deletedAt: getPostListInput?.fromStash ? {
+        not: {
+          not: null,
+        }
+      } : null,
     };
 
     const postCount = await this.prisma.post.count({
@@ -56,10 +62,8 @@ export class PostListService {
       where: {
         ...queryObject,
       },
-      include: { author: true },
     });
-
-
+    
     return {
       posts: posts,
       pagination: {

@@ -77,6 +77,9 @@ type PostResponse {
   id: String!
   published: Boolean!
   authorId: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
 }
 
 type PostListResponse {
@@ -155,6 +158,7 @@ input RoleListInput {
   page: Int
   pageSize: Int
   orderBy: Order = DESC
+  fromStash: Boolean = false
   title: String
   orderByField: roleOrderByField = title
 }
@@ -177,10 +181,10 @@ input GetPostListInput {
   page: Int
   pageSize: Int
   orderBy: Order = DESC
+  fromStash: Boolean = false
   title: String
   authorId: Int
   orderByField: orderByField = id
-  fromStash: Boolean = false
 }
 
 enum orderByField {

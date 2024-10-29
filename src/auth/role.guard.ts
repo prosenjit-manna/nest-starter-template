@@ -74,11 +74,11 @@ export class RoleGuard implements CanActivate {
       });
     });
 
-    console.log('privileges Arr', privilegesFlatArr);
+    // console.log('privileges Arr', privilegesFlatArr);
 
     // Check if user has the required privilege
     const hasPrivilege = privilegesFlatArr.some(p => p.group === privilegeGroup && p.name === privilegeName);
-    console.log('hasPrivilege', hasPrivilege);
+    // console.log('hasPrivilege', hasPrivilege);
 
    return hasPrivilege;
   }
