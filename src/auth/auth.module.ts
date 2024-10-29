@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtModule } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma.service';
 import { TokenService } from './token.service';
 import { PasswordResetService } from './password-reset/password-reset.service';
 import appEnv from 'src/env';
@@ -20,7 +19,6 @@ import { RefreshTokenService } from './refresh-token/refresh-token.service';
     MailerModule,
   ],
   providers: [
-    PrismaService,
     JwtService,
     PasswordResetService,
     TokenService,

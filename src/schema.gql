@@ -71,6 +71,10 @@ type RoleGetResponse {
   privilege: [RolePrivilegeResponse!]!
 }
 
+type AssignRoleResponse {
+  success: Boolean!
+}
+
 type PostResponse {
   title: String!
   content: String!
@@ -207,6 +211,7 @@ type Mutation {
   createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
   updateRole(roleUpdateInput: RoleUpdateInput!): RoleUpdateResponse!
   deleteRole(roleDeleteInput: RoleDeleteInput): Boolean!
+  assignRole(assignRoleInput: AssignRoleInput!): AssignRoleResponse!
   createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   updatePost(postId: String!, updatePostInput: UpdatePostInput!): UpdatePostResponse!
   deletePost(postDeleteInput: PostDeleteInput): Boolean!
@@ -242,6 +247,11 @@ input RoleUpdateInput {
 input RoleDeleteInput {
   id: String!
   fromStash: Boolean
+}
+
+input AssignRoleInput {
+  roleId: String!
+  userId: String!
 }
 
 input CreatePostInput {
