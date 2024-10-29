@@ -9,6 +9,7 @@ import { UseGuards, UsePipes } from '@nestjs/common';
 import { ValidationPipe } from '../validator.pipe';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { RolePrivilegeResponse } from 'src/roles/get-role/role-get-response.dto';
+import { orderBy, unionBy } from 'lodash';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()
@@ -58,7 +59,7 @@ export class UserService {
     return  {
       ...user,
       sessionCount: user.session.length,
-      privilege: transformPrivileges,
+      privilege: orderBy(unionBy(transformPrivileges,  item => `${item.group}-${item.name}`), ['group'], ['asc']),
       roles: roles.map(role => role.roleId)
     };
   }
