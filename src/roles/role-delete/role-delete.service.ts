@@ -1,14 +1,21 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { PrismaService } from 'src/prisma.service';
 import { CreateAppError } from 'src/shared/create-error/create-error';
-import { HttpStatus } from '@nestjs/common';
+import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 import { RoleDeleteInput } from './role-delete-input.dto';
+import { RoleGuard } from 'src/auth/role.guard';
+import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Resolver()
 export class RoleDeleteService {
   constructor(private prismaService: PrismaService) {}
 
   @Mutation(() => Boolean)
+  @UseGuards(RoleGuard)
+  @SetMetadata('privilegeGroup', PrivilegeGroup.ROLE)
+  @SetMetadata('privilegeName', PrivilegeName.DELETE)
   async deleteRole(
     @Args('roleDeleteInput', { nullable: true })
     roleDeleteInput: RoleDeleteInput,

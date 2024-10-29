@@ -1,12 +1,14 @@
-import { Injectable, UsePipes, ValidationPipe, UseGuards, SetMetadata } from '@nestjs/common';
-import { Args, Mutation } from '@nestjs/graphql';
+import { UsePipes, ValidationPipe, UseGuards, SetMetadata } from '@nestjs/common';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { UpdatePostResponse } from './update-post-response.dto';
 import { UpdatePostInput } from './update-post.dto';
 import { PrismaService } from 'src/prisma.service';
 import { RoleGuard } from 'src/auth/role.guard';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
-@Injectable()
+@UseGuards(JwtAuthGuard)
+@Resolver()
 export class PostUpdateService {
   constructor(private prisma: PrismaService) {}
 
