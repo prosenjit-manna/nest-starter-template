@@ -1,14 +1,21 @@
-import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { SetMetadata, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { RoleUpdateResponse } from './role-update-response.dto';
 import { PrismaService } from 'src/prisma.service';
 import { RoleUpdateInput } from './role-update-input.dto';
+import { RoleGuard } from 'src/auth/role.guard';
+import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Resolver()
 export class RoleUpdateService {
   constructor(private prisma: PrismaService) {}
 
   @Mutation(() => RoleUpdateResponse)
+  @UseGuards(RoleGuard)
+  @SetMetadata('privilegeGroup', PrivilegeGroup.ROLE)
+  @SetMetadata('privilegeName', PrivilegeName.UPDATE)
   @UsePipes(new ValidationPipe())
   async updateRole(
     @Args('roleUpdateInput') roleUpdateInput: RoleUpdateInput,
