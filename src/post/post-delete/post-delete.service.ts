@@ -1,14 +1,19 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { PrismaService } from 'src/prisma.service';
 import { CreateAppError } from 'src/shared/create-error/create-error';
-import { HttpStatus } from '@nestjs/common';
+import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 import { PostDeleteInput } from './post-delete-input.dto';
+import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
+import { RoleGuard } from 'src/auth/role.guard';
 
 @Resolver()
 export class PostDeleteService {
   constructor(private prismaService: PrismaService) {}
 
   @Mutation(() => Boolean)
+  @UseGuards(RoleGuard)
+  @SetMetadata('privilegeGroup', PrivilegeGroup.POST)
+  @SetMetadata('privilegeName', PrivilegeName.DELETE)
   async deletePost(
     @Args('postDeleteInput', { nullable: true })
     postDeleteInput: PostDeleteInput,

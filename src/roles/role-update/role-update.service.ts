@@ -18,7 +18,6 @@ export class RoleUpdateService {
         id: roleUpdateInput.id,
       },
       data: {
-        name: roleUpdateInput.name,
         title: roleUpdateInput.title,
       },
     });
@@ -33,7 +32,7 @@ export class RoleUpdateService {
       })),
     });
 
-
+    // remove privileges from the role
     await this.prisma.rolePrivilege.deleteMany({
       where: {
         roleId: role.id,
