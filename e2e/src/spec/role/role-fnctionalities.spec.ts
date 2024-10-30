@@ -105,7 +105,6 @@ import { faker } from '@faker-js/faker';
           break;
         }
       }
-      console.log('1');
     });
 
     test(`Create Role for ${type}`, async () => {
@@ -124,7 +123,6 @@ import { faker } from '@faker-js/faker';
         });
         roleId = createRoleResponse.data?.createRole.id;
         expect(roleId).toBeDefined();
-        console.log('2');
       }
     });
 
@@ -145,7 +143,6 @@ import { faker } from '@faker-js/faker';
         expect(getRoleResponse.data.getRole.privilege[0].id).toBe(
           randomPrivilege?.id,
         );
-        console.log('3');
       }
     });
 
@@ -167,7 +164,6 @@ import { faker } from '@faker-js/faker';
         });
 
         expect(updateRole.data?.updateRole.id).toBe(roleId);
-        console.log('4');
       }
     });
 
@@ -190,7 +186,6 @@ import { faker } from '@faker-js/faker';
         (role) => role.id === roleId,
       );
       expect(addedRole?.title).toBe(titleUpdated);
-      console.log('5');
     });
 
     test(`Delete role for user - ${type} not from stash`, async () => {
@@ -208,7 +203,6 @@ import { faker } from '@faker-js/faker';
           },
         });
         expect(deleteRole.data?.deleteRole).toBe(true);
-        console.log('6');
       }
     });
 
@@ -222,12 +216,19 @@ import { faker } from '@faker-js/faker';
           variables: {
             roleDeleteInput: {
               id: roleId,
-              fromStash: false,
+              fromStash: true,
             },
           },
         });
         expect(deleteRole.data?.deleteRole).toBe(true);
-        console.log('7');
+
+        const dbClient = new PrismaClient();
+        const roleDeleted = await dbClient.role.findUnique({
+          where: {
+            id: roleId,
+          },
+        });
+        expect(roleDeleted).toBe(null);
       }
     });
   });
