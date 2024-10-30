@@ -1,4 +1,4 @@
-import { cleanEnv, str, email, num } from 'envalid'
+import { cleanEnv, str, email, num, bool } from 'envalid'
 
 export const appEnv = cleanEnv(process.env, {
   DATABASE_URL: str({ default: 'postgresql://nodeProdUser:postgresPasswword@localhost:5433/nest_starter' }),
@@ -32,6 +32,8 @@ export const appEnv = cleanEnv(process.env, {
 
   // Error Logging
   SENTRY_URL: str({ desc: 'Please provide SENTRY URL' }),
+
+  PRISMA_DEBUG: bool({ default: false }),
 
 })
 

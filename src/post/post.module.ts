@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
 import { PostListService } from './post-list/post-list.service';
 import { PostUpdateService } from './post-update/post-update.service';
 import { PostCreateService } from './post-create/post-create.service';
@@ -15,7 +14,6 @@ import { PostDeleteService } from './post-delete/post-delete.service';
     PostCreateService,
     PostUpdateService,
     PostDeleteService,
-    PrismaService,
   ],
 })
 export class PostModule {}

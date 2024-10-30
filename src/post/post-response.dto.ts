@@ -7,4 +7,8 @@ export class PostResponse {
   @Field() id: string;
   @Field() published: boolean;
   @Field() authorId: string;
+
+  @Field() createdAt: Date;
+  @Field() updatedAt: Date;
+  @Field({ nullable: true }) deletedAt: Date;
 }

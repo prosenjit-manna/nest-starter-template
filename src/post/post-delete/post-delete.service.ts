@@ -5,7 +5,9 @@ import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 import { PostDeleteInput } from './post-delete-input.dto';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { RoleGuard } from 'src/auth/role.guard';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Resolver()
 export class PostDeleteService {
   constructor(private prismaService: PrismaService) {}

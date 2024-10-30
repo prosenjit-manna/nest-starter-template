@@ -71,12 +71,19 @@ type RoleGetResponse {
   privilege: [RolePrivilegeResponse!]!
 }
 
+type AssignRoleResponse {
+  success: Boolean!
+}
+
 type PostResponse {
   title: String!
   content: String!
   id: String!
   published: Boolean!
   authorId: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
 }
 
 type PostListResponse {
@@ -155,6 +162,7 @@ input RoleListInput {
   page: Int
   pageSize: Int
   orderBy: Order = DESC
+  fromStash: Boolean = false
   title: String
   orderByField: roleOrderByField = title
 }
@@ -177,10 +185,10 @@ input GetPostListInput {
   page: Int
   pageSize: Int
   orderBy: Order = DESC
+  fromStash: Boolean = false
   title: String
   authorId: Int
   orderByField: orderByField = id
-  fromStash: Boolean = false
 }
 
 enum orderByField {
@@ -203,6 +211,7 @@ type Mutation {
   createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
   updateRole(roleUpdateInput: RoleUpdateInput!): RoleUpdateResponse!
   deleteRole(roleDeleteInput: RoleDeleteInput): Boolean!
+  assignRole(assignRoleInput: AssignRoleInput!): AssignRoleResponse!
   createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   updatePost(postId: String!, updatePostInput: UpdatePostInput!): UpdatePostResponse!
   deletePost(postDeleteInput: PostDeleteInput): Boolean!
@@ -238,6 +247,11 @@ input RoleUpdateInput {
 input RoleDeleteInput {
   id: String!
   fromStash: Boolean
+}
+
+input AssignRoleInput {
+  roleId: String!
+  userId: String!
 }
 
 input CreatePostInput {

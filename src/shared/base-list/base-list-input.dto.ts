@@ -18,4 +18,7 @@ export class BaseListInput {
 
   @Field(() => Order, { nullable: true, defaultValue: Order.DESC })
   orderBy?: Order;
+
+  @Field(() => Boolean, { nullable: true, defaultValue: false })
+  fromStash?: boolean;
 }
