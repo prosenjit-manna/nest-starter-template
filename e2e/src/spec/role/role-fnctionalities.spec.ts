@@ -24,7 +24,7 @@ import { GET_ROLE_LIST_QUERY } from '../../graphql/get-role-list-query.gql';
 import { DELETE_ROLE_MUTATION } from '../../graphql/delete-role-muutation.gql';
 import { faker } from '@faker-js/faker';
 
-[UserType.USER, UserType.SUPER_ADMIN].forEach((type) => {
+[UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
   describe(`Role functionalities for user : ${type}`, () => {
     let user: User | null;
     let randomPrivilege:
@@ -90,13 +90,22 @@ import { faker } from '@faker-js/faker';
         expect(privilege.name).toBeDefined();
       });
 
-      for (const privilege of privilegeList.data.listBasePrivilege.privilege) {
-        randomPrivilege = sample(privilege);
-        randomPrivilege2 = sample(privilege);
+      for (
+        let i = 0;
+        i < privilegeList.data.listBasePrivilege.privilege.length;
+        i++
+      ) {
+        randomPrivilege = sample(
+          privilegeList.data.listBasePrivilege.privilege,
+        );
+        randomPrivilege2 = sample(
+          privilegeList.data.listBasePrivilege.privilege,
+        );
         if (randomPrivilege?.id !== randomPrivilege2?.id) {
           break;
         }
       }
+      console.log('1');
     });
 
     test(`Create Role for ${type}`, async () => {
@@ -115,6 +124,7 @@ import { faker } from '@faker-js/faker';
         });
         roleId = createRoleResponse.data?.createRole.id;
         expect(roleId).toBeDefined();
+        console.log('2');
       }
     });
 
@@ -135,6 +145,7 @@ import { faker } from '@faker-js/faker';
         expect(getRoleResponse.data.getRole.privilege[0].id).toBe(
           randomPrivilege?.id,
         );
+        console.log('3');
       }
     });
 
@@ -156,6 +167,7 @@ import { faker } from '@faker-js/faker';
         });
 
         expect(updateRole.data?.updateRole.id).toBe(roleId);
+        console.log('4');
       }
     });
 
@@ -178,9 +190,10 @@ import { faker } from '@faker-js/faker';
         (role) => role.id === roleId,
       );
       expect(addedRole?.title).toBe(titleUpdated);
+      console.log('5');
     });
 
-    test(`Delete role for user - ${type}`, async () => {
+    test(`Delete role for user - ${type} not from stash`, async () => {
       if (roleId) {
         const deleteRole = await api.graphql.mutate<
           DeleteRoleMutation,
@@ -195,6 +208,26 @@ import { faker } from '@faker-js/faker';
           },
         });
         expect(deleteRole.data?.deleteRole).toBe(true);
+        console.log('6');
+      }
+    });
+
+    test(`Delete role for user - ${type} from stash`, async () => {
+      if (roleId) {
+        const deleteRole = await api.graphql.mutate<
+          DeleteRoleMutation,
+          DeleteRoleMutationVariables
+        >({
+          mutation: DELETE_ROLE_MUTATION,
+          variables: {
+            roleDeleteInput: {
+              id: roleId,
+              fromStash: false,
+            },
+          },
+        });
+        expect(deleteRole.data?.deleteRole).toBe(true);
+        console.log('7');
       }
     });
   });
