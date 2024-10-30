@@ -24,7 +24,7 @@ import { GET_ROLE_LIST_QUERY } from '../../graphql/get-role-list-query.gql';
 import { DELETE_ROLE_MUTATION } from '../../graphql/delete-role-muutation.gql';
 import { faker } from '@faker-js/faker';
 
-[UserType.USER, UserType.SUPER_ADMIN, UserType.USER].forEach((type) => {
+[UserType.USER, UserType.SUPER_ADMIN].forEach((type) => {
   describe(`Role functionalities for user : ${type}`, () => {
     let user: User | null;
     let randomPrivilege:
