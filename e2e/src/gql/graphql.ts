@@ -14,6 +14,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
+  DateTime: { input: any; output: any; }
 };
 
 export type CreatePostInput = {
@@ -43,17 +45,36 @@ export type CurrentUserResponse = {
   email: Scalars['String']['output'];
   id: Scalars['String']['output'];
   name?: Maybe<Scalars['String']['output']>;
+  privilege: Array<RolePrivilegeResponse>;
+  roles: Array<Scalars['String']['output']>;
   sessionCount: Scalars['Float']['output'];
   userType: Scalars['String']['output'];
 };
 
+export type GetPostInput = {
+  id: Scalars['String']['input'];
+};
+
 export type GetPostListInput = {
   authorId?: InputMaybe<Scalars['Int']['input']>;
+  fromStash?: InputMaybe<Scalars['Boolean']['input']>;
   orderBy?: InputMaybe<Order>;
   orderByField?: InputMaybe<OrderByField>;
   page?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GetPostResponse = {
+  __typename?: 'GetPostResponse';
+  authorId?: Maybe<Scalars['String']['output']>;
+  content?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['String']['output'];
+  published?: Maybe<Scalars['Boolean']['output']>;
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type LoginInput = {
@@ -73,11 +94,14 @@ export type Mutation = {
   createPost: CreatePostResponse;
   createRole: RoleCreateResponse;
   createUser: CreateUserResponse;
+  deletePost: Scalars['Boolean']['output'];
+  deleteRole: Scalars['Boolean']['output'];
   refreshAccessToken: VerifyEmailResponse;
   requestPasswordReset: PassWordResetRequestResponse;
   resetPassword: PassWordResetResponse;
   signup: SignupResponse;
   updatePost: UpdatePostResponse;
+  updateRole: RoleUpdateResponse;
   verifyEmail: VerifyEmailResponse;
 };
 
@@ -94,6 +118,16 @@ export type MutationCreateRoleArgs = {
 
 export type MutationCreateUserArgs = {
   createUserInput: CreateUserInput;
+};
+
+
+export type MutationDeletePostArgs = {
+  postDeleteInput?: InputMaybe<PostDeleteInput>;
+};
+
+
+export type MutationDeleteRoleArgs = {
+  roleDeleteInput?: InputMaybe<RoleDeleteInput>;
 };
 
 
@@ -120,6 +154,11 @@ export type MutationSignupArgs = {
 export type MutationUpdatePostArgs = {
   postId: Scalars['String']['input'];
   updatePostInput: UpdatePostInput;
+};
+
+
+export type MutationUpdateRoleArgs = {
+  roleUpdateInput: RoleUpdateInput;
 };
 
 
@@ -150,6 +189,11 @@ export type PasswordResetRequestInput = {
   email: Scalars['String']['input'];
 };
 
+export type PostDeleteInput = {
+  fromStash?: InputMaybe<Scalars['Boolean']['input']>;
+  id: Scalars['String']['input'];
+};
+
 export type PostListResponse = {
   __typename?: 'PostListResponse';
   pagination: BaseListResponse;
@@ -165,18 +209,47 @@ export type PostResponse = {
   title: Scalars['String']['output'];
 };
 
+export type PrivilegeListResponse = {
+  __typename?: 'PrivilegeListResponse';
+  privilege: Array<PrivilegeResponse>;
+};
+
+export type PrivilegeResponse = {
+  __typename?: 'PrivilegeResponse';
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  group: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  type: Type;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   currentUser: CurrentUserResponse;
+  getPost?: Maybe<GetPostResponse>;
   getPostList: PostListResponse;
+  getRole: RoleGetResponse;
   getUsers: Array<CurrentUserResponse>;
+  listBasePrivilege: PrivilegeListResponse;
   login: LoginResponse;
   roleList: RoleListResponse;
 };
 
 
+export type QueryGetPostArgs = {
+  getPostInput: GetPostInput;
+};
+
+
 export type QueryGetPostListArgs = {
   getPostListInput?: InputMaybe<GetPostListInput>;
+};
+
+
+export type QueryGetRoleArgs = {
+  roleGetInput: RoleGetInput;
 };
 
 
@@ -195,12 +268,33 @@ export type RefreshAccessTokenInput = {
 
 export type RoleCreateInput = {
   name?: RoleName;
+  privileges: Array<Scalars['String']['input']>;
   title: Scalars['String']['input'];
 };
 
 export type RoleCreateResponse = {
   __typename?: 'RoleCreateResponse';
   id: Scalars['String']['output'];
+};
+
+export type RoleDeleteInput = {
+  fromStash?: InputMaybe<Scalars['Boolean']['input']>;
+  id: Scalars['String']['input'];
+};
+
+export type RoleGetInput = {
+  id: Scalars['String']['input'];
+};
+
+export type RoleGetResponse = {
+  __typename?: 'RoleGetResponse';
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  privilege: Array<RolePrivilegeResponse>;
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type RoleListInput = {
@@ -224,11 +318,35 @@ export enum RoleName {
   User = 'USER'
 }
 
+export type RolePrivilegeResponse = {
+  __typename?: 'RolePrivilegeResponse';
+  group: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
 export type RoleResponse = {
   __typename?: 'RoleResponse';
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
   title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type RoleUpdateInput = {
+  createPrivileges: Array<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  name?: RoleName;
+  removePrivileges: Array<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+};
+
+export type RoleUpdateResponse = {
+  __typename?: 'RoleUpdateResponse';
+  id: Scalars['String']['output'];
 };
 
 export type SignupInput = {
@@ -278,8 +396,13 @@ export enum OrderByField {
 }
 
 export enum RoleOrderByField {
-  Id = 'id',
+  CreatedAt = 'createdAt',
   Title = 'title'
+}
+
+export enum Type {
+  Base = 'BASE',
+  Custom = 'CUSTOM'
 }
 
 export type CreatePostMutationVariables = Exact<{
@@ -299,7 +422,14 @@ export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __type
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'CurrentUserResponse', id: string, name?: string | null, email: string, userType: string, sessionCount: number } };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'CurrentUserResponse', id: string, name?: string | null, email: string, userType: string, sessionCount: number, roles: Array<string>, privilege: Array<{ __typename?: 'RolePrivilegeResponse', group: string, name: string, id: string, type: string }> } };
+
+export type DeletePostMutationVariables = Exact<{
+  postDeleteInput?: InputMaybe<PostDeleteInput>;
+}>;
+
+
+export type DeletePostMutation = { __typename?: 'Mutation', deletePost: boolean };
 
 export type GetPostListQueryVariables = Exact<{
   getPostListInput?: InputMaybe<GetPostListInput>;
@@ -307,6 +437,13 @@ export type GetPostListQueryVariables = Exact<{
 
 
 export type GetPostListQuery = { __typename?: 'Query', getPostList: { __typename?: 'PostListResponse', pagination: { __typename?: 'baseListResponse', currentPage: number, perPage: number, totalPage: number }, posts: Array<{ __typename?: 'PostResponse', title: string, content: string, id: string, published: boolean, authorId: string }> } };
+
+export type GetPostQueryVariables = Exact<{
+  getPostInput: GetPostInput;
+}>;
+
+
+export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'GetPostResponse', id: string, title: string, content?: string | null, published?: boolean | null, authorId?: string | null, createdAt: any, updatedAt: any, deletedAt?: any | null } | null };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -366,8 +503,10 @@ export type VerifyEmailMutation = { __typename?: 'Mutation', verifyEmail: { __ty
 
 export const CreatePostDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreatePost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createPostInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreatePostInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createPost"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createPostInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createPostInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreatePostMutation, CreatePostMutationVariables>;
 export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createUserInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createUserInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createUserInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
-export const CurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"sessionCount"}}]}}]}}]} as unknown as DocumentNode<CurrentUserQuery, CurrentUserQueryVariables>;
+export const CurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"sessionCount"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}},{"kind":"Field","name":{"kind":"Name","value":"privilege"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"group"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}}]} as unknown as DocumentNode<CurrentUserQuery, CurrentUserQueryVariables>;
+export const DeletePostDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeletePost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postDeleteInput"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"PostDeleteInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deletePost"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"postDeleteInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postDeleteInput"}}}]}]}}]} as unknown as DocumentNode<DeletePostMutation, DeletePostMutationVariables>;
 export const GetPostListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPostList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"getPostListInput"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"GetPostListInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPostList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"getPostListInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"getPostListInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"perPage"}},{"kind":"Field","name":{"kind":"Name","value":"totalPage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"published"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}}]}}]}}]}}]} as unknown as DocumentNode<GetPostListQuery, GetPostListQueryVariables>;
+export const GetPostDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"getPostInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"GetPostInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPost"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"getPostInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"getPostInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"published"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}}]}}]} as unknown as DocumentNode<GetPostQuery, GetPostQueryVariables>;
 export const GetUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"loginInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"loginInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"loginInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<LoginQuery, LoginQueryVariables>;
 export const ResetPasswordDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ResetPassword"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"resetPassword"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PasswordResetInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resetPassword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"resetPassword"},"value":{"kind":"Variable","name":{"kind":"Name","value":"resetPassword"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<ResetPasswordMutation, ResetPasswordMutationVariables>;
