@@ -1,4 +1,3 @@
-
 import { Injectable, UseGuards } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Args, Query } from '@nestjs/graphql';
@@ -14,23 +13,24 @@ import { JwtAuthGuard } from 'src/auth/auth.guard';
 @Injectable()
 export class ListWorkSpaceService {
   constructor(private prisma: PrismaService) {}
-    
+
   @Query(() => ListWorkSpaceResponse)
   async listWorkSpace(
     @Args('listWorkspaceInput', { nullable: true })
     listWorkspaceInput: ListWorkSpaceInput,
   ): Promise<ListWorkSpaceResponse> {
-
     const queryObject: Prisma.WorkspaceWhereInput = {
       name: {
         contains: listWorkspaceInput?.name || undefined,
         mode: 'insensitive',
       },
-      deletedAt: listWorkspaceInput?.fromStash ? {
-        not: {
-          not: null,
-        }
-      } : null,
+      deletedAt: listWorkspaceInput?.fromStash
+        ? {
+            not: {
+              not: null,
+            },
+          }
+        : null,
     };
 
     const postCount = await this.prisma.workspace.count({
@@ -52,9 +52,8 @@ export class ListWorkSpaceService {
         [listWorkspaceInput.orderByField as string]: listWorkspaceInput.orderBy,
       };
     }
-    
 
-    const posts = await this.prisma.workspace.findMany({
+    const workspaceList = await this.prisma.workspace.findMany({
       skip: paginationMeta.skip,
       take: paginationMeta.perPage,
       orderBy: orderByQuery,
@@ -62,14 +61,14 @@ export class ListWorkSpaceService {
         ...queryObject,
       },
     });
-    
+
     return {
-      workspace: posts,
+      workspace: workspaceList,
       pagination: {
         currentPage: paginationMeta.page,
         totalPage: paginationMeta.totalPage,
         perPage: paginationMeta.perPage,
-      }
+      },
     };
   }
 }
