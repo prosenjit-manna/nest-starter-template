@@ -16,9 +16,9 @@ export class UpdateWorkspaceService {
   @Mutation(() => UpdateWorkspaceResponse)
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.WORKSPACE)
-  @SetMetadata('privilegeName', PrivilegeName.CREATE)
+  @SetMetadata('privilegeName', PrivilegeName.UPDATE)
   @UsePipes(new ValidationPipe())
-  async createWorkspace(
+  async updateWorkspace(
     @Args('updateWorkspaceInput') updateWorkspaceInput: UpdateWorkspaceInput,
   ): Promise<UpdateWorkspaceResponse> {
 
