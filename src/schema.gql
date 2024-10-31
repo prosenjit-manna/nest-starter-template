@@ -123,10 +123,6 @@ type CurrentUserResponse {
   privilege: [RolePrivilegeResponse!]!
 }
 
-type CreateUserResponse {
-  id: String!
-}
-
 type PassWordResetRequestResponse {
   message: String!
 }
@@ -259,7 +255,6 @@ type Mutation {
   createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   updatePost(postId: String!, updatePostInput: UpdatePostInput!): UpdatePostResponse!
   deletePost(postDeleteInput: PostDeleteInput): Boolean!
-  createUser(createUserInput: CreateUserInput!): CreateUserResponse!
   requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
   resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
   signup(signupInput: SignupInput!): SignupResponse!
@@ -334,11 +329,6 @@ input UpdatePostInput {
 input PostDeleteInput {
   id: String!
   fromStash: Boolean
-}
-
-input CreateUserInput {
-  email: String!
-  name: String
 }
 
 input PasswordResetRequestInput {
