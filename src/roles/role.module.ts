@@ -6,6 +6,7 @@ import { RoleUpdateService } from './role-update/role-update.service';
 import { RoleDeleteService } from './role-delete/role-delete.service';
 import { RoleGetService } from './get-role/role-get.service';
 import { AssignRoleService } from './assign-role/assign-role.service';
+import { UnAssignRoleService } from './unassign-role/unassign-role.service';
 
 @Module({
   imports: [],
@@ -17,7 +18,8 @@ import { AssignRoleService } from './assign-role/assign-role.service';
     ListPrivilegeService,
     RoleDeleteService,
     RoleGetService,
-    AssignRoleService
+    AssignRoleService,
+    UnAssignRoleService
   ],
 })
 export class RoleModule {}

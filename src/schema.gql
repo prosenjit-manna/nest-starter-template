@@ -75,6 +75,10 @@ type AssignRoleResponse {
   success: Boolean!
 }
 
+type UnAssignRoleResponse {
+  success: Boolean!
+}
+
 type PostResponse {
   title: String!
   content: String!
@@ -212,6 +216,7 @@ type Mutation {
   updateRole(roleUpdateInput: RoleUpdateInput!): RoleUpdateResponse!
   deleteRole(roleDeleteInput: RoleDeleteInput): Boolean!
   assignRole(assignRoleInput: AssignRoleInput!): AssignRoleResponse!
+  unAssignRole(unAssignRoleInput: UnAssignRoleInput!): UnAssignRoleResponse!
   createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   updatePost(postId: String!, updatePostInput: UpdatePostInput!): UpdatePostResponse!
   deletePost(postDeleteInput: PostDeleteInput): Boolean!
@@ -250,6 +255,11 @@ input RoleDeleteInput {
 }
 
 input AssignRoleInput {
+  roleId: String!
+  userId: String!
+}
+
+input UnAssignRoleInput {
   roleId: String!
   userId: String!
 }
