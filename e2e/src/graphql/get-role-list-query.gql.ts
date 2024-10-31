@@ -1,8 +1,8 @@
 import { graphql } from 'gql';
 
 export const GET_ROLE_LIST_QUERY = graphql(`
-  query RoleList {
-    roleList {
+  query RoleList($roleListInput: RoleListInput) {
+    roleList(roleListInput: $roleListInput) {
       role {
         title
         name
