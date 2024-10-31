@@ -111,6 +111,8 @@ model User {
   userType            UserType              @default(USER)
   posts               Post[]
   roles               UserRole[]            @relation(name: "userRoleRleation")
+  pages               Page[]            @relation(name: "userPageRleation")
+
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @updatedAt
   deletedAt           DateTime?
@@ -148,6 +150,9 @@ model WorkspaceMembership {
   userId      String
   workspace   Workspace @relation(name: "workspaceIdMembershipRelation", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String
+  isAccepted  Boolean   @default(false)
+  invitationToken String?
+  
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
@@ -159,6 +164,18 @@ model Post {
   content   String?
   published Boolean?  @default(false)
   author    User?     @relation(fields: [authorId], references: [id])
+  authorId  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Page {
+  id        String    @id @default(uuid())
+  title     String
+  content   String?
+  published Boolean?  @default(false)
+  author    User?     @relation(name: "userPageRleation", fields: [authorId], references: [id])
   authorId  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
