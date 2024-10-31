@@ -14,7 +14,6 @@ datasource db {
 }
 
 enum PrivilegeType {
-  CUSTOM
   BASE
 }
 
@@ -29,6 +28,8 @@ enum PrivilegeGroup {
   POST
   USER
   ROLE
+  WORKSPACE
+  MEMBERSHIP
 }
 
 enum RoleName {

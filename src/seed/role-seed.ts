@@ -16,7 +16,7 @@ export async function roleSeed() {
 
   // create privileges data
   const privilegeData: Prisma.PrivilegeCreateManyInput | Prisma.PrivilegeCreateManyInput[] = [];
-  const models = [PrivilegeGroup.POST, PrivilegeGroup.USER, PrivilegeGroup.ROLE];
+  const models = [PrivilegeGroup.POST, PrivilegeGroup.USER, PrivilegeGroup.ROLE, PrivilegeGroup.WORKSPACE, PrivilegeGroup.MEMBERSHIP];
   models.forEach((model) => {
     [PrivilegeName.CREATE, PrivilegeName.DELETE, PrivilegeName.UPDATE, PrivilegeName.READ].forEach((name) => {
       privilegeData.push({
@@ -101,6 +101,17 @@ export async function roleSeed() {
     },
   });
 
+  const memberShipAndWorkspacePrivileges = await prismaClient.privilege.findMany({
+    where: {
+      type: PrivilegeType.BASE,
+      group: {
+        in: [PrivilegeGroup.WORKSPACE, PrivilegeGroup.MEMBERSHIP],
+      },
+    },
+  });
+
+ 
+
   // find user role
   const userRole = await prismaClient.role.findFirst({
     where: {
@@ -108,13 +119,21 @@ export async function roleSeed() {
     },
   });
   
+
   if (userRole) {
+    const memberShipAndWorkspacePrivilegesIds = memberShipAndWorkspacePrivileges.map((privilege) => ({
+      roleId: userRole.id,
+      privilegeId: privilege.id,
+    }));
+
+    const otherPrivilegesIds = userRolePrivileges.map((privilege) => ({
+      roleId: userRole.id,
+      privilegeId: privilege.id,
+    }));
+
     // Attach all privileges to admin role
     await prismaClient.rolePrivilege.createMany({
-      data: userRolePrivileges.map((privilege) => ({
-        roleId: userRole.id,
-        privilegeId: privilege.id,
-      })),
+      data: otherPrivilegesIds.concat(memberShipAndWorkspacePrivilegesIds),
     });
   }
 
