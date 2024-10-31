@@ -42,7 +42,6 @@ type PrivilegeResponse {
 }
 
 enum type {
-  CUSTOM
   BASE
 }
 
@@ -151,6 +150,10 @@ type VerifyEmailResponse {
   refreshToken: String!
 }
 
+type CreateWorkspaceResponse {
+  id: String!
+}
+
 type Query {
   roleList(roleListInput: RoleListInput): RoleListResponse!
   listBasePrivilege: PrivilegeListResponse!
@@ -212,6 +215,7 @@ input LoginInput {
 }
 
 type Mutation {
+  createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): CreateWorkspaceResponse!
   createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
   updateRole(roleUpdateInput: RoleUpdateInput!): RoleUpdateResponse!
   deleteRole(roleDeleteInput: RoleDeleteInput): Boolean!
@@ -226,6 +230,10 @@ type Mutation {
   signup(signupInput: SignupInput!): SignupResponse!
   verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
   refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
+}
+
+input CreateWorkspaceInput {
+  name: String!
 }
 
 input RoleCreateInput {

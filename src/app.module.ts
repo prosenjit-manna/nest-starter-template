@@ -11,6 +11,7 @@ import { SentryModule } from '@sentry/nestjs/setup';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { WorkspaceModule } from './workspace/workspace.module';
 
 
 
@@ -18,6 +19,7 @@ import { PrismaModule } from './prisma/prisma.module';
   imports: [
     SentryModule.forRoot(),
     PrismaModule,
+    WorkspaceModule,
     RoleModule,
     PostModule,
     UserModule,
