@@ -86,6 +86,8 @@ model RolePrivilege {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
+
+  @@unique([privilegeId, roleId])
 }
 
 model UserRole {
@@ -156,6 +158,8 @@ model WorkspaceMembership {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
+
+  @@unique([workspaceId, userId])
 }
 
 model Post {

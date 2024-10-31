@@ -167,6 +167,10 @@ type UpdateWorkspaceResponse {
   id: String!
 }
 
+type SendInvitationResponse {
+  success: Boolean
+}
+
 type Query {
   listWorkSpace(listWorkspaceInput: ListWorkSpaceInput): ListWorkSpaceResponse!
   roleList(roleListInput: RoleListInput): RoleListResponse!
@@ -247,6 +251,7 @@ type Mutation {
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): CreateWorkspaceResponse!
   updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): UpdateWorkspaceResponse!
   deleteWorkSpace(deleteWorkspaceInput: WorkspaceDeleteInput): Boolean!
+  sendInvitation(sendInvitationInput: SendInvitationInput!): SendInvitationResponse!
   createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
   updateRole(roleUpdateInput: RoleUpdateInput!): RoleUpdateResponse!
   deleteRole(roleDeleteInput: RoleDeleteInput): Boolean!
@@ -274,6 +279,11 @@ input UpdateWorkspaceInput {
 input WorkspaceDeleteInput {
   id: String!
   fromStash: Boolean
+}
+
+input SendInvitationInput {
+  userId: String!
+  workspaceId: String!
 }
 
 input RoleCreateInput {
