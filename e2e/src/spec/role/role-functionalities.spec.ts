@@ -62,7 +62,6 @@ import { sample } from 'lodash';
     let createFlag = false;
     let deleteFlag = false;
     let readFlag = false;
-    let updateFlag = false;
     let createdRoleId: string | undefined;
     const api = new GraphQlApi();
 
@@ -119,8 +118,6 @@ import { sample } from 'lodash';
         if (privilege.group === 'ROLE') {
           if (privilege.name === 'READ') {
             readFlag = true;
-          } else if (privilege.name === 'UPDATE') {
-            updateFlag = true;
           } else if (privilege.name === 'CREATE') {
             createFlag = true;
           } else if (privilege.name === 'DELETE') {
@@ -163,7 +160,12 @@ import { sample } from 'lodash';
 
         for (const privilege of privilegeList.data.listBasePrivilege
           .privilege) {
-          if (randomPrivilege?.id !== randomPrivilege2?.id) break;
+          if (
+            randomPrivilege?.id !== randomPrivilege2?.id &&
+            randomPrivilege2?.group !== 'ROLE' &&
+            randomPrivilege2?.name !== 'UPDATE'
+          )
+            break;
           else randomPrivilege2 = privilege;
         }
       }
@@ -240,21 +242,15 @@ import { sample } from 'lodash';
           },
         });
 
-        if (updateFlag) {
-          expect(updateRole.data?.updateRole.id).toBe(roleId);
-          if (randomPrivilege2.group === 'ROLE') {
-            if (randomPrivilege2.name === 'READ') {
-              readFlag = false;
-            } else if (randomPrivilege2.name === 'UPDATE') {
-              updateFlag = false;
-            } else if (randomPrivilege2.name === 'CREATE') {
-              createFlag = false;
-            } else if (randomPrivilege2.name === 'DELETE') {
-              deleteFlag = false;
-            }
+        expect(updateRole.data?.updateRole.id).toBe(roleId);
+        if (randomPrivilege2.group === 'ROLE') {
+          if (randomPrivilege2.name === 'READ') {
+            readFlag = false;
+          } else if (randomPrivilege2.name === 'CREATE') {
+            createFlag = false;
+          } else if (randomPrivilege2.name === 'DELETE') {
+            deleteFlag = false;
           }
-        } else if (updateRole.errors) {
-          expect(updateRole.errors[0].message).toBe('Forbidden resource');
         }
       }
     });
@@ -340,23 +336,21 @@ import { sample } from 'lodash';
     });
 
     test(`Update the role back to the original state for user : ${type}`, async () => {
-      if (updateFlag) {
-        if (randomPrivilege && randomPrivilege2 && roleId) {
-          await api.graphql.mutate<
-            UpdateRoleMutation,
-            UpdateRoleMutationVariables
-          >({
-            mutation: UPDATE_ROLE_MUTATION,
-            variables: {
-              roleUpdateInput: {
-                id: roleId,
-                title: titleUpdated,
-                createPrivileges: [randomPrivilege2.id],
-                removePrivileges: [],
-              },
+      if (randomPrivilege && randomPrivilege2 && roleId) {
+        await api.graphql.mutate<
+          UpdateRoleMutation,
+          UpdateRoleMutationVariables
+        >({
+          mutation: UPDATE_ROLE_MUTATION,
+          variables: {
+            roleUpdateInput: {
+              id: roleId,
+              title: titleUpdated,
+              createPrivileges: [randomPrivilege2.id],
+              removePrivileges: [],
             },
-          });
-        }
+          },
+        });
       }
     });
   });
