@@ -2,6 +2,8 @@ import { PrismaClient, User, UserType } from '@prisma/client';
 import { GraphQlApi } from '../../lib/graphql-api';
 import { appEnv } from '../../lib/app-env';
 import {
+  AssignRoleMutation,
+  AssignRoleMutationVariables,
   CreateRoleMutation,
   CreateRoleMutationVariables,
   CurrentUserQuery,
@@ -14,6 +16,8 @@ import {
   RoleListQueryVariables,
   RoleQuery,
   RoleQueryVariables,
+  UnAssignRoleMutation,
+  UnAssignRoleMutationVariables,
   UpdateRoleMutation,
   UpdateRoleMutationVariables,
 } from '../../gql/graphql';
@@ -25,6 +29,8 @@ import { DELETE_ROLE_MUTATION } from '../../graphql/delete-role-mutation.gql';
 import { faker } from '@faker-js/faker';
 import { CURRENT_USER_QUERY } from '../../graphql/current-user.gql';
 import { PRIVILEGE_LIST } from '../../graphql/privilege-list-query.gql';
+import { ASSIGN_ROLE_MUTATION } from '../../graphql/assign-role-mutaton.gql';
+import { UNASSIGN_ROLE_MUTATION } from '../../graphql/unassign-role-mutation.gql';
 import { sample } from 'lodash';
 
 [UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
@@ -57,11 +63,15 @@ import { sample } from 'lodash';
         }
       | undefined;
     let roleId: string | undefined;
+    let userId: string | undefined;
     const title = faker.lorem.word();
     const titleUpdated = faker.lorem.word();
     let createFlag = false;
     let deleteFlag = false;
     let readFlag = false;
+    let createFlagNewRole = false;
+    let deleteFlagNewRole = false;
+    let readFlagNewRole = false;
     let createdRoleId: string | undefined;
     const api = new GraphQlApi();
 
@@ -96,6 +106,7 @@ import { sample } from 'lodash';
       rolesForCurrentUser = currentUser.data.currentUser.roles;
 
       roleId = currentUser.data.currentUser.roles[0];
+      userId = currentUser.data.currentUser.id;
 
       const dbClient = new PrismaClient();
       async function fetchPrivileges() {
@@ -169,6 +180,15 @@ import { sample } from 'lodash';
           else randomPrivilege2 = privilege;
         }
       }
+      if (randomPrivilege?.group === 'ROLE') {
+        if (randomPrivilege.name === 'READ') {
+          readFlagNewRole = true;
+        } else if (randomPrivilege.name === 'CREATE') {
+          createFlagNewRole = true;
+        } else if (randomPrivilege.name === 'DELETE') {
+          deleteFlagNewRole = true;
+        }
+      }
     });
 
     test(`Create Role for ${type}`, async () => {
@@ -186,7 +206,7 @@ import { sample } from 'lodash';
           },
         });
 
-        if (createFlag) {
+        if (createFlag || createFlagNewRole) {
           createdRoleId = createRoleResponse.data?.createRole.id;
           expect(createRoleResponse.data?.createRole.id).toBeDefined();
         } else if (createRoleResponse.errors) {
@@ -194,6 +214,24 @@ import { sample } from 'lodash';
             'Forbidden resource',
           );
         }
+      }
+    });
+
+    test('Assign role which has been created', async () => {
+      if (createdRoleId && userId) {
+        const assignRole = await api.graphql.mutate<
+          AssignRoleMutation,
+          AssignRoleMutationVariables
+        >({
+          mutation: ASSIGN_ROLE_MUTATION,
+          variables: {
+            assignRoleInput: {
+              roleId: createdRoleId,
+              userId,
+            },
+          },
+        });
+        expect(assignRole.data?.assignRole.success).toBe(true);
       }
     });
 
@@ -210,7 +248,7 @@ import { sample } from 'lodash';
         },
       });
 
-      if (readFlag) {
+      if (readFlag || readFlagNewRole) {
         roleList.data.roleList.role.forEach((role) => {
           expect(role.id).toBeDefined();
           expect(role.name).toBeDefined();
@@ -224,7 +262,6 @@ import { sample } from 'lodash';
         expect(roleList.errors[0].message).toBe('Forbidden resource');
       }
     });
-
     test(`Update role for user : ${type}`, async () => {
       if (randomPrivilege && randomPrivilege2 && roleId) {
         const updateRole = await api.graphql.mutate<
@@ -236,19 +273,19 @@ import { sample } from 'lodash';
             roleUpdateInput: {
               id: roleId,
               title: titleUpdated,
-              createPrivileges: [randomPrivilege.id],
-              removePrivileges: [randomPrivilege2.id],
+              createPrivileges: [],
+              removePrivileges: [randomPrivilege.id],
             },
           },
         });
-
+        console.log(updateRole);
         expect(updateRole.data?.updateRole.id).toBe(roleId);
-        if (randomPrivilege2.group === 'ROLE') {
-          if (randomPrivilege2.name === 'READ') {
+        if (randomPrivilege.group === 'ROLE') {
+          if (randomPrivilege.name === 'READ') {
             readFlag = false;
-          } else if (randomPrivilege2.name === 'CREATE') {
+          } else if (randomPrivilege.name === 'CREATE') {
             createFlag = false;
-          } else if (randomPrivilege2.name === 'DELETE') {
+          } else if (randomPrivilege.name === 'DELETE') {
             deleteFlag = false;
           }
         }
@@ -256,7 +293,7 @@ import { sample } from 'lodash';
     });
 
     test(`Get Role for user ${type}`, async () => {
-      if (roleId) {
+      if (createdRoleId) {
         const getRoleResponse = await api.graphql.query<
           GetRoleQuery,
           GetRoleQueryVariables
@@ -264,22 +301,39 @@ import { sample } from 'lodash';
           query: GET_ROLE_QUERY,
           variables: {
             roleGetInput: {
-              id: roleId,
+              id: createdRoleId,
             },
           },
         });
 
-        if (readFlag) {
-          expect(getRoleResponse.data.getRole.id).toBe(roleId);
-
+        if (readFlag || readFlagNewRole) {
+          expect(getRoleResponse.data.getRole.id).toBe(createdRoleId);
           let flag = false;
           getRoleResponse.data.getRole.privilege.forEach((eachPrivilege) => {
-            if (eachPrivilege.id === randomPrivilege?.id) flag = true;
+            if (eachPrivilege.id === randomPrivilege2?.id) flag = true;
           });
           expect(flag).toBe(true);
         } else if (getRoleResponse.errors) {
           expect(getRoleResponse.errors[0].message).toBe('Forbidden resource');
         }
+      }
+    });
+
+    test('Unassign role which has been created', async () => {
+      if (createdRoleId && userId) {
+        const unAssignRole = await api.graphql.mutate<
+          UnAssignRoleMutation,
+          UnAssignRoleMutationVariables
+        >({
+          mutation: UNASSIGN_ROLE_MUTATION,
+          variables: {
+            unAssignRoleInput: {
+              roleId: createdRoleId,
+              userId,
+            },
+          },
+        });
+        expect(unAssignRole.data?.unAssignRole.success).toBe(true);
       }
     });
 
@@ -297,8 +351,25 @@ import { sample } from 'lodash';
             },
           },
         });
-        if (deleteFlag) {
+        if (deleteFlag || deleteFlagNewRole) {
           expect(deleteRole.data?.deleteRole).toBe(true);
+
+          const roleList = await api.graphql.query<
+            RoleListQuery,
+            RoleListQueryVariables
+          >({
+            query: GET_ROLE_LIST_QUERY,
+            variables: {
+              roleListInput: {
+                fromStash: false,
+              },
+            },
+          });
+          console.log(roleList.data.roleList.role);
+          const deletedRole = roleList.data.roleList.role.find(
+            (role) => role.id === createdRoleId,
+          );
+          expect(deletedRole).toBe(null);
         } else if (deleteRole.errors) {
           expect(deleteRole.errors[0].message).toBe('Forbidden resource');
         }
@@ -319,7 +390,7 @@ import { sample } from 'lodash';
             },
           },
         });
-        if (deleteFlag) {
+        if (deleteFlag || deleteFlagNewRole) {
           expect(deleteRole.data?.deleteRole).toBe(true);
         } else if (deleteRole.errors) {
           expect(deleteRole.errors[0].message).toBe('Forbidden resource');
