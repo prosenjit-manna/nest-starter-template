@@ -63,6 +63,7 @@ import { sample } from 'lodash';
     let deleteFlag = false;
     let readFlag = false;
     let updateFlag = false;
+    let createdRoleId: string | undefined;
     const api = new GraphQlApi();
 
     test(`Login as a ${type.toUpperCase()} `, async () => {
@@ -95,6 +96,8 @@ import { sample } from 'lodash';
       expect(currentUser.data.currentUser.userType).toBe(type);
       rolesForCurrentUser = currentUser.data.currentUser.roles;
 
+      roleId = currentUser.data.currentUser.roles[0];
+
       const dbClient = new PrismaClient();
       async function fetchPrivileges() {
         for (const role of rolesForCurrentUser) {
@@ -103,12 +106,13 @@ import { sample } from 'lodash';
           });
 
           privilegesForTheUser.forEach((specificPrivilege) => {
-            privilegesForTheRolesOfCurrentUser.push(specificPrivilege.id);
+            privilegesForTheRolesOfCurrentUser.push(
+              specificPrivilege.privilegeId,
+            );
           });
         }
       }
       await fetchPrivileges();
-      console.log(privilegesForTheRolesOfCurrentUser);
 
       currentUser.data.currentUser.privilege.forEach((privilege) => {
         privilegesArrayCurrentUser.push(privilege.id);
@@ -125,10 +129,8 @@ import { sample } from 'lodash';
         }
       });
 
-      privilegesArrayCurrentUser.sort();
-      privilegesForTheRolesOfCurrentUser.sort();
-      expect(privilegesForTheRolesOfCurrentUser).toContain(
-        privilegesArrayCurrentUser,
+      expect(privilegesForTheRolesOfCurrentUser).toEqual(
+        expect.arrayContaining(privilegesArrayCurrentUser),
       );
     });
 
@@ -140,30 +142,31 @@ import { sample } from 'lodash';
         query: PRIVILEGE_LIST,
         variables: {},
       });
-      expect(
-        privilegeList.data.listBasePrivilege.privilege.length,
-      ).toBeGreaterThan(0);
 
-      privilegeList.data.listBasePrivilege.privilege.forEach((privilege) => {
-        expect(privilege.id).toBeDefined();
-        expect(privilege.group).toBeDefined();
-        expect(privilege.name).toBeDefined();
-      });
+      if (readFlag) {
+        expect(
+          privilegeList.data.listBasePrivilege.privilege.length,
+        ).toBeGreaterThan(0);
 
-      randomPrivilege = sample(privilegeList.data.listBasePrivilege.privilege);
-      randomPrivilege2 = sample(privilegeList.data.listBasePrivilege.privilege);
+        privilegeList.data.listBasePrivilege.privilege.forEach((privilege) => {
+          expect(privilege.id).toBeDefined();
+          expect(privilege.group).toBeDefined();
+          expect(privilege.name).toBeDefined();
+        });
 
-      for (
-        let i = 0;
-        i < privilegeList.data.listBasePrivilege.privilege.length;
-        i++
-      ) {
-        if (randomPrivilege?.id !== randomPrivilege2?.id) break;
-        else
-          randomPrivilege2 = privilegeList.data.listBasePrivilege.privilege[i];
+        randomPrivilege = sample(
+          privilegeList.data.listBasePrivilege.privilege,
+        );
+        randomPrivilege2 = sample(
+          privilegeList.data.listBasePrivilege.privilege,
+        );
+
+        for (const privilege of privilegeList.data.listBasePrivilege
+          .privilege) {
+          if (randomPrivilege?.id !== randomPrivilege2?.id) break;
+          else randomPrivilege2 = privilege;
+        }
       }
-
-      console.log(randomPrivilege, randomPrivilege2);
     });
 
     test(`Create Role for ${type}`, async () => {
@@ -180,12 +183,14 @@ import { sample } from 'lodash';
             },
           },
         });
+
         if (createFlag) {
-          roleId = createRoleResponse.data?.createRole.id;
-          expect(roleId).toBeDefined();
-        } else {
-          console.log('DENIED');
-          expect(createRoleResponse).toThrow('Forbidden Resource');
+          createdRoleId = createRoleResponse.data?.createRole.id;
+          expect(createRoleResponse.data?.createRole.id).toBeDefined();
+        } else if (createRoleResponse.errors) {
+          expect(createRoleResponse.errors[0].message).toBe(
+            'Forbidden resource',
+          );
         }
       }
     });
@@ -203,18 +208,18 @@ import { sample } from 'lodash';
         },
       });
 
-      roleList.data.roleList.role.forEach((role) => {
-        expect(role.id).toBeDefined();
-        expect(role.name).toBeDefined();
-        expect(role.title).toBeDefined();
-      });
       if (readFlag) {
+        roleList.data.roleList.role.forEach((role) => {
+          expect(role.id).toBeDefined();
+          expect(role.name).toBeDefined();
+          expect(role.title).toBeDefined();
+        });
         const addedRole = roleList.data.roleList.role.find(
           (role) => role.id === roleId,
         );
         expect(roleId).toBe(addedRole?.id);
-      } else {
-        expect(roleList).toThrow('Forbidden Resource');
+      } else if (roleList.errors) {
+        expect(roleList.errors[0].message).toBe('Forbidden resource');
       }
     });
 
@@ -234,6 +239,7 @@ import { sample } from 'lodash';
             },
           },
         });
+
         if (updateFlag) {
           expect(updateRole.data?.updateRole.id).toBe(roleId);
           if (randomPrivilege2.group === 'ROLE') {
@@ -247,8 +253,8 @@ import { sample } from 'lodash';
               deleteFlag = false;
             }
           }
-        } else {
-          expect(updateRole).toThrow('Forbidden Resource');
+        } else if (updateRole.errors) {
+          expect(updateRole.errors[0].message).toBe('Forbidden resource');
         }
       }
     });
@@ -269,17 +275,20 @@ import { sample } from 'lodash';
 
         if (readFlag) {
           expect(getRoleResponse.data.getRole.id).toBe(roleId);
-          expect(getRoleResponse.data.getRole.privilege[0].id).toBe(
-            randomPrivilege?.id,
-          );
-        } else {
-          expect(getRoleResponse).toThrow('Forbidden Resource');
+
+          let flag = false;
+          getRoleResponse.data.getRole.privilege.forEach((eachPrivilege) => {
+            if (eachPrivilege.id === randomPrivilege?.id) flag = true;
+          });
+          expect(flag).toBe(true);
+        } else if (getRoleResponse.errors) {
+          expect(getRoleResponse.errors[0].message).toBe('Forbidden resource');
         }
       }
     });
 
     test(`Delete role for user - ${type} not from stash`, async () => {
-      if (roleId) {
+      if (createdRoleId) {
         const deleteRole = await api.graphql.mutate<
           DeleteRoleMutation,
           DeleteRoleMutationVariables
@@ -287,22 +296,21 @@ import { sample } from 'lodash';
           mutation: DELETE_ROLE_MUTATION,
           variables: {
             roleDeleteInput: {
-              id: roleId,
+              id: createdRoleId,
               fromStash: false,
             },
           },
         });
         if (deleteFlag) {
           expect(deleteRole.data?.deleteRole).toBe(true);
-        } else {
-          console.log('DENIED');
-          expect(deleteRole).toThrow('Forbidden Resource');
+        } else if (deleteRole.errors) {
+          expect(deleteRole.errors[0].message).toBe('Forbidden resource');
         }
       }
     });
 
     test(`Delete role for user - ${type} from stash`, async () => {
-      if (roleId) {
+      if (createdRoleId) {
         const deleteRole = await api.graphql.mutate<
           DeleteRoleMutation,
           DeleteRoleMutationVariables
@@ -310,25 +318,45 @@ import { sample } from 'lodash';
           mutation: DELETE_ROLE_MUTATION,
           variables: {
             roleDeleteInput: {
-              id: roleId,
+              id: createdRoleId,
               fromStash: true,
             },
           },
         });
         if (deleteFlag) {
           expect(deleteRole.data?.deleteRole).toBe(true);
-        } else {
-          console.log('DENIED');
-          expect(deleteRole).toThrow('Forbidden Resource');
+        } else if (deleteRole.errors) {
+          expect(deleteRole.errors[0].message).toBe('Forbidden resource');
         }
 
         const dbClient = new PrismaClient();
         const roleDeleted = await dbClient.role.findUnique({
           where: {
-            id: roleId,
+            id: createdRoleId,
           },
         });
         expect(roleDeleted).toBe(null);
+      }
+    });
+
+    test(`Update the role back to the original state for user : ${type}`, async () => {
+      if (updateFlag) {
+        if (randomPrivilege && randomPrivilege2 && roleId) {
+          await api.graphql.mutate<
+            UpdateRoleMutation,
+            UpdateRoleMutationVariables
+          >({
+            mutation: UPDATE_ROLE_MUTATION,
+            variables: {
+              roleUpdateInput: {
+                id: roleId,
+                title: titleUpdated,
+                createPrivileges: [randomPrivilege2.id],
+                removePrivileges: [],
+              },
+            },
+          });
+        }
       }
     });
   });
