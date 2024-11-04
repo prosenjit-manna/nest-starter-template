@@ -18,6 +18,16 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type AssignRoleInput = {
+  roleId: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
+export type AssignRoleResponse = {
+  __typename?: 'AssignRoleResponse';
+  success: Scalars['Boolean']['output'];
+};
+
 export type CreatePostInput = {
   authorId: Scalars['String']['input'];
   content?: InputMaybe<Scalars['String']['input']>;
@@ -30,13 +40,12 @@ export type CreatePostResponse = {
   id: Scalars['String']['output'];
 };
 
-export type CreateUserInput = {
-  email: Scalars['String']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
+export type CreateWorkspaceInput = {
+  name: Scalars['String']['input'];
 };
 
-export type CreateUserResponse = {
-  __typename?: 'CreateUserResponse';
+export type CreateWorkspaceResponse = {
+  __typename?: 'CreateWorkspaceResponse';
   id: Scalars['String']['output'];
 };
 
@@ -77,6 +86,22 @@ export type GetPostResponse = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type ListWorkSpaceInput = {
+  authorId?: InputMaybe<Scalars['Int']['input']>;
+  fromStash?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  orderBy?: InputMaybe<Order>;
+  orderByField?: InputMaybe<WorkspaceOrderByField>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  pageSize?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ListWorkSpaceResponse = {
+  __typename?: 'ListWorkSpaceResponse';
+  pagination: BaseListResponse;
+  workspace: Array<WorkSpaceResponse>;
+};
+
 export type LoginInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -91,18 +116,28 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  assignRole: AssignRoleResponse;
   createPost: CreatePostResponse;
   createRole: RoleCreateResponse;
-  createUser: CreateUserResponse;
+  createWorkspace: CreateWorkspaceResponse;
   deletePost: Scalars['Boolean']['output'];
   deleteRole: Scalars['Boolean']['output'];
+  deleteWorkSpace: Scalars['Boolean']['output'];
   refreshAccessToken: VerifyEmailResponse;
   requestPasswordReset: PassWordResetRequestResponse;
   resetPassword: PassWordResetResponse;
+  sendInvitation: SendInvitationResponse;
   signup: SignupResponse;
+  unAssignRole: UnAssignRoleResponse;
   updatePost: UpdatePostResponse;
   updateRole: RoleUpdateResponse;
+  updateWorkspace: UpdateWorkspaceResponse;
   verifyEmail: VerifyEmailResponse;
+};
+
+
+export type MutationAssignRoleArgs = {
+  assignRoleInput: AssignRoleInput;
 };
 
 
@@ -116,8 +151,8 @@ export type MutationCreateRoleArgs = {
 };
 
 
-export type MutationCreateUserArgs = {
-  createUserInput: CreateUserInput;
+export type MutationCreateWorkspaceArgs = {
+  createWorkspaceInput: CreateWorkspaceInput;
 };
 
 
@@ -128,6 +163,11 @@ export type MutationDeletePostArgs = {
 
 export type MutationDeleteRoleArgs = {
   roleDeleteInput?: InputMaybe<RoleDeleteInput>;
+};
+
+
+export type MutationDeleteWorkSpaceArgs = {
+  deleteWorkspaceInput?: InputMaybe<WorkspaceDeleteInput>;
 };
 
 
@@ -146,8 +186,18 @@ export type MutationResetPasswordArgs = {
 };
 
 
+export type MutationSendInvitationArgs = {
+  sendInvitationInput: SendInvitationInput;
+};
+
+
 export type MutationSignupArgs = {
   signupInput: SignupInput;
+};
+
+
+export type MutationUnAssignRoleArgs = {
+  unAssignRoleInput: UnAssignRoleInput;
 };
 
 
@@ -159,6 +209,11 @@ export type MutationUpdatePostArgs = {
 
 export type MutationUpdateRoleArgs = {
   roleUpdateInput: RoleUpdateInput;
+};
+
+
+export type MutationUpdateWorkspaceArgs = {
+  updateWorkspaceInput: UpdateWorkspaceInput;
 };
 
 
@@ -204,9 +259,12 @@ export type PostResponse = {
   __typename?: 'PostResponse';
   authorId: Scalars['String']['output'];
   content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['String']['output'];
   published: Scalars['Boolean']['output'];
   title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type PrivilegeListResponse = {
@@ -233,6 +291,7 @@ export type Query = {
   getRole: RoleGetResponse;
   getUsers: Array<CurrentUserResponse>;
   listBasePrivilege: PrivilegeListResponse;
+  listWorkSpace: ListWorkSpaceResponse;
   login: LoginResponse;
   roleList: RoleListResponse;
 };
@@ -250,6 +309,11 @@ export type QueryGetPostListArgs = {
 
 export type QueryGetRoleArgs = {
   roleGetInput: RoleGetInput;
+};
+
+
+export type QueryListWorkSpaceArgs = {
+  listWorkspaceInput?: InputMaybe<ListWorkSpaceInput>;
 };
 
 
@@ -298,6 +362,7 @@ export type RoleGetResponse = {
 };
 
 export type RoleListInput = {
+  fromStash?: InputMaybe<Scalars['Boolean']['input']>;
   orderBy?: InputMaybe<Order>;
   orderByField?: InputMaybe<RoleOrderByField>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -349,6 +414,16 @@ export type RoleUpdateResponse = {
   id: Scalars['String']['output'];
 };
 
+export type SendInvitationInput = {
+  userId: Scalars['String']['input'];
+  workspaceId: Scalars['String']['input'];
+};
+
+export type SendInvitationResponse = {
+  __typename?: 'SendInvitationResponse';
+  success?: Maybe<Scalars['Boolean']['output']>;
+};
+
 export type SignupInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -357,6 +432,16 @@ export type SignupInput = {
 export type SignupResponse = {
   __typename?: 'SignupResponse';
   id: Scalars['String']['output'];
+};
+
+export type UnAssignRoleInput = {
+  roleId: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
+export type UnAssignRoleResponse = {
+  __typename?: 'UnAssignRoleResponse';
+  success: Scalars['Boolean']['output'];
 };
 
 export type UpdatePostInput = {
@@ -371,6 +456,16 @@ export type UpdatePostResponse = {
   id: Scalars['String']['output'];
 };
 
+export type UpdateWorkspaceInput = {
+  id: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+};
+
+export type UpdateWorkspaceResponse = {
+  __typename?: 'UpdateWorkspaceResponse';
+  id: Scalars['String']['output'];
+};
+
 export type VerifyEmailInput = {
   token: Scalars['String']['input'];
 };
@@ -379,6 +474,20 @@ export type VerifyEmailResponse = {
   __typename?: 'VerifyEmailResponse';
   refreshToken: Scalars['String']['output'];
   token: Scalars['String']['output'];
+};
+
+export type WorkSpaceResponse = {
+  __typename?: 'WorkSpaceResponse';
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type WorkspaceDeleteInput = {
+  fromStash?: InputMaybe<Scalars['Boolean']['input']>;
+  id: Scalars['String']['input'];
 };
 
 export type BaseListResponse = {
@@ -401,8 +510,12 @@ export enum RoleOrderByField {
 }
 
 export enum Type {
-  Base = 'BASE',
-  Custom = 'CUSTOM'
+  Base = 'BASE'
+}
+
+export enum WorkspaceOrderByField {
+  Id = 'id',
+  Name = 'name'
 }
 
 export type CreatePostMutationVariables = Exact<{
@@ -412,12 +525,12 @@ export type CreatePostMutationVariables = Exact<{
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'CreatePostResponse', id: string } };
 
-export type CreateUserMutationVariables = Exact<{
-  createUserInput: CreateUserInput;
+export type CreateWorkspaceMutationVariables = Exact<{
+  createWorkspaceInput: CreateWorkspaceInput;
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'CreateUserResponse', id: string } };
+export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: { __typename?: 'CreateWorkspaceResponse', id: string } };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -449,6 +562,13 @@ export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'CurrentUserResponse', email: string, id: string }> };
+
+export type ListWorkSpaceQueryVariables = Exact<{
+  listWorkspaceInput?: InputMaybe<ListWorkSpaceInput>;
+}>;
+
+
+export type ListWorkSpaceQuery = { __typename?: 'Query', listWorkSpace: { __typename?: 'ListWorkSpaceResponse', workspace: Array<{ __typename?: 'WorkSpaceResponse', name: string, id: string }>, pagination: { __typename?: 'baseListResponse', totalPage: number, currentPage: number, perPage: number } } };
 
 export type LoginQueryVariables = Exact<{
   loginInput: LoginInput;
@@ -493,6 +613,13 @@ export type UpdatePostMutationVariables = Exact<{
 
 export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'UpdatePostResponse', id: string } };
 
+export type UpdateWorkspaceMutationVariables = Exact<{
+  updateWorkspaceInput: UpdateWorkspaceInput;
+}>;
+
+
+export type UpdateWorkspaceMutation = { __typename?: 'Mutation', updateWorkspace: { __typename?: 'UpdateWorkspaceResponse', id: string } };
+
 export type VerifyEmailMutationVariables = Exact<{
   verifyEmailInput: VerifyEmailInput;
 }>;
@@ -502,16 +629,18 @@ export type VerifyEmailMutation = { __typename?: 'Mutation', verifyEmail: { __ty
 
 
 export const CreatePostDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreatePost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createPostInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreatePostInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createPost"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createPostInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createPostInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreatePostMutation, CreatePostMutationVariables>;
-export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createUserInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createUserInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createUserInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
+export const CreateWorkspaceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateWorkspace"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createWorkspaceInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateWorkspaceInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createWorkspace"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createWorkspaceInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createWorkspaceInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateWorkspaceMutation, CreateWorkspaceMutationVariables>;
 export const CurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"sessionCount"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}},{"kind":"Field","name":{"kind":"Name","value":"privilege"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"group"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}}]} as unknown as DocumentNode<CurrentUserQuery, CurrentUserQueryVariables>;
 export const DeletePostDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeletePost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postDeleteInput"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"PostDeleteInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deletePost"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"postDeleteInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postDeleteInput"}}}]}]}}]} as unknown as DocumentNode<DeletePostMutation, DeletePostMutationVariables>;
 export const GetPostListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPostList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"getPostListInput"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"GetPostListInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPostList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"getPostListInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"getPostListInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"perPage"}},{"kind":"Field","name":{"kind":"Name","value":"totalPage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"published"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}}]}}]}}]}}]} as unknown as DocumentNode<GetPostListQuery, GetPostListQueryVariables>;
 export const GetPostDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"getPostInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"GetPostInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPost"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"getPostInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"getPostInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"published"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}}]}}]} as unknown as DocumentNode<GetPostQuery, GetPostQueryVariables>;
 export const GetUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>;
+export const ListWorkSpaceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListWorkSpace"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"listWorkspaceInput"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ListWorkSpaceInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listWorkSpace"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"listWorkspaceInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"listWorkspaceInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"workspace"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalPage"}},{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"perPage"}}]}}]}}]}}]} as unknown as DocumentNode<ListWorkSpaceQuery, ListWorkSpaceQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"loginInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"loginInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"loginInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<LoginQuery, LoginQueryVariables>;
 export const ResetPasswordDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ResetPassword"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"resetPassword"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PasswordResetInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resetPassword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"resetPassword"},"value":{"kind":"Variable","name":{"kind":"Name","value":"resetPassword"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const RefreshAccessTokenDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RefreshAccessToken"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"refreshAccessTokenInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RefreshAccessTokenInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"refreshAccessToken"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"refreshAccessTokenInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"refreshAccessTokenInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<RefreshAccessTokenMutation, RefreshAccessTokenMutationVariables>;
 export const RequestPasswordResetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RequestPasswordReset"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"passwordReset"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PasswordResetRequestInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"requestPasswordReset"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"passwordReset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"passwordReset"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<RequestPasswordResetMutation, RequestPasswordResetMutationVariables>;
 export const SignupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Signup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"signupInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SignupInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signup"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"signupInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"signupInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<SignupMutation, SignupMutationVariables>;
 export const UpdatePostDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdatePost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"updatePostInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdatePostInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updatePost"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"postId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postId"}}},{"kind":"Argument","name":{"kind":"Name","value":"updatePostInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"updatePostInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdatePostMutation, UpdatePostMutationVariables>;
+export const UpdateWorkspaceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateWorkspace"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"updateWorkspaceInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateWorkspaceInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateWorkspace"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updateWorkspaceInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"updateWorkspaceInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateWorkspaceMutation, UpdateWorkspaceMutationVariables>;
 export const VerifyEmailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"VerifyEmail"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"verifyEmailInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"VerifyEmailInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verifyEmail"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"verifyEmailInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"verifyEmailInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<VerifyEmailMutation, VerifyEmailMutationVariables>;
