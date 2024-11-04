@@ -1,6 +1,7 @@
 import { SetMetadata, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context,  Mutation, Resolver } from '@nestjs/graphql';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
+import { Request } from 'express';
 
 import { CreateWorkspaceResponse } from './create-workspace-response.dto';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
@@ -20,12 +21,22 @@ export class CreateWorkspaceService {
   @UsePipes(new ValidationPipe())
   async createWorkspace(
     @Args('createWorkspaceInput') createWorkspaceInput: CreateWorkspaceInput,
+    @Context('req') req: Request
   ): Promise<CreateWorkspaceResponse> {
 
     const workspace = await this.prisma.workspace.create({
       data: {
         name: createWorkspaceInput.name,
       },
+    });
+
+    await this.prisma.workspaceMembership.create({
+      data: {
+        // User ID can not be blank it is just for type safety
+        userId: req?.user?.id || '',
+        workspaceId: workspace.id,
+        isOwner: true,
+      }
     });
     
     return workspace;

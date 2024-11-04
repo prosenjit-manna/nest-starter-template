@@ -20,6 +20,7 @@ model WorkspaceMembership {
   userId          String
   workspace       Workspace @relation(name: "workspaceIdMembershipRelation", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId     String
+  isOwner         Boolean   @default(false)
   isAccepted      Boolean   @default(false)
   invitationToken String?
 
