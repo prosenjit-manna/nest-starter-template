@@ -29,7 +29,7 @@ import { DELETE_ROLE_MUTATION } from '../../graphql/delete-role-mutation.gql';
 import { faker } from '@faker-js/faker';
 import { CURRENT_USER_QUERY } from '../../graphql/current-user.gql';
 import { PRIVILEGE_LIST } from '../../graphql/privilege-list-query.gql';
-import { ASSIGN_ROLE_MUTATION } from '../../graphql/assign-role-mutaton.gql';
+import { ASSIGN_ROLE_MUTATION } from '../../graphql/assign-role-mutation.gql';
 import { UNASSIGN_ROLE_MUTATION } from '../../graphql/unassign-role-mutation.gql';
 import { sample } from 'lodash';
 
