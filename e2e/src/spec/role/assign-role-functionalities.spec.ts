@@ -6,6 +6,8 @@ import {
   AssignRoleMutationVariables,
   CurrentUserQuery,
   CurrentUserQueryVariables,
+  GetRoleQuery,
+  GetRoleQueryVariables,
   GetUsersQuery,
   GetUsersQueryVariables,
   RoleListQuery,
@@ -19,6 +21,7 @@ import { CURRENT_USER_QUERY } from '../../graphql/current-user.gql';
 import { ASSIGN_ROLE_MUTATION } from '../../graphql/assign-role-mutation.gql';
 import { UNASSIGN_ROLE_MUTATION } from '../../graphql/unassign-role-mutation.gql';
 import { sample } from 'lodash';
+import { GET_ROLE_QUERY } from '../../graphql/get-role-query.gql';
 
 [UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
   describe(`Assign Role functionalities for user : ${type}`, () => {
@@ -26,6 +29,9 @@ import { sample } from 'lodash';
     let user: User | null;
     let roleId: string | undefined;
     let userId: string | undefined;
+    let privilegeArrayForCurrentUser: string[] | undefined;
+    let privilegeArrayForAllRoles: string[] | undefined;
+    let rolesArray: string[] | undefined;
     const api = new GraphQlApi();
     const dbClient = new PrismaClient();
 
@@ -124,16 +130,31 @@ import { sample } from 'lodash';
     });
 
     test(`Fetch current user roles for user - ${type}`, async () => {
-      const currentUser = await api.graphql.query<
-        CurrentUserQuery,
-        CurrentUserQueryVariables
-      >({
-        query: CURRENT_USER_QUERY,
-        variables: {},
-      });
+      async function currentUserInfo() {
+        const currentUser = await api.graphql.query<
+          CurrentUserQuery,
+          CurrentUserQueryVariables
+        >({
+          query: CURRENT_USER_QUERY,
+          variables: {},
+        });
+        const roles: string[] = [];
+        currentUser.data.currentUser.roles.forEach((role) => {
+          roles?.push(role);
+        });
+        const privileges: string[] = [];
+        currentUser.data.currentUser.privilege.forEach((privilege) => {
+          privileges?.push(privilege.id);
+        });
+        expect(currentUser.data.currentUser.userType).toBe(UserType.USER);
+        expect(currentUser.data.currentUser.roles).toContain(roleId);
 
-      expect(currentUser.data.currentUser.userType).toBe(UserType.USER);
-      expect(currentUser.data.currentUser.roles).toContain(roleId);
+        return { roles, privileges };
+      }
+
+      const response = await currentUserInfo();
+      rolesArray = response.roles;
+      privilegeArrayForCurrentUser = response.privileges;
     });
 
     test('Login with the user which can unassign role', async () => {
@@ -144,6 +165,39 @@ import { sample } from 'lodash';
         });
         expect(response.data).toBeDefined();
       }
+    });
+
+    test('Assert the multiple role privileges', async () => {
+      async function fetchPrivilege() {
+        const privileges: string[] = [];
+        if (rolesArray) {
+          for (const role of rolesArray) {
+            const getRoleResponse = await api.graphql.query<
+              GetRoleQuery,
+              GetRoleQueryVariables
+            >({
+              query: GET_ROLE_QUERY,
+              variables: {
+                roleGetInput: {
+                  id: role,
+                },
+              },
+            });
+
+            getRoleResponse.data.getRole.privilege.forEach((privilege) => {
+              privileges?.push(privilege.id);
+            });
+          }
+          return privileges;
+        }
+      }
+      privilegeArrayForAllRoles = await fetchPrivilege();
+
+      privilegeArrayForAllRoles?.sort();
+      privilegeArrayForCurrentUser?.sort();
+      expect(privilegeArrayForAllRoles).toStrictEqual(
+        privilegeArrayForCurrentUser,
+      );
     });
 
     test('Unassign role which has been created', async () => {
