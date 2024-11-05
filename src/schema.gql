@@ -42,7 +42,6 @@ type PrivilegeResponse {
 }
 
 enum type {
-  CUSTOM
   BASE
 }
 
