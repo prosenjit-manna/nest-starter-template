@@ -108,7 +108,11 @@ import { GraphQLError } from 'graphql';
     });
 
     test(`Create Role for ${type}`, async () => {
-      if (randomPrivilege) {
+      if (!randomPrivilege) {
+        throw new Error(
+          'Random privilege id not found! The privilege list fetch might have failed!',
+        );
+      } else {
         const createRoleResponse = await api.graphql.mutate<
           CreateRoleMutation,
           CreateRoleMutationVariables
@@ -170,6 +174,10 @@ import { GraphQLError } from 'graphql';
         });
 
         expect(updateRole.data?.updateRole.id).toBe(createdRoleId);
+      } else {
+        throw new Error(
+          'Random privilege id and created role id not found! The privilege list fetch and role creation might have failed!',
+        );
       }
     });
 
@@ -194,6 +202,10 @@ import { GraphQLError } from 'graphql';
           if (eachPrivilege.id === randomPrivilege2?.id) flag = true;
         });
         expect(flag).toBe(true);
+      } else {
+        throw new Error(
+          'Created role id not found! Role creation test might have failed',
+        );
       }
     });
 
@@ -212,6 +224,10 @@ import { GraphQLError } from 'graphql';
           },
         });
         expect(deleteRole.data?.deleteRole).toBe(true);
+      } else {
+        throw new Error(
+          'Created role id not found! Role creation test might have failed',
+        );
       }
     });
 
@@ -249,6 +265,10 @@ import { GraphQLError } from 'graphql';
               },
             },
           });
+        } else {
+          throw new Error(
+            'Created role id not found! Role creation test might have failed',
+          );
         }
       } catch (error) {
         if (error instanceof GraphQLError)
@@ -280,6 +300,10 @@ import { GraphQLError } from 'graphql';
           },
         });
         expect(roleDeleted).toBe(null);
+      } else {
+        throw new Error(
+          'Created role id not found! Role creation test might have failed',
+        );
       }
     });
   });
