@@ -21,7 +21,7 @@ import { UNASSIGN_ROLE_MUTATION } from '../../graphql/unassign-role-mutation.gql
 import { sample } from 'lodash';
 
 [UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
-  describe(`Role functionalities for user : ${type}`, () => {
+  describe(`Assign Role functionalities for user : ${type}`, () => {
     let dbUser: User | null;
     let user: User | null;
     let roleId: string | undefined;
@@ -106,6 +106,10 @@ import { sample } from 'lodash';
           },
         });
         expect(assignRole.data?.assignRole.success).toBe(true);
+      } else {
+        throw new Error(
+          'Role ID and User ID not found! Role list and user list might not have been fetched properly',
+        );
       }
     });
 
@@ -157,6 +161,10 @@ import { sample } from 'lodash';
           },
         });
         expect(unAssignRole.data?.unAssignRole.success).toBe(true);
+      } else {
+        throw new Error(
+          'Role ID and User ID not found! Role list and user list might not have been fetched properly',
+        );
       }
     });
 
