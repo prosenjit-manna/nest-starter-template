@@ -12,16 +12,12 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { WorkspaceModule } from './workspace/workspace.module';
-import { MembershipModule } from './membership/membership.module';
-
-
 
 @Module({
   imports: [
     SentryModule.forRoot(),
     PrismaModule,
     WorkspaceModule,
-    MembershipModule,
     RoleModule,
     PostModule,
     UserModule,

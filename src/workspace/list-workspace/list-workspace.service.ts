@@ -27,6 +27,7 @@ export class ListWorkSpaceService {
     const membership = await this.prisma.workspaceMembership.findMany({
       where: {
         userId: req?.user?.id,
+        isAccepted: true,
       }
     });
 

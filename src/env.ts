@@ -29,6 +29,7 @@ export const appEnv = cleanEnv(process.env, {
   // FRONTEND_URL
   SIGNUP_VERIFY_URL: str({ default: '/verify-email/', desc: 'Signup verify url' }),
   PASSWORD_RESET_URL: str({ default: '/password-reset/', desc: 'Password Reset URL' }),
+  MEMBERSHIP_VERIFY_URL: str({ default: '/membership-verify/', desc: 'Membership Verify' }),
 
   // Error Logging
   SENTRY_URL: str({ desc: 'Please provide SENTRY URL' }),
