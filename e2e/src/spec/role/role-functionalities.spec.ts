@@ -28,7 +28,6 @@ import { GraphQLError } from 'graphql';
 [UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
   describe(`Role functionalities for user : ${type}`, () => {
     let user: User | null;
-
     let randomPrivilege:
       | {
           name: string;
@@ -64,13 +63,16 @@ import { GraphQLError } from 'graphql';
           isVerified: true,
         },
       });
+
       if (!user) {
         return;
       }
+
       const response = await api.login({
         email: user.email,
         password: appEnv.SEED_PASSWORD,
       });
+
       expect(response.data).toBeDefined();
     });
 
@@ -148,9 +150,11 @@ import { GraphQLError } from 'graphql';
         expect(role.name).toBeDefined();
         expect(role.title).toBeDefined();
       });
+
       const addedRole = roleList.data.roleList.role.find(
         (role) => role.id === createdRoleId,
       );
+
       expect(createdRoleId).toBe(addedRole?.id);
       expect(title).toBe(addedRole?.title);
     });
@@ -200,6 +204,7 @@ import { GraphQLError } from 'graphql';
         getRoleResponse.data.getRole.privilege.forEach((eachPrivilege) => {
           if (eachPrivilege.id === randomPrivilege2?.id) flag = true;
         });
+
         expect(flag).toBe(true);
       } else {
         throw new Error(
@@ -222,6 +227,7 @@ import { GraphQLError } from 'graphql';
             },
           },
         });
+
         expect(deleteRole.data?.deleteRole).toBe(true);
       } else {
         throw new Error(
@@ -246,6 +252,7 @@ import { GraphQLError } from 'graphql';
       const addedRole = roleList.data.roleList.role.find(
         (role) => role.id === createdRoleId,
       );
+
       expect(addedRole).toBe(undefined);
     });
 
