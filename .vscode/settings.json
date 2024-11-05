@@ -2,5 +2,5 @@
   "cSpell.words": ["TESTINATOR"],
   "editor.tabSize": 2,
   "files.autoSave": "off",
-  "editor.formatOnSave": false
+  "editor.formatOnSave": true
 }
