@@ -24,9 +24,11 @@ import { faker } from '@faker-js/faker';
 import { PRIVILEGE_LIST } from '../../graphql/privilege-list-query.gql';
 import { sample } from 'lodash';
 import { GraphQLError } from 'graphql';
+
 [UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
   describe(`Role functionalities for user : ${type}`, () => {
     let user: User | null;
+
     let randomPrivilege:
       | {
           name: string;
@@ -53,6 +55,7 @@ import { GraphQLError } from 'graphql';
     const titleUpdated = faker.lorem.word();
     let createdRoleId: string | undefined;
     const api = new GraphQlApi();
+
     test(`Login as a ${type.toUpperCase()} `, async () => {
       const dbClient = new PrismaClient();
       user = await dbClient.user.findFirst({
@@ -70,6 +73,7 @@ import { GraphQLError } from 'graphql';
       });
       expect(response.data).toBeDefined();
     });
+
     test(`View the list of privileges for user - ${type}`, async () => {
       const privilegeList = await api.graphql.query<
         RoleQuery,
@@ -78,16 +82,20 @@ import { GraphQLError } from 'graphql';
         query: PRIVILEGE_LIST,
         variables: {},
       });
+
       expect(
         privilegeList.data.listBasePrivilege.privilege.length,
       ).toBeGreaterThan(0);
+
       privilegeList.data.listBasePrivilege.privilege.forEach((privilege) => {
         expect(privilege.id).toBeDefined();
         expect(privilege.group).toBeDefined();
         expect(privilege.name).toBeDefined();
       });
+
       randomPrivilege = sample(privilegeList.data.listBasePrivilege.privilege);
       randomPrivilege2 = sample(privilegeList.data.listBasePrivilege.privilege);
+
       for (const privilege of privilegeList.data.listBasePrivilege.privilege) {
         if (
           randomPrivilege?.id !== randomPrivilege2?.id &&
@@ -98,6 +106,7 @@ import { GraphQLError } from 'graphql';
         else randomPrivilege2 = privilege;
       }
     });
+
     test(`Create Role for ${type}`, async () => {
       if (!randomPrivilege) {
         throw new Error(
@@ -116,10 +125,12 @@ import { GraphQLError } from 'graphql';
             },
           },
         });
+
         createdRoleId = createRoleResponse.data?.createRole.id;
         expect(createRoleResponse.data?.createRole.id).toBeDefined();
       }
     });
+
     test(`Role list for user - ${type}`, async () => {
       const roleList = await api.graphql.query<
         RoleListQuery,
@@ -132,6 +143,7 @@ import { GraphQLError } from 'graphql';
           },
         },
       });
+
       roleList.data.roleList.role.forEach((role) => {
         expect(role.id).toBeDefined();
         expect(role.name).toBeDefined();
@@ -143,6 +155,7 @@ import { GraphQLError } from 'graphql';
       expect(createdRoleId).toBe(addedRole?.id);
       expect(title).toBe(addedRole?.title);
     });
+
     test(`Update role for user : ${type}`, async () => {
       if (randomPrivilege && randomPrivilege2 && createdRoleId) {
         const updateRole = await api.graphql.mutate<
@@ -159,6 +172,7 @@ import { GraphQLError } from 'graphql';
             },
           },
         });
+
         expect(updateRole.data?.updateRole.id).toBe(createdRoleId);
       } else {
         throw new Error(
@@ -166,6 +180,7 @@ import { GraphQLError } from 'graphql';
         );
       }
     });
+
     test(`Get Role for user ${type}`, async () => {
       if (createdRoleId) {
         const getRoleResponse = await api.graphql.query<
@@ -179,7 +194,9 @@ import { GraphQLError } from 'graphql';
             },
           },
         });
+
         expect(getRoleResponse.data.getRole.id).toBe(createdRoleId);
+
         let flag = false;
         getRoleResponse.data.getRole.privilege.forEach((eachPrivilege) => {
           if (eachPrivilege.id === randomPrivilege2?.id) flag = true;
@@ -191,6 +208,7 @@ import { GraphQLError } from 'graphql';
         );
       }
     });
+
     test(`Delete role for user - ${type} not from stash`, async () => {
       if (createdRoleId) {
         const deleteRole = await api.graphql.mutate<
@@ -212,6 +230,7 @@ import { GraphQLError } from 'graphql';
         );
       }
     });
+
     test(`Role list for user - ${type}`, async () => {
       const roleList = await api.graphql.query<
         RoleListQuery,
@@ -224,11 +243,13 @@ import { GraphQLError } from 'graphql';
           },
         },
       });
+
       const addedRole = roleList.data.roleList.role.find(
         (role) => role.id === createdRoleId,
       );
       expect(addedRole).toBe(undefined);
     });
+
     test(`Delete role for user - ${type} again for assertion`, async () => {
       try {
         if (createdRoleId) {
@@ -254,6 +275,7 @@ import { GraphQLError } from 'graphql';
           expect(error.message).toBe('Role not found');
       }
     });
+
     test(`Delete role for user - ${type} from stash`, async () => {
       if (createdRoleId) {
         const deleteRole = await api.graphql.mutate<
@@ -268,7 +290,9 @@ import { GraphQLError } from 'graphql';
             },
           },
         });
+
         expect(deleteRole.data?.deleteRole).toBe(true);
+
         const dbClient = new PrismaClient();
         const roleDeleted = await dbClient.role.findUnique({
           where: {
