@@ -1,5 +1,3 @@
-import { RoleModule } from './roles/role.module';
-import { PostModule } from './post/post.module';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -8,9 +6,13 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { SentryModule } from '@sentry/nestjs/setup';
 
+import { RoleModule } from './roles/role.module';
+import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { WorkspaceModule } from './workspace/workspace.module';
+import { MembershipModule } from './membership/membership.module';
 
 
 
@@ -18,6 +20,8 @@ import { PrismaModule } from './prisma/prisma.module';
   imports: [
     SentryModule.forRoot(),
     PrismaModule,
+    WorkspaceModule,
+    MembershipModule,
     RoleModule,
     PostModule,
     UserModule,

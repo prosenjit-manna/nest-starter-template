@@ -123,10 +123,6 @@ type CurrentUserResponse {
   privilege: [RolePrivilegeResponse!]!
 }
 
-type CreateUserResponse {
-  id: String!
-}
-
 type PassWordResetRequestResponse {
   message: String!
 }
@@ -150,7 +146,33 @@ type VerifyEmailResponse {
   refreshToken: String!
 }
 
+type CreateWorkspaceResponse {
+  id: String!
+}
+
+type WorkSpaceResponse {
+  name: String!
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type ListWorkSpaceResponse {
+  workspace: [WorkSpaceResponse!]!
+  pagination: baseListResponse!
+}
+
+type UpdateWorkspaceResponse {
+  id: String!
+}
+
+type SendInvitationResponse {
+  success: Boolean
+}
+
 type Query {
+  listWorkSpace(listWorkspaceInput: ListWorkSpaceInput): ListWorkSpaceResponse!
   roleList(roleListInput: RoleListInput): RoleListResponse!
   listBasePrivilege: PrivilegeListResponse!
   getRole(roleGetInput: RoleGetInput!): RoleGetResponse!
@@ -161,6 +183,26 @@ type Query {
   login(loginInput: LoginInput!): LoginResponse!
 }
 
+input ListWorkSpaceInput {
+  page: Int
+  pageSize: Int
+  orderBy: Order = DESC
+  fromStash: Boolean = false
+  name: String
+  authorId: Int
+  orderByField: workspaceOrderByField = id
+}
+
+enum Order {
+  ASC
+  DESC
+}
+
+enum workspaceOrderByField {
+  id
+  name
+}
+
 input RoleListInput {
   page: Int
   pageSize: Int
@@ -168,11 +210,6 @@ input RoleListInput {
   fromStash: Boolean = false
   title: String
   orderByField: roleOrderByField = title
-}
-
-enum Order {
-  ASC
-  DESC
 }
 
 enum roleOrderByField {
@@ -211,6 +248,10 @@ input LoginInput {
 }
 
 type Mutation {
+  createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): CreateWorkspaceResponse!
+  updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): UpdateWorkspaceResponse!
+  deleteWorkSpace(deleteWorkspaceInput: WorkspaceDeleteInput): Boolean!
+  sendInvitation(sendInvitationInput: SendInvitationInput!): SendInvitationResponse!
   createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
   updateRole(roleUpdateInput: RoleUpdateInput!): RoleUpdateResponse!
   deleteRole(roleDeleteInput: RoleDeleteInput): Boolean!
@@ -219,12 +260,30 @@ type Mutation {
   createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   updatePost(postId: String!, updatePostInput: UpdatePostInput!): UpdatePostResponse!
   deletePost(postDeleteInput: PostDeleteInput): Boolean!
-  createUser(createUserInput: CreateUserInput!): CreateUserResponse!
   requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
   resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
   signup(signupInput: SignupInput!): SignupResponse!
   verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
   refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
+}
+
+input CreateWorkspaceInput {
+  name: String!
+}
+
+input UpdateWorkspaceInput {
+  id: String!
+  name: String!
+}
+
+input WorkspaceDeleteInput {
+  id: String!
+  fromStash: Boolean
+}
+
+input SendInvitationInput {
+  userId: String!
+  workspaceId: String!
 }
 
 input RoleCreateInput {
@@ -280,11 +339,6 @@ input UpdatePostInput {
 input PostDeleteInput {
   id: String!
   fromStash: Boolean
-}
-
-input CreateUserInput {
-  email: String!
-  name: String
 }
 
 input PasswordResetRequestInput {
