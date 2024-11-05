@@ -98,12 +98,11 @@ import { GraphQLError } from 'graphql';
 
       for (const privilege of privilegeList.data.listBasePrivilege.privilege) {
         if (
-          randomPrivilege?.id !== randomPrivilege2?.id &&
-          randomPrivilege2?.group !== 'ROLE' &&
-          randomPrivilege2?.name !== 'UPDATE'
+          randomPrivilege?.id === randomPrivilege2?.id &&
+          randomPrivilege2?.name === 'UPDATE'
         )
-          break;
-        else randomPrivilege2 = privilege;
+          randomPrivilege2 = privilege;
+        else break;
       }
     });
 
