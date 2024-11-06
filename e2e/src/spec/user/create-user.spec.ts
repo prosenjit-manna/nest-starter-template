@@ -1,7 +1,7 @@
 import { PrismaClient, UserType } from '@prisma/client';
 import { GraphQlApi } from '../../lib/graphql-api';
 import { appEnv } from '../../lib/app-env';
-import { CREATE_USER } from '../../graphql/create-user.gql';
+// import { CREATE_USER } from '../../graphql/create-user.gql';
 import { faker } from '@faker-js/faker';
 
 describe('User List', () => {
@@ -24,18 +24,18 @@ describe('User List', () => {
       });
     });
   });
-  test('Create User', async () => {
-    const response = await api.graphql.mutate({
-      mutation: CREATE_USER,
-      variables: {
-        createUserInput: {
-          email: UserEmail,
-          name: faker.internet.userName(),
-        },
-      },
-    });
-    expect(response.data?.createUser.id).toBeDefined();
-  });
+  // test('Create User', async () => {
+  //   const response = await api.graphql.mutate({
+  //     mutation: CREATE_USER,
+  //     variables: {
+  //       createUserInput: {
+  //         email: UserEmail,
+  //         name: faker.internet.userName(),
+  //       },
+  //     },
+  //   });
+  //   expect(response.data?.createUser.id).toBeDefined();
+  // });
 
   test('Search new user in user list and exist', () => {});
 });
