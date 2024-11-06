@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { baseListResponse } from "src/shared/base-list/base-list-response.dto";
+import { BaseListResponse } from "src/shared/base-list/base-list-response.dto";
 import { RoleResponse } from "./role-reponse.dto";
 import { Role } from "@prisma/client";
 
@@ -8,7 +8,7 @@ export class RoleListResponse {
   @Field(() => [RoleResponse])
   role: Role[];
 
-  @Field(() => baseListResponse)
-  pagination: baseListResponse;
+  @Field(() => BaseListResponse)
+  pagination: BaseListResponse;
 
 }

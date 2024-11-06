@@ -21,14 +21,15 @@ export class ListWorkSpaceService {
   @SetMetadata('privilegeName', PrivilegeName.READ)
   @Query(() => ListWorkSpaceResponse)
   async listWorkSpace(
-    @Args('listWorkspaceInput', { nullable: true }) listWorkspaceInput: ListWorkSpaceInput,
-    @Context('req') req: Request
+    @Args('listWorkspaceInput', { nullable: true })
+    listWorkspaceInput: ListWorkSpaceInput,
+    @Context('req') req: Request,
   ): Promise<ListWorkSpaceResponse> {
     const membership = await this.prisma.workspaceMembership.findMany({
       where: {
         userId: req?.user?.id,
         isAccepted: true,
-      }
+      },
     });
 
     const queryObject: Prisma.WorkspaceWhereInput = {

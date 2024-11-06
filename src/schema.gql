@@ -2,7 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type baseListResponse {
+type BaseListResponse {
   totalPage: Float!
   currentPage: Float!
   perPage: Float!
@@ -24,7 +24,7 @@ scalar DateTime
 
 type RoleListResponse {
   role: [RoleResponse!]!
-  pagination: baseListResponse!
+  pagination: BaseListResponse!
 }
 
 type RoleCreateResponse {
@@ -91,7 +91,7 @@ type PostResponse {
 
 type PostListResponse {
   posts: [PostResponse!]!
-  pagination: baseListResponse!
+  pagination: BaseListResponse!
 }
 
 type UpdatePostResponse {
@@ -160,7 +160,7 @@ type WorkSpaceResponse {
 
 type ListWorkSpaceResponse {
   workspace: [WorkSpaceResponse!]!
-  pagination: baseListResponse!
+  pagination: BaseListResponse!
 }
 
 type UpdateWorkspaceResponse {
@@ -171,8 +171,27 @@ type SendInvitationResponse {
   success: Boolean
 }
 
+type User {
+  id: String!
+  name: String!
+  email: String!
+}
+
+type MembershipResponse {
+  workspaceId: String!
+  isOwner: Boolean!
+  isAccepted: Boolean!
+  user: User!
+}
+
+type ListMembershipResponse {
+  memberships: [MembershipResponse!]!
+  pagination: BaseListResponse!
+}
+
 type Query {
   listWorkSpace(listWorkspaceInput: ListWorkSpaceInput): ListWorkSpaceResponse!
+  listMemberships(listMembershipsInput: ListMembershipInput!): ListMembershipResponse!
   roleList(roleListInput: RoleListInput): RoleListResponse!
   listBasePrivilege: PrivilegeListResponse!
   getRole(roleGetInput: RoleGetInput!): RoleGetResponse!
@@ -190,7 +209,7 @@ input ListWorkSpaceInput {
   fromStash: Boolean = false
   name: String
   authorId: Int
-  orderByField: workspaceOrderByField = id
+  orderByField: workspaceOrderByField = createdAt
 }
 
 enum Order {
@@ -199,8 +218,16 @@ enum Order {
 }
 
 enum workspaceOrderByField {
-  id
+  createdAt
   name
+}
+
+input ListMembershipInput {
+  page: Int
+  pageSize: Int
+  orderBy: Order = DESC
+  fromStash: Boolean = false
+  workspaceId: String!
 }
 
 input RoleListInput {

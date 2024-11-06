@@ -1,9 +1,8 @@
 import { Field, InputType, Int, registerEnumType } from '@nestjs/graphql';
 import { BaseListInput } from 'src/shared/base-list/base-list-input.dto';
 
-
 export enum WorkSpaceOrderByField {
-  id = 'id',
+  createdAt = 'createdAt',
   name = 'title',
 }
 
@@ -19,7 +18,9 @@ export class ListWorkSpaceInput extends BaseListInput {
   @Field(() => Int, { nullable: true })
   authorId: string;
 
-  @Field(() => WorkSpaceOrderByField, { nullable: true, defaultValue: WorkSpaceOrderByField.id })
+  @Field(() => WorkSpaceOrderByField, {
+    nullable: true,
+    defaultValue: WorkSpaceOrderByField.createdAt,
+  })
   orderByField?: WorkSpaceOrderByField;
-  
 }
