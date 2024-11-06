@@ -1,0 +1,20 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}}</title>
+  </head>
+  <body>
+    <h2>All reports</h2>
+    <ul>
+      {{#each data}}
+        <li>
+         <a href="{{this.url}}" target="_blank">
+            {{this.key}}
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+
+  </body>
+</html>
