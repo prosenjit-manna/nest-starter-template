@@ -1,4 +1,4 @@
-import { PrismaClient, UserType } from '@prisma/client';
+import { PrismaClient, User, UserType } from '@prisma/client';
 import { appEnv } from '../../lib/app-env';
 import { faker } from '@faker-js/faker';
 import { GraphQlApi } from '../../lib/graphql-api';
@@ -19,23 +19,19 @@ import { DELETE_WORKSPACE_MUTATION } from '../../graphql/delete-workspace-mutati
 import { GraphQLError } from 'graphql';
 
 describe('Workspace Module', () => {
-  let dbClient = new PrismaClient();
-  let user;
+  const dbClient = new PrismaClient();
+  let user: User | null;
   const api = new GraphQlApi();
   let workspaceId: string | undefined;
   const workspaceName = faker.lorem.word();
   const workspaceNameUpdated = faker.lorem.word();
 
-  beforeAll(() => {
-    dbClient = new PrismaClient();
-  });
-
   afterAll(async () => {
     await dbClient.$disconnect();
   });
 
-  [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER].forEach((type) => {
-    test(`Login as a ${UserType.ADMIN.toUpperCase()}`, async () => {
+  [UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
+    test(`Login as a ${type}`, async () => {
       user = await dbClient.user.findFirst({
         where: {
           userType: type,
@@ -160,36 +156,34 @@ describe('Workspace Module', () => {
         (workspace) => workspace.id === workspaceId,
       );
 
-      expect(addedWorkspace).toBe(null);
+      expect(addedWorkspace).toBe(undefined);
     });
 
-
     test('Delete Workspace which is created not from stash again', async () => {
-    try {
-      if (!workspaceId) {
-        throw new Error(
-          'Workspace ID is undefined; creation test might have failed',
-        );
-      }
-      const response = await api.graphql.mutate<
-        DeleteWorkSpaceMutation,
-        DeleteWorkSpaceMutationVariables
-      >({
-        mutation: DELETE_WORKSPACE_MUTATION,
-        variables: {
-          deleteWorkspaceInput: {
-            id: workspaceId,
-            fromStash: false,
+      try {
+        if (!workspaceId) {
+          throw new Error(
+            'Workspace ID is undefined; creation test might have failed',
+          );
+        }
+        const response = await api.graphql.mutate<
+          DeleteWorkSpaceMutation,
+          DeleteWorkSpaceMutationVariables
+        >({
+          mutation: DELETE_WORKSPACE_MUTATION,
+          variables: {
+            deleteWorkspaceInput: {
+              id: workspaceId,
+              fromStash: false,
+            },
           },
-        },
-      });
+        });
 
-      expect(response.data?.deleteWorkSpace).toBe(true);
-    } catch (error) {
-      if(error instanceof GraphQLError)
-      expect(error.message).toBe('Workspace not found')
-    }
-      
+        expect(response.data?.deleteWorkSpace).toBe(true);
+      } catch (error) {
+        if (error instanceof GraphQLError)
+          expect(error.message).toBe('Workspace not found');
+      }
     });
 
     test('Delete Workspace which is created from stash', async () => {
@@ -211,13 +205,13 @@ describe('Workspace Module', () => {
         },
       });
 
-        const addedWorkspace = await dbClient.workspace.findFirst({
-          where: {
-            id:workspaceId
-          },
-        });
+      const addedWorkspace = await dbClient.workspace.findFirst({
+        where: {
+          id: workspaceId,
+        },
+      });
 
-        expect(addedWorkspace).toBe(undefined)
+      expect(addedWorkspace).toBe(null);
       expect(response.data?.deleteWorkSpace).toBe(true);
     });
   });

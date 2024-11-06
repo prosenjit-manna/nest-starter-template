@@ -22,10 +22,12 @@ export class GraphQlApi {
       cache: new InMemoryCache(),
       defaultOptions: {
         query: {
-          errorPolicy: 'all',  // or 'ignore', 'none'
+          errorPolicy: 'all', // or 'ignore', 'none'
+          fetchPolicy: 'no-cache',
         },
         mutate: {
-          errorPolicy: 'all',  // or 'ignore', 'none'
+          errorPolicy: 'all', // or 'ignore', 'none'
+          fetchPolicy: 'no-cache',
         },
       },
     });
