@@ -1,5 +1,10 @@
-import { SetMetadata, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { Args, Context,  Mutation, Resolver } from '@nestjs/graphql';
+import {
+  SetMetadata,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { Request } from 'express';
 
@@ -21,9 +26,8 @@ export class CreateWorkspaceService {
   @UsePipes(new ValidationPipe())
   async createWorkspace(
     @Args('createWorkspaceInput') createWorkspaceInput: CreateWorkspaceInput,
-    @Context('req') req: Request
+    @Context('req') req: Request,
   ): Promise<CreateWorkspaceResponse> {
-
     const workspace = await this.prisma.workspace.create({
       data: {
         name: createWorkspaceInput.name,
@@ -35,10 +39,11 @@ export class CreateWorkspaceService {
         // User ID can not be blank it is just for type safety
         userId: req?.user?.id || '',
         workspaceId: workspace.id,
+        isAccepted: true,
         isOwner: true,
-      }
+      },
     });
-    
+
     return workspace;
   }
 }
