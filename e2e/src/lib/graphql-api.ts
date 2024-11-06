@@ -11,7 +11,6 @@ import { setContext } from '@apollo/client/link/context';
 import { LOGIN_QUERY } from '../graphql/login-query.gql';
 import { LoginInput, LoginQuery } from '../gql/graphql';
 
-
 export class GraphQlApi {
   public graphql: ApolloClient<NormalizedCacheObject>;
   private token: string | null = null;

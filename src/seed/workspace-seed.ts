@@ -37,6 +37,7 @@ export async function workSpaceSeed() {
     membershipData.push({
       workspaceId: workspaces[i].id,
       userId: user.id,
+      isAccepted: true,
     });
   });
   await prismaClient.workspaceMembership.createMany({

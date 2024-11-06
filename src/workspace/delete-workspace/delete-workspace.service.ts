@@ -1,9 +1,11 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
+import { Request } from 'express';
+
 import { PrismaService } from 'src/prisma.service';
 import { CreateAppError } from 'src/shared/create-error/create-error';
-import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 import { WorkspaceDeleteInput } from './workspace-delete-input.dto';
-import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { RoleGuard } from 'src/auth/role.guard';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 
@@ -19,15 +21,30 @@ export class DeleteWorkSpaceService {
   async deleteWorkSpace(
     @Args('deleteWorkspaceInput', { nullable: true })
     deleteWorkspaceInput: WorkspaceDeleteInput,
+    @Context('req') req: Request,
   ): Promise<boolean> {
-    const post = await this.prismaService.workspace.findUnique({
+
+    const membership = await this.prismaService.workspaceMembership.findMany({
+      where: {
+        userId: req?.user?.id,
+      }
+    });
+
+    // Check if the user has access to the workspace
+    if (!membership.some((m) => m.workspaceId === deleteWorkspaceInput.id)) {
+      throw new CreateAppError({
+        message: 'You are not a member of this workspace',
+      });
+    }
+
+    const workspace = await this.prismaService.workspace.findUnique({
       where: {
         id: deleteWorkspaceInput.id,
         deletedAt: deleteWorkspaceInput.fromStash ? { not: null } : null,
       },
     });
 
-    if (!post) {
+    if (!workspace) {
       throw new CreateAppError({
         message: 'Workspace not found',
         httpStatus: HttpStatus.NOT_FOUND,
