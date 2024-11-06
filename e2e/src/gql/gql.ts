@@ -13,6 +13,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+  '\n  mutation AssignRole($assignRoleInput: AssignRoleInput!) {\n    assignRole(assignRoleInput: $assignRoleInput) {\n      success\n    }\n  }\n':
+    types.AssignRoleDocument,
   '\n  mutation CreatePost($createPostInput: CreatePostInput!) {\n    createPost(createPostInput: $createPostInput) {\n      id\n    }\n  }\n':
     types.CreatePostDocument,
   '\n  mutation CreateRole($roleCreateInput: RoleCreateInput!) {\n    createRole(roleCreateInput: $roleCreateInput) {\n      id\n    }\n  }\n':
@@ -51,6 +53,8 @@ const documents = {
     types.RequestPasswordResetDocument,
   '\n  mutation Signup($signupInput: SignupInput!) {\n    signup(signupInput: $signupInput) {\n      id\n    }\n  }\n':
     types.SignupDocument,
+  '\n  mutation UnAssignRole($unAssignRoleInput: UnAssignRoleInput!) {\n    unAssignRole(unAssignRoleInput: $unAssignRoleInput) {\n      success\n    }\n  }\n':
+    types.UnAssignRoleDocument,
   '\n  mutation UpdatePost($postId: String!, $updatePostInput: UpdatePostInput!) {\n    updatePost(postId: $postId, updatePostInput: $updatePostInput) {\n      id\n    }\n  }\n':
     types.UpdatePostDocument,
   '\n  mutation UpdateRole($roleUpdateInput: RoleUpdateInput!) {\n    updateRole(roleUpdateInput: $roleUpdateInput) {\n      id\n    }\n  }\n':
@@ -75,6 +79,18 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation AssignRole($assignRoleInput: AssignRoleInput!) {\n    assignRole(assignRoleInput: $assignRoleInput) {\n      success\n    }\n  }\n',
+): (typeof documents)['\n  mutation AssignRole($assignRoleInput: AssignRoleInput!) {\n    assignRole(assignRoleInput: $assignRoleInput) {\n      success\n    }\n  }\n'];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation AssignRole($assignRoleInput: AssignRoleInput!) {\n    assignRole(assignRoleInput: $assignRoleInput) {\n      success\n    }\n  }\n',
+): (typeof documents)['\n  mutation AssignRole($assignRoleInput: AssignRoleInput!) {\n    assignRole(assignRoleInput: $assignRoleInput) {\n      success\n    }\n  }\n'];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -201,6 +217,12 @@ export function graphql(
 export function graphql(
   source: '\n  mutation UpdatePost($postId: String!, $updatePostInput: UpdatePostInput!) {\n    updatePost(postId: $postId, updatePostInput: $updatePostInput) {\n      id\n    }\n  }\n',
 ): (typeof documents)['\n  mutation UpdatePost($postId: String!, $updatePostInput: UpdatePostInput!) {\n    updatePost(postId: $postId, updatePostInput: $updatePostInput) {\n      id\n    }\n  }\n'];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation UnAssignRole($unAssignRoleInput: UnAssignRoleInput!) {\n    unAssignRole(unAssignRoleInput: $unAssignRoleInput) {\n      success\n    }\n  }\n',
+): (typeof documents)['\n  mutation UnAssignRole($unAssignRoleInput: UnAssignRoleInput!) {\n    unAssignRole(unAssignRoleInput: $unAssignRoleInput) {\n      success\n    }\n  }\n'];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

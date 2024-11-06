@@ -508,6 +508,15 @@ export enum WorkspaceOrderByField {
   Name = 'name',
 }
 
+export type AssignRoleMutationVariables = Exact<{
+  assignRoleInput: AssignRoleInput;
+}>;
+
+export type AssignRoleMutation = {
+  __typename?: 'Mutation';
+  assignRole: { __typename?: 'AssignRoleResponse'; success: boolean };
+};
+
 export type CreatePostMutationVariables = Exact<{
   createPostInput: CreatePostInput;
 }>;
@@ -785,6 +794,15 @@ export type SignupMutation = {
   signup: { __typename?: 'SignupResponse'; id: string };
 };
 
+export type UnAssignRoleMutationVariables = Exact<{
+  unAssignRoleInput: UnAssignRoleInput;
+}>;
+
+export type UnAssignRoleMutation = {
+  __typename?: 'Mutation';
+  unAssignRole: { __typename?: 'UnAssignRoleResponse'; success: boolean };
+};
+
 export type UpdatePostMutationVariables = Exact<{
   postId: Scalars['String']['input'];
   updatePostInput: UpdatePostInput;
@@ -826,6 +844,57 @@ export type VerifyEmailMutation = {
   };
 };
 
+export const AssignRoleDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'AssignRole' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'assignRoleInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'AssignRoleInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'assignRole' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'assignRoleInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'assignRoleInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'success' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<AssignRoleMutation, AssignRoleMutationVariables>;
 export const CreatePostDocument = {
   kind: 'Document',
   definitions: [
@@ -1886,6 +1955,60 @@ export const SignupDocument = {
     },
   ],
 } as unknown as DocumentNode<SignupMutation, SignupMutationVariables>;
+export const UnAssignRoleDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UnAssignRole' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'unAssignRoleInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'UnAssignRoleInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'unAssignRole' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'unAssignRoleInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'unAssignRoleInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'success' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UnAssignRoleMutation,
+  UnAssignRoleMutationVariables
+>;
 export const UpdatePostDocument = {
   kind: 'Document',
   definitions: [
