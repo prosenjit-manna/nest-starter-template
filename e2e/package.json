@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:ci": "jest --runInBand --ci",
+    "test:ci": "npm run prisma:generate && jest --runInBand --ci --verbose=false",
     "gql:generate": "graphql-codegen",
     "prisma:generate": "npm run prisma -- generate",
     "prisma": "prisma"
@@ -24,7 +24,7 @@
     "jest": "^29.7.0",
     "prisma": "^5.19.1",
     "ts-jest": "^29.2.5",
-    "jest-html-reporter": "^3.10.2"
+    "jest-html-reporters": "^3.1.7"
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",

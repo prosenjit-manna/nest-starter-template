@@ -20,10 +20,13 @@ const config: Config = {
   reporters: [
     'default',
     [
-      './node_modules/jest-html-reporter',
+      './node_modules/jest-html-reporters',
       {
         pageTitle: 'Test Report',
-        outputPath: `./reports/${fileName}.html`,
+        publicPath: `./reports`,
+        filename: `${fileName}.html`,
+        includeConsoleLog: true,
+        inlineSource: true,
       },
     ],
   ],
