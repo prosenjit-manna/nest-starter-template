@@ -81,7 +81,9 @@ describe('Workspace Module', () => {
       );
 
       expect(addedWorkspace?.name).toBe(workspaceName);
-      expect(listWorkspace.data.listWorkSpace.workspace.length).not.toBe(null);
+      expect(listWorkspace.data.listWorkSpace.workspace.length).toBeGreaterThan(
+        0,
+      );
     });
 
     test('Update Workspace already created', async () => {
@@ -119,7 +121,9 @@ describe('Workspace Module', () => {
       );
 
       expect(addedWorkspace?.name).toBe(workspaceNameUpdated);
-      expect(listWorkspace.data.listWorkSpace.workspace.length).not.toBe(null);
+      expect(listWorkspace.data.listWorkSpace.workspace.length).toBeGreaterThan(
+        0,
+      );
     });
 
     test('Delete Workspace which is created not from stash', async () => {
