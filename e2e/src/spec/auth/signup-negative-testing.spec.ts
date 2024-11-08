@@ -1,12 +1,29 @@
 import { SIGN_UP_MUTATION } from '../../graphql/sign-up-mutation.gql';
 import { GraphQlApi } from '../../lib/graphql-api';
 import { appEnv } from '../../lib/app-env';
-import { SignupMutation, SignupMutationVariables } from '../../gql/graphql';
 import { faker } from '@faker-js/faker/.';
 import { PrismaClient, UserType } from '@prisma/client';
+import { VERIFY_EMAIL_MUTATION } from '../../graphql/verify-email-mutation.gql';
+import { waitForTime } from '../../lib/wait-for-time';
+import { fetchEmailsFromInbox } from '../../lib/fetchEmails';
+import {
+  SignupMutation,
+  SignupMutationVariables,
+  VerifyEmailInput,
+  VerifyEmailMutation,
+  VerifyEmailMutationVariables,
+} from '../../gql/graphql';
 
 describe('User Sign up negative testing - NST-46', () => {
   const api = new GraphQlApi();
+  let invitationLink: string | undefined;
+  let onboardingToken: string | undefined;
+  const userEmail = `automation-${crypto.randomUUID()}@${appEnv.TESTINATOR_TEAM_ID}`;
+  const prisma = new PrismaClient();
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+  });
 
   test('Add a new user with only email and blank password', async () => {
     const signup = await api.graphql.mutate<
@@ -168,5 +185,70 @@ describe('User Sign up negative testing - NST-46', () => {
       throw new Error('Expected an error, but none was returned');
     }
     expect(signup.errors[0].message).toBe('User already exists');
+  });
+
+  test('Add a new user with valid email and password', async () => {
+    const signUpData = await api.graphql.mutate<
+      SignupMutation,
+      SignupMutationVariables
+    >({
+      mutation: SIGN_UP_MUTATION,
+      variables: {
+        signupInput: {
+          email: userEmail,
+          password: appEnv.SEED_PASSWORD,
+        },
+      },
+    });
+
+    const data = signUpData.data?.signup;
+    expect(data?.id).not.toBe(null);
+
+    await waitForTime();
+  }, 10000);
+
+  test('Should create a verification URL', async () => {
+    invitationLink = await fetchEmailsFromInbox('Welcome');
+    onboardingToken = invitationLink?.substring(35);
+    expect(invitationLink).toContain('verify-email');
+  }, 10000);
+
+  test('Add a new user with valid email and password for the second time', async () => {
+    const signUpData = await api.graphql.mutate<
+      SignupMutation,
+      SignupMutationVariables
+    >({
+      mutation: SIGN_UP_MUTATION,
+      variables: {
+        signupInput: {
+          email: userEmail,
+          password: appEnv.SEED_PASSWORD,
+        },
+      },
+    });
+
+    const data = signUpData.data?.signup;
+    expect(data?.id).not.toBe(null);
+
+    await waitForTime();
+  }, 10000);
+
+  test('Verify the email with onboarding token', async () => {
+    const verifyEmailData = await api.graphql.mutate<
+      VerifyEmailMutation,
+      VerifyEmailMutationVariables
+    >({
+      mutation: VERIFY_EMAIL_MUTATION,
+      variables: {
+        verifyEmailInput: {
+          token: onboardingToken,
+        } as VerifyEmailInput,
+      },
+    });
+
+    if (!verifyEmailData.errors)
+      throw new Error('Expected an error, but none was returned');
+
+    expect(verifyEmailData.errors[0].message).toBe('Invalid token');
   });
 });
