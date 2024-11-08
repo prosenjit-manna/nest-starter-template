@@ -88,4 +88,16 @@ describe('Login module negative testing', () => {
     }
   });
   
+  test(`Login with space in email and password field`, async () => {
+    try {
+      await api.login({
+        email: '   ',
+        password: '  ',
+      });
+    } catch (error) {
+      if (error instanceof GraphQLError)
+        expect(error.message).toBe('Invalid email or password');
+    }
+  });
+  
 });
