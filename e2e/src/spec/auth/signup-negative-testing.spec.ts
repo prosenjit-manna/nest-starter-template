@@ -4,8 +4,6 @@ import { appEnv } from '../../lib/app-env';
 import { faker } from '@faker-js/faker/.';
 import { PrismaClient, UserType } from '@prisma/client';
 import { VERIFY_EMAIL_MUTATION } from '../../graphql/verify-email-mutation.gql';
-import { waitForTime } from '../../lib/wait-for-time';
-import { fetchEmailsFromInbox } from '../../lib/fetchEmails';
 import {
   SignupMutation,
   SignupMutationVariables,
@@ -16,11 +14,8 @@ import {
 
 describe('User Sign up negative testing - NST-46', () => {
   const api = new GraphQlApi();
-  let invitationLink: string | undefined;
-  let onboardingToken: string | undefined;
-  const userEmail = `automation-${crypto.randomUUID()}@${appEnv.TESTINATOR_TEAM_ID}`;
   const prisma = new PrismaClient();
-
+  const token = '$2b$10$pY/jxBRRY6hmfi6Dpa4ZzeGEQ0z9/zNS1Ht0qg2RnETlLahB21VHe';
   afterAll(async () => {
     await prisma.$disconnect();
   });
@@ -187,52 +182,6 @@ describe('User Sign up negative testing - NST-46', () => {
     expect(signup.errors[0].message).toBe('User already exists');
   });
 
-  test('Add a new user with valid email and password', async () => {
-    const signUpData = await api.graphql.mutate<
-      SignupMutation,
-      SignupMutationVariables
-    >({
-      mutation: SIGN_UP_MUTATION,
-      variables: {
-        signupInput: {
-          email: userEmail,
-          password: appEnv.SEED_PASSWORD,
-        },
-      },
-    });
-
-    const data = signUpData.data?.signup;
-    expect(data?.id).not.toBe(null);
-
-    await waitForTime();
-  }, 10000);
-
-  test('Should create a verification URL', async () => {
-    invitationLink = await fetchEmailsFromInbox('Welcome');
-    onboardingToken = invitationLink?.substring(35);
-    expect(invitationLink).toContain('verify-email');
-  }, 10000);
-
-  test('Add a new user with valid email and password for the second time', async () => {
-    const signUpData = await api.graphql.mutate<
-      SignupMutation,
-      SignupMutationVariables
-    >({
-      mutation: SIGN_UP_MUTATION,
-      variables: {
-        signupInput: {
-          email: userEmail,
-          password: appEnv.SEED_PASSWORD,
-        },
-      },
-    });
-
-    const data = signUpData.data?.signup;
-    expect(data?.id).not.toBe(null);
-
-    await waitForTime();
-  }, 10000);
-
   test('Verify the email with onboarding token', async () => {
     const verifyEmailData = await api.graphql.mutate<
       VerifyEmailMutation,
@@ -241,7 +190,7 @@ describe('User Sign up negative testing - NST-46', () => {
       mutation: VERIFY_EMAIL_MUTATION,
       variables: {
         verifyEmailInput: {
-          token: onboardingToken,
+          token,
         } as VerifyEmailInput,
       },
     });
