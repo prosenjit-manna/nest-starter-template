@@ -1,5 +1,5 @@
 import { GraphQlApi } from '../../lib/graphql-api';
-import { faker } from '@faker-js/faker/.';
+import { faker } from '@faker-js/faker';
 import { appEnv } from '../../lib/app-env';
 import { PrismaClient, UserType } from '@prisma/client';
 import { LOGIN_QUERY } from '../../graphql/login-query.gql';
