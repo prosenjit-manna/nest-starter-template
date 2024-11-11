@@ -1,7 +1,7 @@
 import { SIGN_UP_MUTATION } from '../../graphql/sign-up-mutation.gql';
 import { GraphQlApi } from '../../lib/graphql-api';
 import { appEnv } from '../../lib/app-env';
-import { faker } from '@faker-js/faker/.';
+import { faker } from '@faker-js/faker';
 import { PrismaClient, UserType } from '@prisma/client';
 import { VERIFY_EMAIL_MUTATION } from '../../graphql/verify-email-mutation.gql';
 import {
