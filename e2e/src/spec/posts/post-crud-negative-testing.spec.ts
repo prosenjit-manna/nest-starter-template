@@ -26,7 +26,7 @@ import { DELETE_POST_MUTATION } from '../../graphql/delete-post-mutation.gql';
 
 const userArrays = [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER];
 userArrays.forEach((userTypeRole) => {
-  describe(`Post CRUD functionalities for ${userTypeRole} - NST-42`, () => {
+  describe(`Post CRUD functionalities negative testing for ${userTypeRole} - NST-42`, () => {
     let user: User | null;
     let postId: string | undefined;
     const content = faker.lorem.paragraph();
