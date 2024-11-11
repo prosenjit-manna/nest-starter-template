@@ -6,6 +6,8 @@ import {
   CreatePostMutationVariables,
   CurrentUserQuery,
   CurrentUserQueryVariables,
+  DeletePostMutation,
+  DeletePostMutationVariables,
   GetPostListQuery,
   GetPostListQueryVariables,
   GetPostQuery,
@@ -20,6 +22,7 @@ import { UPDATE_POST_MUTATION } from '../../graphql/update-post-mutation.gql';
 import { CURRENT_USER_QUERY } from '../../graphql/current-user.gql';
 import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
+import { DELETE_POST_MUTATION } from '../../graphql/delete-post-mutation.gql';
 
 const userArrays = [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER];
 userArrays.forEach((userTypeRole) => {
@@ -30,6 +33,7 @@ userArrays.forEach((userTypeRole) => {
     const title = faker.lorem.word();
     let createFlag = false;
     let updateFlag = false;
+    let deleteFlag = false;
     const api = new GraphQlApi();
 
     test(`Login as a ${userTypeRole.toUpperCase()}`, async () => {
@@ -65,6 +69,8 @@ userArrays.forEach((userTypeRole) => {
             createFlag = true;
           } else if (privilege.name === 'UPDATE') {
             updateFlag = true;
+          } else if (privilege.name === 'DELETE') {
+            deleteFlag = true;
           }
         }
       }
@@ -210,6 +216,32 @@ userArrays.forEach((userTypeRole) => {
         }
         expect(updatePostResponse.errors[0].message).toContain(
           'Title cannot be blank',
+        );
+      }
+    });
+
+    test(`Delete post as ${userTypeRole} with wrong id`, async () => {
+      if (!postId) return;
+
+      if (deleteFlag) {
+        const deletePostResponse = await api.graphql.mutate<
+          DeletePostMutation,
+          DeletePostMutationVariables
+        >({
+          mutation: DELETE_POST_MUTATION,
+          variables: {
+            postDeleteInput: {
+              id: crypto.randomUUID(),
+              fromStash: false,
+            },
+          },
+        });
+
+        if (!deletePostResponse.errors) {
+          throw new Error('Expected an error, but none was returned');
+        }
+        expect(deletePostResponse.errors[0].message).toContain(
+          'Post not found',
         );
       }
     });
