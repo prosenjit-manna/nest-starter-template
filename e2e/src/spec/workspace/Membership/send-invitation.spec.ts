@@ -6,6 +6,8 @@ import { fetchEmailsFromInbox } from '../../../lib/fetchEmails';
 import { appEnv } from '../../../lib/app-env';
 import { PrismaClient, User, UserType } from '@prisma/client';
 import {
+  AcceptInvitationMutation,
+  AcceptInvitationMutationVariables,
   ListWorkSpaceQuery,
   ListWorkSpaceQueryVariables,
   SendInvitationMutation,
@@ -18,6 +20,7 @@ import {
 } from '../../../gql/graphql';
 import { LIST_WORKSPACE_QUERY } from '../../../graphql/list-workspace-query.gql';
 import { SEND_INVITATION_MUTATION } from '../../../graphql/send-invitation-mutation.gql';
+import { VERIFY_INVITATION_MUTATION } from '../../../graphql/verify-invitation-mutation.gql';
 
 describe('Membership invitation module', () => {
   let workspaceID: string | undefined;
@@ -142,6 +145,24 @@ describe('Membership invitation module', () => {
         },
       });
       expect(sendInvitation.data?.sendInvitation.success).toBe(true);
+    }
+  });
+
+  test('Verify invitation', async () => {
+    if (userId && workspaceID) {
+      const verifyInvitation = await api.graphql.mutate<
+        AcceptInvitationMutation,
+        AcceptInvitationMutationVariables
+      >({
+        mutation: VERIFY_INVITATION_MUTATION,
+        variables: {
+          acceptInvitationInput: {
+            token: onboardingToken as string,
+          }
+        },
+      });
+      console.log(onboardingToken);
+      expect(verifyInvitation.data?.acceptInvitation).toBe(true);
     }
   });
 });
