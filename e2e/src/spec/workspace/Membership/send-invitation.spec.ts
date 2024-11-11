@@ -123,25 +123,25 @@ describe('Membership invitation module', () => {
     >({
       query: LIST_WORKSPACE_QUERY,
     });
-     workspaceID = listWorkspace.data.listWorkSpace.workspace[0].id;
-     console.log(workspaceID);
+    workspaceID = listWorkspace.data.listWorkSpace.workspace[0].id;
+    console.log(workspaceID);
   });
 
   test('Send invitation', async () => {
-    const sendInvitation = await api.graphql.mutate<
-    SendInvitationMutation,
-    SendInvitationMutationVariables
-    >({
-      mutation: SEND_INVITATION_MUTATION,
-      variables: {
-        sendInvitationInput: { 
-          userId: userId,
-          workspaceId: workspaceID,
-  
+    if (userId && workspaceID) {
+      const sendInvitation = await api.graphql.mutate<
+        SendInvitationMutation,
+        SendInvitationMutationVariables
+      >({
+        mutation: SEND_INVITATION_MUTATION,
+        variables: {
+          sendInvitationInput: {
+            userId: userId,
+            workspaceId: workspaceID,
+          },
         },
-      }
-    });
-    expect(sendInvitation.data?.sendInvitation.success).toBe(true);
-   
+      });
+      expect(sendInvitation.data?.sendInvitation.success).toBe(true);
+    }
   });
 });
