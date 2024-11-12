@@ -2,6 +2,8 @@ import { PrismaClient, User, UserType } from '@prisma/client';
 import { GraphQlApi } from '../../lib/graphql-api';
 import { appEnv } from '../../lib/app-env';
 import {
+  AssignRoleMutation,
+  AssignRoleMutationVariables,
   CreateRoleMutation,
   CreateRoleMutationVariables,
   DeleteRoleMutation,
@@ -12,6 +14,8 @@ import {
   RoleListQueryVariables,
   RoleQuery,
   RoleQueryVariables,
+  UnAssignRoleMutation,
+  UnAssignRoleMutationVariables,
   UpdateRoleMutation,
   UpdateRoleMutationVariables,
 } from '../../gql/graphql';
@@ -23,6 +27,8 @@ import { DELETE_ROLE_MUTATION } from '../../graphql/delete-role-mutation.gql';
 import { faker } from '@faker-js/faker';
 import { PRIVILEGE_LIST } from '../../graphql/privilege-list-query.gql';
 import { sample } from 'lodash';
+import { ASSIGN_ROLE_MUTATION } from '../../graphql/assign-role-mutation.gql';
+import { UNASSIGN_ROLE_MUTATION } from '../../graphql/unassign-role-mutation.gql';
 
 [UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
   describe(`Role negative testing functionalities for user : ${type} - NST-37`, () => {
@@ -165,8 +171,8 @@ import { sample } from 'lodash';
             roleUpdateInput: {
               id: roleId,
               title: '',
-              createPrivileges: [randomPrivilege.id],
-              removePrivileges: [],
+              createPrivileges: [],
+              removePrivileges: [randomPrivilege.id],
             },
           },
         });
@@ -271,6 +277,116 @@ import { sample } from 'lodash';
         throw new Error('Expected an error, but none was returned');
       }
       expect(deleteRole.errors[0].message).toContain('Role not found');
+    });
+
+    test('Assign the role with a wrong role id', async () => {
+      if (user) {
+        const assignRole = await api.graphql.mutate<
+          AssignRoleMutation,
+          AssignRoleMutationVariables
+        >({
+          mutation: ASSIGN_ROLE_MUTATION,
+          variables: {
+            assignRoleInput: {
+              roleId: crypto.randomUUID(),
+              userId: user?.id,
+            },
+          },
+        });
+
+        if (!assignRole.errors) {
+          throw new Error('Expected an error, but none was returned');
+        }
+        expect(assignRole.errors[0].message).toContain(
+          'Foreign key constraint failed on the field: `UserRole_roleId_fkey (index)`',
+        );
+      } else {
+        throw new Error(
+          'User ID not found! User list might not have been fetched properly',
+        );
+      }
+    });
+
+    test('Assign the role with a wrong user id', async () => {
+      if (roleId) {
+        const assignRole = await api.graphql.mutate<
+          AssignRoleMutation,
+          AssignRoleMutationVariables
+        >({
+          mutation: ASSIGN_ROLE_MUTATION,
+          variables: {
+            assignRoleInput: {
+              roleId,
+              userId: crypto.randomUUID(),
+            },
+          },
+        });
+
+        if (!assignRole.errors) {
+          throw new Error('Expected an error, but none was returned');
+        }
+        expect(assignRole.errors[0].message).toContain(
+          'Foreign key constraint failed on the field: `UserRole_userId_fkey (index)`',
+        );
+      } else {
+        throw new Error(
+          'Role ID not found! Role list might not have been fetched properly',
+        );
+      }
+    });
+
+    test('Unassign role with wrong role id', async () => {
+      if (user) {
+        const unAssignRole = await api.graphql.mutate<
+          UnAssignRoleMutation,
+          UnAssignRoleMutationVariables
+        >({
+          mutation: UNASSIGN_ROLE_MUTATION,
+          variables: {
+            unAssignRoleInput: {
+              roleId: crypto.randomUUID(),
+              userId: user?.id,
+            },
+          },
+        });
+        if (!unAssignRole.errors) {
+          throw new Error('Expected an error, but none was returned');
+        }
+        expect(unAssignRole.errors[0].message).toContain(
+          'Mentioned not assigned to the user',
+        );
+      } else {
+        throw new Error(
+          'Role ID and User ID not found! Role list and user list might not have been fetched properly',
+        );
+      }
+    });
+
+    test('Unassign role with wrong user id', async () => {
+      if (roleId) {
+        const unAssignRole = await api.graphql.mutate<
+          UnAssignRoleMutation,
+          UnAssignRoleMutationVariables
+        >({
+          mutation: UNASSIGN_ROLE_MUTATION,
+          variables: {
+            unAssignRoleInput: {
+              roleId,
+              userId: crypto.randomUUID(),
+            },
+          },
+        });
+        if (!unAssignRole.errors) {
+          throw new Error('Expected an error, but none was returned');
+        }
+        expect(unAssignRole.errors[0].message).toContain(
+          'Mentioned not assigned to the user',
+        );
+      } else {
+        throw new Error(
+          'Role ID and User ID not found! Role list and user list might not have been fetched properly',
+        );
+      }
     });
   });
 });
