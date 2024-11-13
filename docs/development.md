@@ -1,8 +1,12 @@
-## Setup 
+# Install dependency in mac  
+- brew install python3 
+- brew install python-setuptools
+- npm install -g corepack 
 - Install docker 
+
+## Setup 
 - docker-compose up -d 
 - This will start database server locally 
-
 
 - Clone repository 
 - yarn 
