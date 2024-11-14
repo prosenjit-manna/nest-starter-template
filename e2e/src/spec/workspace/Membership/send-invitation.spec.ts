@@ -161,7 +161,6 @@ describe('Membership invitation module', () => {
           }
         },
       });
-      console.log(onboardingToken);
       expect(verifyInvitation.data?.acceptInvitation).toBe(true);
     }
   });
