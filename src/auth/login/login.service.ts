@@ -45,8 +45,7 @@ export class LoginService {
       throw new Error('Invalid email or password');
     }
 
-    const { token, expiryDate, refreshToken } =
-      await this.tokenService.generateToken(user);
+    const { token, expiryDate, refreshToken } = await this.tokenService.generateToken(user);
 
     await this.prisma.session.create({
       data: {
