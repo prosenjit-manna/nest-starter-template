@@ -9,10 +9,12 @@ describe('Refresh token module', () => {
     const dbClient = new PrismaClient();
     const api = new GraphQlApi();
     let refreshToken: string;
-    beforeAll(async () => {
+
+    test(`Login as ${type}`, async () => {
       const user = await dbClient.user.findFirst({
         where: {
           userType: type,
+          isVerified: true,
         },
       });
       if (!user) {
