@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma.service';
 import { SignupResponse } from './signup-response.dto';
 import { SignupInput } from './signup-input.dto';
 import * as bcrypt from 'bcrypt';
-import { randomBytes } from 'crypto';
+import { randomUUID } from 'crypto';
 import { VerifyRegisterEmailContent } from './verify-register-email-content.interface';
 import appEnv from 'src/env';
 
@@ -21,10 +21,10 @@ export class SignupService {
     singUpInput: SignupInput,
   ) {
     const hashedPassword = await bcrypt.hash(singUpInput.password, 10);
-    const verifyToken = await bcrypt.hash(randomBytes(5), 10);
+    const verifyToken = randomUUID();
 
     const verifyEmailContent: VerifyRegisterEmailContent = {
-      verifyURl: `${appEnv.FRONTEND_URL}${appEnv.SIGNUP_VERIFY_URL}${verifyToken}`,
+      verifyURl: `${appEnv.FRONTEND_URL}${appEnv.SIGNUP_VERIFY_URL}?token=${verifyToken}`,
     };
 
   
