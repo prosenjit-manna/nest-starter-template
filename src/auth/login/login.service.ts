@@ -21,6 +21,7 @@ export class LoginService {
     loginInput: LoginInput,
   ) {
     const ip = req.headers['x-forwarded-for'] || req.ip;
+    loginInput.email = loginInput.email.toLowerCase();
 
     const user = await this.prisma.user.findFirst({
       where: {
