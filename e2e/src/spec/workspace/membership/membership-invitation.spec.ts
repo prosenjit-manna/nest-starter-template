@@ -35,7 +35,7 @@ describe('Membership invitation module', () => {
   const dbClient = new PrismaClient();
 
   afterAll(async () => {
-    await prisma.$disconnect();
+    await prisma.$disconnect();``
   });
 
   test(`Login as a ${UserType.ADMIN}`, async () => {
@@ -88,7 +88,7 @@ describe('Membership invitation module', () => {
 
   test('Should create a verification URL', async () => {
     invitationLink = await fetchEmailsFromInbox('Welcome');
-    onboardingToken = invitationLink?.substring(35);
+    onboardingToken = invitationLink?.substring(46);
     expect(invitationLink).toContain('verify-email');
   });
 
@@ -148,6 +148,12 @@ describe('Membership invitation module', () => {
     }
   });
 
+  test('Should create a verification URL', async () => {
+    invitationLink = await fetchEmailsFromInbox('Welcome');
+    onboardingToken = invitationLink?.substring(46);
+    expect(invitationLink).toContain('verify-email');
+  });
+console.log(onboardingToken);
   test('Verify invitation', async () => {
     if (userId && workspaceID) {
       const verifyInvitation = await api.graphql.mutate<
