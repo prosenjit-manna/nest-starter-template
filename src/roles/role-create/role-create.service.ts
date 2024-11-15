@@ -1,4 +1,4 @@
-import { SetMetadata, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { SetMetadata, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { RoleCreateResponse } from './role-create-response.dto';
 import { PrismaService } from 'src/prisma.service';
@@ -16,7 +16,6 @@ export class RoleCreateService {
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.ROLE)
   @SetMetadata('privilegeName', PrivilegeName.CREATE)
-  @UsePipes(new ValidationPipe())
   async createRole(
     @Args('roleCreateInput') roleCreateInput: RoleCreateInput,
   ): Promise<RoleCreateResponse> {
@@ -29,10 +28,12 @@ export class RoleCreateService {
 
     console.log(roleCreateInput.privileges);
 
-    console.log(roleCreateInput.privileges.map((privilege) => ({
-      roleId: role.id,
-      privilegeId: privilege,
-    })))
+    console.log(
+      roleCreateInput.privileges.map((privilege) => ({
+        roleId: role.id,
+        privilegeId: privilege,
+      })),
+    );
 
     // assign base privileges to the role
 
