@@ -141,12 +141,10 @@ test('New Workspace created', async () => {
   test('Get the invitation link', async () => {
     invitationLink = await fetchEmailsFromInbox('Membership Invitation');
     onboardingToken = invitationLink?.substring(61);
-    console.log(invitationLink, onboardingToken);
     expect(invitationLink).toContain('membership-verify');
   });
 
   test('Verify invitation', async () => {
-    console.log(onboardingToken);
     if (userId && workspaceID) {
       const verifyInvitation = await api.graphql.mutate<
         AcceptInvitationMutation,
