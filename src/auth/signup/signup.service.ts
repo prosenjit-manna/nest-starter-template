@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UsePipes } from '@nestjs/common';
 import { Args, Mutation } from '@nestjs/graphql';
 import { MailerService } from 'src/mailer/mailer.service';
 import { PrismaService } from 'src/prisma.service';
@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import { VerifyRegisterEmailContent } from './verify-register-email-content.interface';
 import appEnv from 'src/env';
+import { AppValidationPipe } from 'src/validator.pipe';
 
 @Injectable()
 export class SignupService {
@@ -16,6 +17,7 @@ export class SignupService {
     private readonly mailerService: MailerService,
   ) {}
   @Mutation(() => SignupResponse)
+  @UsePipes(new AppValidationPipe())
   async signup(
     @Args('signupInput')
     singUpInput: SignupInput,
