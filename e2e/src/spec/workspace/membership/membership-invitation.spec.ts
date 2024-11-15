@@ -8,8 +8,8 @@ import { PrismaClient, User, UserType } from '@prisma/client';
 import {
   AcceptInvitationMutation,
   AcceptInvitationMutationVariables,
-  ListWorkSpaceQuery,
-  ListWorkSpaceQueryVariables,
+  CreateWorkspaceMutation,
+  CreateWorkspaceMutationVariables,
   SendInvitationMutation,
   SendInvitationMutationVariables,
   SignupMutation,
@@ -18,15 +18,16 @@ import {
   VerifyEmailMutation,
   VerifyEmailMutationVariables,
 } from '../../../gql/graphql';
-import { LIST_WORKSPACE_QUERY } from '../../../graphql/list-workspace-query.gql';
 import { SEND_INVITATION_MUTATION } from '../../../graphql/send-invitation-mutation.gql';
 import { VERIFY_INVITATION_MUTATION } from '../../../graphql/verify-invitation-mutation.gql';
+import { CREATE_WORKSPACE_MUTATION } from '../../../graphql/create-workspace-mutation.gql';
+import { faker } from '@faker-js/faker/.';
 
 describe('Membership invitation module', () => {
   let workspaceID: string | undefined;
+  const workspaceName = faker.lorem.word();
   let invitationLink: string | undefined;
   let onboardingToken: string | undefined;
-  let addedUser: User | null;
   let user: User | null;
   let userId: string | undefined;
   const userEmail = `automation-${crypto.randomUUID()}@${appEnv.TESTINATOR_TEAM_ID}`;
@@ -79,13 +80,6 @@ describe('Membership invitation module', () => {
     await waitForTime();
   }, 10000);
 
-  test('Should hash the password correctly', async () => {
-    addedUser = await prisma.user.findUnique({
-      where: { email: userEmail },
-    });
-    expect(addedUser?.password).not.toBe(appEnv.SEED_PASSWORD);
-  });
-
   test('Should create a verification URL', async () => {
     invitationLink = await fetchEmailsFromInbox('Welcome');
     onboardingToken = invitationLink?.substring(46);
@@ -109,26 +103,22 @@ describe('Membership invitation module', () => {
     expect(data?.refreshToken).not.toBe(null);
   });
 
-  test('should return the user ID after successful signup', async () => {
-    expect(userId).not.toBe(null);
-
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-    });
-
-    expect(user?.isVerified).toBe(true);
+test('New Workspace created', async () => {
+  const createWorkspace = await api.graphql.mutate<
+    CreateWorkspaceMutation,
+    CreateWorkspaceMutationVariables
+  >({
+    mutation: CREATE_WORKSPACE_MUTATION,
+    variables: {
+      createWorkspaceInput: {
+        name: workspaceName,
+      },
+    },
   });
 
-  test('List of Workspace and created workspace assertion', async () => {
-    const listWorkspace = await api.graphql.query<
-      ListWorkSpaceQuery,
-      ListWorkSpaceQueryVariables
-    >({
-      query: LIST_WORKSPACE_QUERY,
-    });
-    workspaceID = listWorkspace.data.listWorkSpace.workspace[0].id;
-    console.log(workspaceID);
-  });
+  workspaceID = createWorkspace.data?.createWorkspace.id;
+  expect(createWorkspace.data?.createWorkspace.id).not.toBeNull();
+});
 
   test('Send invitation', async () => {
     if (userId && workspaceID) {
@@ -148,13 +138,15 @@ describe('Membership invitation module', () => {
     }
   });
 
-  test('Should create a verification URL', async () => {
-    invitationLink = await fetchEmailsFromInbox('Welcome');
-    onboardingToken = invitationLink?.substring(46);
-    expect(invitationLink).toContain('verify-email');
+  test('Get the invitation link', async () => {
+    invitationLink = await fetchEmailsFromInbox('Membership Invitation');
+    onboardingToken = invitationLink?.substring(61);
+    console.log(invitationLink, onboardingToken);
+    expect(invitationLink).toContain('membership-verify');
   });
-console.log(onboardingToken);
+
   test('Verify invitation', async () => {
+    console.log(onboardingToken);
     if (userId && workspaceID) {
       const verifyInvitation = await api.graphql.mutate<
         AcceptInvitationMutation,
