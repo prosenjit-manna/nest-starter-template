@@ -1,14 +1,22 @@
-import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from '@nestjs/common';
+import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+import { CreateAppError, CustomApolloServerErrorCode } from './shared/create-error/create-error';
 
 @Injectable()
 export class AppValidationPipe implements PipeTransform<any> {
   async transform(value: any, { metatype }: ArgumentMetadata) {
+    // console.log(metatype, value);
+
     if (!metatype || !this.toValidate(metatype)) {
       return value;
     }
     const object = plainToInstance(metatype, value);
+    
+    if (!object) {
+      return value;
+    }
+
     const errors = await validate(object);
 
     if (errors.length > 0) {
@@ -21,7 +29,8 @@ export class AppValidationPipe implements PipeTransform<any> {
       });
 
 
-      throw new BadRequestException(`Validation Error: ${JSON.stringify(errorsMessage)}`);
+
+      throw new CreateAppError({ message: `${JSON.stringify(errorsMessage)}`, httpStatus: CustomApolloServerErrorCode.INPUT_VALIDATION  });
     }
     return value;
   }
