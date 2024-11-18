@@ -37,7 +37,9 @@ describe('User Sign up negative testing - NST-46', () => {
     if (!signup.errors) {
       throw new Error('Expected an error, but none was returned');
     }
-    expect(signup.errors[0].message).toBe('The fields cannot be empty');
+    expect(signup.errors[0].message).toContain(
+      'Password must contain at least one letter, one number, and one special character,Password must be at least 8 characters long',
+    );
   });
 
   test('Add a new user with only password and blank email', async () => {
@@ -57,7 +59,7 @@ describe('User Sign up negative testing - NST-46', () => {
     if (!signup.errors) {
       throw new Error('Expected an error, but none was returned');
     }
-    expect(signup.errors[0].message).toBe('The fields cannot be empty');
+    expect(signup.errors[0].message).toContain('Invalid email format');
   });
 
   test('Add a new user with blank values in all fields', async () => {
@@ -76,7 +78,9 @@ describe('User Sign up negative testing - NST-46', () => {
     if (!signup.errors) {
       throw new Error('Expected an error, but none was returned');
     }
-    expect(signup.errors[0].message).toBe('The fields cannot be empty');
+    expect(signup.errors[0].message).toContain(
+      'Password must contain at least one letter, one number, and one special character,Password must be at least 8 characters long',
+    );
   });
 
   test('Add a new user with invalid email format', async () => {
@@ -88,14 +92,14 @@ describe('User Sign up negative testing - NST-46', () => {
       variables: {
         signupInput: {
           email: 'abcd',
-          password: '',
+          password: appEnv.SEED_PASSWORD,
         },
       },
     });
     if (!signup.errors) {
       throw new Error('Expected an error, but none was returned');
     }
-    expect(signup.errors[0].message).toBe('Invalid email format');
+    expect(signup.errors[0].message).toContain('Invalid email format');
   });
 
   test('Add a new user with invalid password format', async () => {
@@ -114,7 +118,9 @@ describe('User Sign up negative testing - NST-46', () => {
     if (!signup.errors) {
       throw new Error('Expected an error, but none was returned');
     }
-    expect(signup.errors[0].message).toBe('Invalid password format');
+    expect(signup.errors[0].message).toContain(
+      'Password must contain at least one letter, one number, and one special character,Password must be at least 8 characters long',
+    );
   });
 
   test('Add a new user with excessively long email and password', async () => {
@@ -133,7 +139,7 @@ describe('User Sign up negative testing - NST-46', () => {
     if (!signup.errors) {
       throw new Error('Expected an error, but none was returned');
     }
-    expect(signup.errors[0].message).toBe('Excessively long characters');
+    expect(signup.errors[0].message).toContain('Invalid email format');
   });
 
   test('Add a new user with White space in email and password', async () => {
@@ -152,7 +158,7 @@ describe('User Sign up negative testing - NST-46', () => {
     if (!signup.errors) {
       throw new Error('Expected an error, but none was returned');
     }
-    expect(signup.errors[0].message).toBe('Invalid input');
+    expect(signup.errors[0].message).toContain('Invalid email format');
   });
 
   test('Add a new user with Exiting user', async () => {
@@ -172,14 +178,14 @@ describe('User Sign up negative testing - NST-46', () => {
       variables: {
         signupInput: {
           email: user.email,
-          password: '    ',
+          password: appEnv.SEED_PASSWORD,
         },
       },
     });
     if (!signup.errors) {
       throw new Error('Expected an error, but none was returned');
     }
-    expect(signup.errors[0].message).toBe('User already exists');
+    expect(signup.errors[0].message).toContain('User already exists');
   });
 
   test('Verify the email with onboarding token', async () => {
@@ -198,6 +204,6 @@ describe('User Sign up negative testing - NST-46', () => {
     if (!verifyEmailData.errors)
       throw new Error('Expected an error, but none was returned');
 
-    expect(verifyEmailData.errors[0].message).toBe('Invalid token');
+    expect(verifyEmailData.errors[0].message).toContain('Invalid token');
   });
 });

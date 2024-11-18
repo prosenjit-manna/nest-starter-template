@@ -75,6 +75,7 @@ describe('Password Reset', () => {
   test('Fetch emails from the inbox and extract the invitation link', async () => {
     invitationLink = await fetchEmailsFromInbox('Password Reset Request');
     onboardingToken = invitationLink?.substring(48);
+    console.log(onboardingToken, invitationLink);
     if (invitationLink) {
       expect(invitationLink).toContain('password-reset');
     }

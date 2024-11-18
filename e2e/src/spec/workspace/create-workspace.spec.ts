@@ -68,6 +68,7 @@ describe('Workspace Module', () => {
       expect(createWorkspace.data?.createWorkspace.id).not.toBeNull();
     });
 
+    //This test has an issue - NST-61
     test('List of Workspace and created workspace assertion', async () => {
       const listWorkspace = await api.graphql.query<
         ListWorkSpaceQuery,
@@ -76,6 +77,7 @@ describe('Workspace Module', () => {
         query: LIST_WORKSPACE_QUERY,
       });
 
+      console.log(listWorkspace);
       const addedWorkspace = listWorkspace.data.listWorkSpace.workspace.find(
         (workspace) => workspace.id === workspaceId,
       );

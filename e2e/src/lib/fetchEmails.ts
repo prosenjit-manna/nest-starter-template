@@ -14,6 +14,7 @@ export async function fetchEmailsFromInbox(
         const emails = mailResponse.data.msgs;
         emails.forEach((email: any, index: number) => {
           if (email.subject === emailSubject && index === 0) {
+            console.log(email);
             messageId = email.id;
           }
         });
