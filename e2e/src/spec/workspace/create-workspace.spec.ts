@@ -13,7 +13,7 @@ import {
   UpdateWorkspaceMutation,
   UpdateWorkspaceMutationVariables,
 } from '../../gql/graphql';
-import { UPDATE_WORKSPACE_MUTATION } from '../../graphql/update-workspace-mution.gql';
+import { UPDATE_WORKSPACE_MUTATION } from '../../graphql/update-workspace-mutation.gql';
 import { LIST_WORKSPACE_QUERY } from '../../graphql/list-workspace-query.gql';
 import { DELETE_WORKSPACE_MUTATION } from '../../graphql/delete-workspace-mutation.gql';
 import { GraphQLError } from 'graphql';
