@@ -60,7 +60,7 @@ describe('User Sign up', () => {
 
   test('Should create a verification URL', async () => {
     invitationLink = await fetchEmailsFromInbox('Welcome');
-    onboardingToken = invitationLink?.substring(46);
+    onboardingToken = invitationLink?.substring(35);
     expect(invitationLink).toContain('verify-email');
   });
 
@@ -95,6 +95,7 @@ describe('User Sign up', () => {
         } as VerifyEmailInput,
       },
     });
+
     const data = verifyEmailData.data?.verifyEmail;
     expect(data?.refreshToken).not.toBe(null);
   });
