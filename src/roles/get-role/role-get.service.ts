@@ -1,6 +1,9 @@
-import { HttpStatus, SetMetadata, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { RoleGetResponse, RolePrivilegeResponse } from './role-get-response.dto';
+import {
+  RoleGetResponse,
+  RolePrivilegeResponse,
+} from './role-get-response.dto';
 import { PrismaService } from 'src/prisma.service';
 import { RoleGetInput } from './role-get-input.dto';
 import { CreateAppError } from 'src/shared/create-error/create-error';
@@ -17,17 +20,15 @@ export class RoleGetService {
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.ROLE)
   @SetMetadata('privilegeName', PrivilegeName.READ)
-  @UsePipes(new ValidationPipe())
   async getRole(
     @Args('roleGetInput') roleGetInput: RoleGetInput,
   ): Promise<RoleGetResponse> {
     const role = await this.prisma.role.findFirst({
       where: {
         id: roleGetInput.id,
-      }
+      },
     });
 
-    
     if (!role) {
       throw new CreateAppError({
         message: 'Role not found',
@@ -40,7 +41,6 @@ export class RoleGetService {
       where: { roleId: role.id },
       include: { privilege: true },
     });
-
 
     privileges.forEach((privilege) => {
       transformPrivileges.push({

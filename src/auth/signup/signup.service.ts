@@ -27,8 +27,6 @@ export class SignupService {
       verifyURl: `${appEnv.FRONTEND_URL}${appEnv.SIGNUP_VERIFY_URL}?token=${verifyToken}`,
     };
 
-  
-
     const result = await this.prisma.user.findFirst({
       where: { email: singUpInput.email.toLowerCase() },
     });
