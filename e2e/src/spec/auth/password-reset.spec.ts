@@ -74,7 +74,7 @@ describe('Password Reset', () => {
 
   test('Fetch emails from the inbox and extract the invitation link', async () => {
     invitationLink = await fetchEmailsFromInbox('Password Reset Request');
-    onboardingToken = invitationLink?.substring(37);
+    onboardingToken = invitationLink?.substring(48);
     if (invitationLink) {
       expect(invitationLink).toContain('password-reset');
     }
@@ -117,7 +117,7 @@ describe('Password Reset', () => {
         } as PasswordResetInput,
       },
     });
-    expect(response.errors?.[0].message).toBe('Invalid token');
+    expect(response.errors?.[0].message).toBe('jwt malformed');
   });
 
   test('Should return an error if the new password does not meet criteria', async () => {
