@@ -113,6 +113,12 @@ type GetPostResponse {
   deletedAt: DateTime
 }
 
+type GetUserResponse {
+  email: String!
+  name: String
+  id: String!
+}
+
 type CurrentUserResponse {
   email: String!
   name: String
@@ -198,7 +204,7 @@ type Query {
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
   getPost(getPostInput: GetPostInput!): GetPostResponse
   currentUser: CurrentUserResponse!
-  getUsers: [CurrentUserResponse!]!
+  getUsers(getUsersInput: GetUsersInput): [GetUserResponse!]!
   login(loginInput: LoginInput!): LoginResponse!
 }
 
@@ -267,6 +273,10 @@ enum orderByField {
 
 input GetPostInput {
   id: String!
+}
+
+input GetUsersInput {
+  search: String
 }
 
 input LoginInput {
