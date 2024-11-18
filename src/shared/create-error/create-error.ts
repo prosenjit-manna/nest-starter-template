@@ -2,6 +2,9 @@ import { HttpStatus } from '@nestjs/common';
 import { GraphQLError } from 'graphql';
 import { ApolloServerErrorCode } from '@apollo/server/errors';
 
+export enum CustomApolloServerErrorCode {
+  TOKEN_EXPIRED = 'TOKEN_EXPIRED',
+}
 export class CreateAppError extends GraphQLError {
   constructor({
     message,
@@ -9,7 +12,7 @@ export class CreateAppError extends GraphQLError {
     error,
   }: {
     message: string;
-    httpStatus?: HttpStatus | ApolloServerErrorCode;
+    httpStatus?: HttpStatus | ApolloServerErrorCode | CustomApolloServerErrorCode;
     error?: Error;
   }) {
     console.log('CreateAppError', message, httpStatus, error);
