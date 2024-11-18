@@ -4,6 +4,7 @@ import { ApolloServerErrorCode } from '@apollo/server/errors';
 
 export enum CustomApolloServerErrorCode {
   TOKEN_EXPIRED = 'TOKEN_EXPIRED',
+  INPUT_VALIDATION = 'INPUT_VALIDATION',
 }
 export class CreateAppError extends GraphQLError {
   constructor({
