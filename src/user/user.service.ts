@@ -1,5 +1,4 @@
 import { Context, Query, Resolver } from '@nestjs/graphql';
-import { User } from '@prisma/client';
 import { Request } from 'express';
 import { PrismaService } from 'src/prisma.service';
 import { CurrentUserResponse } from './current-user.response.dto';
@@ -60,13 +59,5 @@ export class UserService {
       roles: roles.map(role => role.roleId)
     };
   }
-
- 
-  @Query(() => [CurrentUserResponse])
-  async getUsers(): Promise<User[]> {
-    const users = await this.prisma.user.findMany();
-    return users;
-  }
-
 
 }
