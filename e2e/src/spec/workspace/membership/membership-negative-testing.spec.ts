@@ -23,6 +23,7 @@ describe('Membership invitation module', () => {
     '$2b$10$u0wMXxOHe1mJEy2S18zgU.z73msGf9FVaep46wG2vZYFy3WJLWiKu';
   let user: User | null;
   let userId: string | undefined;
+  let userEmail: string | undefined;
   const api = new GraphQlApi();
   const prisma = new PrismaClient();
   const dbClient = new PrismaClient();
@@ -60,6 +61,7 @@ describe('Membership invitation module', () => {
         query: USER_LIST,
       });
       userId = sample(userList.data.getUsers)?.id;
+      userEmail = sample(userList.data.getUsers)?.email;
       expect(userList.data.getUsers.length).not.toBe(0);
     });
 
@@ -159,6 +161,51 @@ describe('Membership invitation module', () => {
       expect(verifyInvitation.errors[0].message).toContain(
         'Invalid invitation token!',
       );
+    });
+
+    test(`Send invitation to a user `, async () => {
+      if (workspaceID && userId) {
+        const sendInvitation = await api.graphql.mutate<
+          SendInvitationMutation,
+          SendInvitationMutationVariables
+        >({
+          mutation: SEND_INVITATION_MUTATION,
+          variables: {
+            sendInvitationInput: {
+              userId: userId,
+              workspaceId: workspaceID,
+            },
+          },
+        });
+        expect(sendInvitation.data?.sendInvitation.success).toBe(true);
+      }
+    });
+
+    test(`Login as the user who has been invited`, async () => {
+      if (userEmail) {
+        const response = await api.login({
+          email: userEmail,
+          password: appEnv.SEED_PASSWORD,
+        });
+        expect(response.data).toBeDefined();
+      }
+    });
+
+    test('Check whether the user can access the workspace', async () => {
+      if (workspaceID) {
+        const listWorkspace = await api.graphql.query<
+          ListWorkSpaceQuery,
+          ListWorkSpaceQueryVariables
+        >({
+          query: LIST_WORKSPACE_QUERY,
+        });
+
+        const addedWorkspace = listWorkspace.data.listWorkSpace.workspace.find(
+          (workspace) => workspace.id === workspaceID,
+        );
+
+        expect(addedWorkspace).toBe(undefined);
+      }
     });
   });
 });
