@@ -42,7 +42,7 @@ export class PasswordResetService {
       templateName: 'password-reset-request',
       context: {
         name: user.name,
-        passwordResetUrl: `${appEnv.FRONTEND_URL}${appEnv.PASSWORD_RESET_URL}${token}`,
+        passwordResetUrl: `${appEnv.FRONTEND_URL}${appEnv.PASSWORD_RESET_URL}?token=${token}`,
       },
     });
 

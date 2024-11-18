@@ -21,6 +21,7 @@ export class LoginService {
     loginInput: LoginInput,
   ) {
     const ip = req.headers['x-forwarded-for'] || req.ip;
+    loginInput.email = loginInput.email.toLowerCase();
 
     const user = await this.prisma.user.findFirst({
       where: {
@@ -45,8 +46,7 @@ export class LoginService {
       throw new Error('Invalid email or password');
     }
 
-    const { token, expiryDate, refreshToken } =
-      await this.tokenService.generateToken(user);
+    const { token, expiryDate, refreshToken } = await this.tokenService.generateToken(user);
 
     await this.prisma.session.create({
       data: {

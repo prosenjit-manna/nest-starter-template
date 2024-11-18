@@ -1,4 +1,4 @@
-import { SetMetadata, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { SetMetadata, UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { Request } from 'express';
@@ -19,16 +19,14 @@ export class UpdateWorkspaceService {
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.WORKSPACE)
   @SetMetadata('privilegeName', PrivilegeName.UPDATE)
-  @UsePipes(new ValidationPipe())
   async updateWorkspace(
     @Args('updateWorkspaceInput') updateWorkspaceInput: UpdateWorkspaceInput,
-    @Context('req') req: Request
+    @Context('req') req: Request,
   ): Promise<UpdateWorkspaceResponse> {
-
     const membership = await this.prisma.workspaceMembership.findMany({
       where: {
         userId: req?.user?.id,
-      }
+      },
     });
 
     // Check if the user has access to the workspace
@@ -46,7 +44,7 @@ export class UpdateWorkspaceService {
         name: updateWorkspaceInput.name,
       },
     });
-    
+
     return workspace;
   }
 }

@@ -1,4 +1,4 @@
-import { SetMetadata, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { SetMetadata, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { RoleUpdateResponse } from './role-update-response.dto';
 import { PrismaService } from 'src/prisma.service';
@@ -16,7 +16,6 @@ export class RoleUpdateService {
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.ROLE)
   @SetMetadata('privilegeName', PrivilegeName.UPDATE)
-  @UsePipes(new ValidationPipe())
   async updateRole(
     @Args('roleUpdateInput') roleUpdateInput: RoleUpdateInput,
   ): Promise<RoleUpdateResponse> {
@@ -28,7 +27,6 @@ export class RoleUpdateService {
         title: roleUpdateInput.title,
       },
     });
-
 
     // assign base privileges to the role
 

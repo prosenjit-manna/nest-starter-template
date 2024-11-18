@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import appEnv from 'src/env';
 import { PrismaService } from 'src/prisma.service';
+import { CreateAppError, CustomApolloServerErrorCode } from 'src/shared/create-error/create-error';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -36,8 +37,12 @@ export class JwtAuthGuard implements CanActivate {
       });
       request.user = user;
 
-    } catch {
-      throw new UnauthorizedException('Invalid token');
+    } catch (err) {
+      console.log(err)
+      if (err.name === "TokenExpiredError") {
+        throw new CreateAppError({ message: "Token expired", httpStatus: CustomApolloServerErrorCode.TOKEN_EXPIRED });
+      }
+      throw new UnauthorizedException(err.message);
     }
 
     return true;
