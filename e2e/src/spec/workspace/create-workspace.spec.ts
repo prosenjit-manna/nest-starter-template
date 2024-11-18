@@ -30,7 +30,7 @@ describe('Workspace Module', () => {
     await dbClient.$disconnect();
   });
 
-  [UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
+  [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER].forEach((type) => {
     test(`Login as a ${type}`, async () => {
       user = await dbClient.user.findFirst({
         where: {
