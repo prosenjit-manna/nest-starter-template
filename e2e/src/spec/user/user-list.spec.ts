@@ -23,6 +23,7 @@ describe('User List', () => {
       });
     });
 
+    //This test has an issue - NST-60
     test('Get  user list ', async () => {
       const response = await api.graphql.query<
         GetUsersQuery,
