@@ -17,7 +17,7 @@ export class AcceptInvitationService {
         invitationToken: acceptInvitationInput.token,
       },
     });
-    if (acceptInvitationInput.token === memberShip?.invitationToken) {
+    if (acceptInvitationInput.token === memberShip?.invitationToken && memberShip?.isAccepted) {
       await this.prisma.workspaceMembership.update({
         where: {
           id: memberShip.id,
@@ -25,6 +25,14 @@ export class AcceptInvitationService {
         data: {
           invitationToken: null,
           isAccepted: true,
+        },
+      });
+
+      return true;
+    } else if (acceptInvitationInput.token === memberShip?.invitationToken && !memberShip?.isAccepted) {
+      await this.prisma.workspaceMembership.delete({
+        where: {
+          id: memberShip.id,
         },
       });
 
