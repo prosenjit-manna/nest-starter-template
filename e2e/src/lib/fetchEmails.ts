@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { appEnv } from './app-env';
 
-export async function fetchEmailsFromInbox(emailSubject: string): Promise<string | undefined> {
+export async function fetchEmailsFromInbox(
+  emailSubject: string,
+): Promise<string | undefined> {
   let messageId;
   const apiUrl = `${appEnv.FETCH_EMAILS_INBOX}${appEnv.TESTINATOR_API_KEY}`;
 
@@ -24,6 +26,7 @@ export async function fetchEmailsFromInbox(emailSubject: string): Promise<string
   } catch (error: any) {
     throw new Error(`${error.message}`);
   }
+  console.log(messageId);
 
   const fetchMessageURL = `${appEnv.FETCH_SPECIFIC_EMAIL}${messageId}?token=${appEnv.TESTINATOR_API_KEY}`;
 
@@ -33,4 +36,4 @@ export async function fetchEmailsFromInbox(emailSubject: string): Promise<string
   if (match) {
     return match[1];
   }
-};
+}
