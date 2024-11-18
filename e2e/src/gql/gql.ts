@@ -32,12 +32,14 @@ const documents = {
     "\n  query Role {\n    listBasePrivilege {\n      privilege {\n        name\n        group\n        id\n        type\n        createdAt\n        updatedAt\n        deletedAt\n      }\n    }\n  }\n": types.RoleDocument,
     "\n  mutation RefreshAccessToken($refreshAccessTokenInput: RefreshAccessTokenInput!) {\n  refreshAccessToken(refreshAccessTokenInput: $refreshAccessTokenInput) {\n    token\n    refreshToken\n  }\n}\n": types.RefreshAccessTokenDocument,
     "\n  mutation RequestPasswordReset($passwordReset: PasswordResetRequestInput!) {\n    requestPasswordReset(passwordReset: $passwordReset) {\n      message\n    }\n  }\n": types.RequestPasswordResetDocument,
+    "\n  mutation SendInvitation($sendInvitationInput: SendInvitationInput!) {\n    sendInvitation(sendInvitationInput: $sendInvitationInput) {\n      success\n    }\n  }\n": types.SendInvitationDocument,
     "\n  mutation Signup($signupInput: SignupInput!) {\n    signup(signupInput: $signupInput) {\n      id\n    }\n  }\n": types.SignupDocument,
     "\n  mutation UnAssignRole($unAssignRoleInput: UnAssignRoleInput!) {\n    unAssignRole(unAssignRoleInput: $unAssignRoleInput) {\n      success\n    }\n  }\n": types.UnAssignRoleDocument,
     "\n  mutation UpdatePost($postId: String!, $updatePostInput: UpdatePostInput!) {\n    updatePost(postId: $postId, updatePostInput: $updatePostInput) {\n      id\n    }\n  }\n": types.UpdatePostDocument,
     "\n  mutation UpdateRole($roleUpdateInput: RoleUpdateInput!) {\n    updateRole(roleUpdateInput: $roleUpdateInput) {\n      id\n    }\n  }\n": types.UpdateRoleDocument,
     "\n  mutation UpdateWorkspace($updateWorkspaceInput: UpdateWorkspaceInput!) {\n  updateWorkspace(updateWorkspaceInput: $updateWorkspaceInput) {\n    id\n  }\n}\n": types.UpdateWorkspaceDocument,
     "\n  mutation VerifyEmail($verifyEmailInput: VerifyEmailInput!) {\n    verifyEmail(verifyEmailInput: $verifyEmailInput) {\n      token\n      refreshToken\n    }\n  }\n": types.VerifyEmailDocument,
+    "\n  mutation AcceptInvitation($acceptInvitationInput: AcceptInvitationInput!) {\n    acceptInvitation(acceptInvitationInput: $acceptInvitationInput)\n  }\n": types.AcceptInvitationDocument,
 };
 
 /**
@@ -133,6 +135,10 @@ export function graphql(source: "\n  mutation RequestPasswordReset($passwordRese
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  mutation SendInvitation($sendInvitationInput: SendInvitationInput!) {\n    sendInvitation(sendInvitationInput: $sendInvitationInput) {\n      success\n    }\n  }\n"): (typeof documents)["\n  mutation SendInvitation($sendInvitationInput: SendInvitationInput!) {\n    sendInvitation(sendInvitationInput: $sendInvitationInput) {\n      success\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  mutation Signup($signupInput: SignupInput!) {\n    signup(signupInput: $signupInput) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation Signup($signupInput: SignupInput!) {\n    signup(signupInput: $signupInput) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -154,6 +160,10 @@ export function graphql(source: "\n  mutation UpdateWorkspace($updateWorkspaceIn
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation VerifyEmail($verifyEmailInput: VerifyEmailInput!) {\n    verifyEmail(verifyEmailInput: $verifyEmailInput) {\n      token\n      refreshToken\n    }\n  }\n"): (typeof documents)["\n  mutation VerifyEmail($verifyEmailInput: VerifyEmailInput!) {\n    verifyEmail(verifyEmailInput: $verifyEmailInput) {\n      token\n      refreshToken\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation AcceptInvitation($acceptInvitationInput: AcceptInvitationInput!) {\n    acceptInvitation(acceptInvitationInput: $acceptInvitationInput)\n  }\n"): (typeof documents)["\n  mutation AcceptInvitation($acceptInvitationInput: AcceptInvitationInput!) {\n    acceptInvitation(acceptInvitationInput: $acceptInvitationInput)\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

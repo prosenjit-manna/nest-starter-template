@@ -53,6 +53,7 @@ describe('Membership invitation module', () => {
       expect(response.data).toBeDefined();
     });
 
+    //this test has issue - NST-60
     test(`Get user list and fetch a random user id ${type}`, async () => {
       const userList = await api.graphql.query<
         GetUsersQuery,
