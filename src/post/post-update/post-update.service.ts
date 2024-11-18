@@ -1,4 +1,4 @@
-import { UsePipes, ValidationPipe, UseGuards, SetMetadata } from '@nestjs/common';
+import { UseGuards, SetMetadata } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { UpdatePostResponse } from './update-post-response.dto';
 import { UpdatePostInput } from './update-post.dto';
@@ -16,7 +16,6 @@ export class PostUpdateService {
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.POST)
   @SetMetadata('privilegeName', PrivilegeName.UPDATE)
-  @UsePipes(new ValidationPipe())
   async updatePost(
     @Args('postId') postId: string,
     @Args('updatePostInput') updatePostInput: UpdatePostInput,
