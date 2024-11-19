@@ -85,6 +85,7 @@ import { GraphQLError } from 'graphql';
       expect(response.data).toBeDefined();
     });
 
+    //This test has issue - NST-60
     test('Fetch user list and store the user ID', async () => {
       user = await dbClient.user.findFirst({
         where: {
