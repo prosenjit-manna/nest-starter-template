@@ -370,6 +370,7 @@ input CreatePostInput {
   content: String
   published: Boolean! = false
   authorId: String!
+  workSpaceId: String!
 }
 
 input UpdatePostInput {
