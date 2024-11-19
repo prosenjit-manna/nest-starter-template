@@ -1,7 +1,8 @@
 
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { Args, Query } from '@nestjs/graphql';
+import { Args, Context, Query } from '@nestjs/graphql';
+import { Request } from 'express';
 
 import { PrismaService } from 'src/prisma.service';
 import { PostListResponse } from './post-list-response.dto';
@@ -15,11 +16,14 @@ export class PostListService {
     
   @Query(() => PostListResponse)
   async getPostList(
+    @Context('req') req: Request,
     @Args('getPostListInput', { nullable: true })
     getPostListInput: GetPostListInput,
   ): Promise<PostListResponse> {
 
-    const queryObject: Prisma.PostWhereInput = {
+   
+    
+    let queryObject: Prisma.PostWhereInput = {
       title: {
         contains: getPostListInput?.title || undefined,
         mode: 'insensitive',
@@ -33,6 +37,23 @@ export class PostListService {
         }
       } : null,
     };
+
+    if (req.user) {
+      const membership = await this.prisma.workspaceMembership.findMany({
+        where: {
+          userId: req?.user?.id,
+          isAccepted: true,
+        },
+      });
+
+      queryObject = {
+        ...queryObject,
+        workspaceId: {
+          in: membership.map((m) => m.workspaceId),
+        },
+      }
+    }
+
 
     const postCount = await this.prisma.post.count({
       where: queryObject,

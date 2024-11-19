@@ -7,8 +7,6 @@ import { PostDeleteService } from './post-delete/post-delete.service';
 import { PostMemberShipValidation } from './post-membership-validation';
 
 @Module({
-  imports: [],
-  controllers: [],
   providers: [
     PostMemberShipValidation,
     PostListService,

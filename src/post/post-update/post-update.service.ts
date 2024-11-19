@@ -36,7 +36,7 @@ export class PostUpdateService {
       throw new Error('Post not found');
     }
 
-    await this.postMemberShipValidation.validateMembership(req?.user?.id || '', existingPost.workspaceId);
+    await this.postMemberShipValidation.validateMembership(this.prisma, req?.user?.id || '', existingPost.workspaceId);
 
     const post = await this.prisma.post.update({
       where: { id: postId },

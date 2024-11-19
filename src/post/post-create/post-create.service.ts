@@ -14,8 +14,8 @@ import { PostMemberShipValidation } from '../post-membership-validation';
 @Resolver()
 export class PostCreateService {
   constructor(
-    private prisma: PrismaService,
     private postMemberShipValidation: PostMemberShipValidation,
+    private prisma: PrismaService,
   ) {}
 
   @Mutation(() => CreatePostResponse)
@@ -28,7 +28,7 @@ export class PostCreateService {
     @Context('req') req: Request,
   ) {
 
-    const membership = await this.postMemberShipValidation.validateMembership(req?.user?.id || '', createPostInput.workSpaceId);
+    const membership = await this.postMemberShipValidation.validateMembership(this.prisma, req?.user?.id || '', createPostInput.workspaceId);
     this.postMemberShipValidation.validateAuthorMembership(membership, (createPostInput?.authorId || req?.user?.id) || '');
 
 
@@ -36,7 +36,7 @@ export class PostCreateService {
       data: {
         ...createPostInput,
         authorId: createPostInput.authorId || req?.user?.id,
-        workspaceId: createPostInput.workSpaceId,
+        workspaceId: createPostInput.workspaceId,
       },
     });
     return post;

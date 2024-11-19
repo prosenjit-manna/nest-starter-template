@@ -2,10 +2,11 @@ import { WorkspaceMembership } from "@prisma/client";
 import { PrismaService } from "src/prisma.service";
 
 export class PostMemberShipValidation {
-  constructor(private prisma: PrismaService) {}
  
-  async validateMembership(userId: string, workSpaceId: string) {
-    const membership = await this.prisma.workspaceMembership.findMany({
+  async validateMembership(prisma: PrismaService, userId: string, workSpaceId: string) {
+    console.log(userId, workSpaceId);
+
+    const membership = await prisma.workspaceMembership.findMany({
       where: {
         userId: userId,
         isAccepted: true,
