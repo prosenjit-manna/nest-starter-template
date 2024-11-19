@@ -19,6 +19,7 @@ export type Scalars = {
 };
 
 export type AcceptInvitationInput = {
+  accept: Scalars['Boolean']['input'];
   token: Scalars['String']['input'];
 };
 

@@ -39,7 +39,7 @@ const documents = {
     "\n  mutation UpdateRole($roleUpdateInput: RoleUpdateInput!) {\n    updateRole(roleUpdateInput: $roleUpdateInput) {\n      id\n    }\n  }\n": types.UpdateRoleDocument,
     "\n  mutation UpdateWorkspace($updateWorkspaceInput: UpdateWorkspaceInput!) {\n  updateWorkspace(updateWorkspaceInput: $updateWorkspaceInput) {\n    id\n  }\n}\n": types.UpdateWorkspaceDocument,
     "\n  mutation VerifyEmail($verifyEmailInput: VerifyEmailInput!) {\n    verifyEmail(verifyEmailInput: $verifyEmailInput) {\n      token\n      refreshToken\n    }\n  }\n": types.VerifyEmailDocument,
-    "\n mutation AcceptInvitation($acceptInvitationInput: AcceptInvitationInput!) {\n  acceptInvitation(acceptInvitationInput: $acceptInvitationInput)\n}\n": types.AcceptInvitationDocument,
+    "\n  mutation AcceptInvitation($acceptInvitationInput: AcceptInvitationInput!) {\n    acceptInvitation(acceptInvitationInput: $acceptInvitationInput)\n  }\n": types.AcceptInvitationDocument,
 };
 
 /**
@@ -163,7 +163,7 @@ export function graphql(source: "\n  mutation VerifyEmail($verifyEmailInput: Ver
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n mutation AcceptInvitation($acceptInvitationInput: AcceptInvitationInput!) {\n  acceptInvitation(acceptInvitationInput: $acceptInvitationInput)\n}\n"): (typeof documents)["\n mutation AcceptInvitation($acceptInvitationInput: AcceptInvitationInput!) {\n  acceptInvitation(acceptInvitationInput: $acceptInvitationInput)\n}\n"];
+export function graphql(source: "\n  mutation AcceptInvitation($acceptInvitationInput: AcceptInvitationInput!) {\n    acceptInvitation(acceptInvitationInput: $acceptInvitationInput)\n  }\n"): (typeof documents)["\n  mutation AcceptInvitation($acceptInvitationInput: AcceptInvitationInput!) {\n    acceptInvitation(acceptInvitationInput: $acceptInvitationInput)\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
