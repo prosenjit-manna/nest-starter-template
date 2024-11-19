@@ -1,9 +1,12 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { MaxLength } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsNotEmpty, MaxLength } from 'class-validator';
 
 @InputType()
 export class CreatePostInput {
   @Field(() => String, { nullable: false })
+  @Transform(({ value }) => value.trim())
+  @IsNotEmpty()
   title: string;
 
 

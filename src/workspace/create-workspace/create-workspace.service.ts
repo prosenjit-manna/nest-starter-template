@@ -1,9 +1,4 @@
-import {
-  SetMetadata,
-  UseGuards,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { SetMetadata, UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { Request } from 'express';
@@ -23,7 +18,6 @@ export class CreateWorkspaceService {
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.WORKSPACE)
   @SetMetadata('privilegeName', PrivilegeName.CREATE)
-  @UsePipes(new ValidationPipe())
   async createWorkspace(
     @Args('createWorkspaceInput') createWorkspaceInput: CreateWorkspaceInput,
     @Context('req') req: Request,
