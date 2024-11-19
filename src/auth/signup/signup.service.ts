@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import { VerifyRegisterEmailContent } from './verify-register-email-content.interface';
 import appEnv from 'src/env';
+import { RoleName } from '@prisma/client';
 
 @Injectable()
 export class SignupService {
@@ -43,6 +44,21 @@ export class SignupService {
       },
     });
 
+    const userRole = await this.prisma.role.findFirst({
+      where: { name: RoleName.USER },
+    });
+  
+  
+     // Attach Role 
+     if (user && userRole) {
+      await this.prisma.userRole.create({
+        data: {
+          userId: user?.id,
+          roleId: userRole?.id,
+        },
+      });
+    }
+
     this.mailerService.sendMail({
       to: singUpInput.email,
       subject: 'Welcome',
@@ -53,3 +69,4 @@ export class SignupService {
     return { id: user.id };
   }
 }
+

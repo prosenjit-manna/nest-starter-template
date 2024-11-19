@@ -1,7 +1,8 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { SetMetadata, UseGuards } from '@nestjs/common';
+import { Request } from 'express';
 
 import { SendInvitationResponse } from './send-invitation-response.dto';
 import { RoleGuard } from 'src/auth/role.guard';
@@ -27,7 +28,19 @@ export class SendInvitationService {
   @SetMetadata('privilegeName', PrivilegeName.CREATE)
   async sendInvitation(
     @Args('sendInvitationInput') sendInvitationInput: SendInvitationInput,
+    @Context('req') req: Request,
   ) {
+    const membership = await this.prisma.workspaceMembership.findMany({
+      where: {
+        userId: req?.user?.id,
+        isAccepted: true,
+      },
+    });
+
+    if (!membership.some((m) => m.workspaceId === sendInvitationInput.workspaceId)) {
+      throw new Error('Membership not available for this workspace');
+    }
+
     const workspaceMembership = await this.prisma.workspaceMembership.findFirst(
       {
         where: {
