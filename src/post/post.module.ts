@@ -4,11 +4,13 @@ import { PostUpdateService } from './post-update/post-update.service';
 import { PostCreateService } from './post-create/post-create.service';
 import { GetPostService } from './get-post/get-post.service';
 import { PostDeleteService } from './post-delete/post-delete.service';
+import { PostMemberShipValidation } from './post-membership-validation';
 
 @Module({
   imports: [],
   controllers: [],
   providers: [
+    PostMemberShipValidation,
     PostListService,
     GetPostService,
     PostCreateService,

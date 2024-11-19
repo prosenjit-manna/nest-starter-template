@@ -8,11 +8,15 @@ import { CreatePostInput } from './create-post-input.dto';
 import { PrismaService } from 'src/prisma.service';
 import { RoleGuard } from 'src/auth/role.guard';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { PostMemberShipValidation } from '../post-membership-validation';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()
 export class PostCreateService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private postMemberShipValidation: PostMemberShipValidation,
+  ) {}
 
   @Mutation(() => CreatePostResponse)
   @UseGuards(RoleGuard)
@@ -24,26 +28,15 @@ export class PostCreateService {
     @Context('req') req: Request,
   ) {
 
-    const membership = await this.prisma.workspaceMembership.findMany({
-      where: {
-        userId: req?.user?.id,
-        isAccepted: true,
-      },
-    });
-
-    if (!membership.some((m) => m.workspaceId === createPostInput.workSpaceId)) {
-      throw new Error('Membership not available for this workspace');
-    }
-
-    if (!membership.some((m) => m.userId === createPostInput.authorId)) {
-      throw new Error('Membership not available for this author');
-    }
+    const membership = await this.postMemberShipValidation.validateMembership(req?.user?.id || '', createPostInput.workSpaceId);
+    this.postMemberShipValidation.validateAuthorMembership(membership, (createPostInput?.authorId || req?.user?.id) || '');
 
 
     const post = await this.prisma.post.create({
       data: {
         ...createPostInput,
         authorId: createPostInput.authorId || req?.user?.id,
+        workspaceId: createPostInput.workSpaceId,
       },
     });
     return post;

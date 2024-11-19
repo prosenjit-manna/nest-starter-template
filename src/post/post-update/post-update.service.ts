@@ -8,11 +8,15 @@ import { UpdatePostInput } from './update-post.dto';
 import { PrismaService } from 'src/prisma.service';
 import { RoleGuard } from 'src/auth/role.guard';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { PostMemberShipValidation } from '../post-membership-validation';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()
 export class PostUpdateService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService, 
+    private postMemberShipValidation: PostMemberShipValidation
+  ) {}
 
   @Mutation(() => UpdatePostResponse)
   @UseGuards(RoleGuard)
@@ -24,16 +28,15 @@ export class PostUpdateService {
     @Context('req') req: Request,
   ) {
 
-    const membership = await this.prisma.workspaceMembership.findMany({
-      where: {
-        userId: req?.user?.id,
-        isAccepted: true,
-      },
+    const existingPost = await this.prisma.post.findUnique({
+      where: { id: postId },
     });
 
-    if (!membership.some((m) => m.userId === updatePostInput.authorId)) {
-      throw new Error('Membership not available for this author');
+    if (!existingPost) {
+      throw new Error('Post not found');
     }
+
+    await this.postMemberShipValidation.validateMembership(req?.user?.id || '', existingPost.workspaceId);
 
     const post = await this.prisma.post.update({
       where: { id: postId },
