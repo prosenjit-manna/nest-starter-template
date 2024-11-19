@@ -13,6 +13,7 @@ export async function fetchEmailsFromInbox(
     if (mailResponse.data.msgs && mailResponse.data.msgs.length > 0) {
       const emails = mailResponse.data.msgs;
       emails.forEach((email: any, index: number) => {
+        index === 0 ? console.log(email.subject) : '';
         if (email.subject === emailSubject && index === 0) {
           console.log(email);
           messageId = email.id;
