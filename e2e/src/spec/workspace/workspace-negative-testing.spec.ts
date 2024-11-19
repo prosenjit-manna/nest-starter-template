@@ -66,9 +66,8 @@ describe('Workspace Module Negative testing - NST-36', () => {
       if (!createWorkspace.errors) {
         throw new Error('Expected an error, but none was returned');
       }
-      expect(createWorkspace.errors[0].message).toContain(
-        'Bad Request Exception',
-      );
+      const errorMessage = createWorkspace.errors[0]?.message;
+      expect(errorMessage).toContain('Name is required');
     });
 
     test('List of Workspace and created workspace assertion', async () => {
@@ -104,9 +103,7 @@ describe('Workspace Module Negative testing - NST-36', () => {
 
     test('Update Workspace with blank name', async () => {
       if (!workspaceId) {
-        throw new Error(
-          'Workspace ID is undefined; workspace list fetch might have failed',
-        );
+        throw new Error('name should not be empty');
       }
       const updateWorkspace = await api.graphql.mutate<
         UpdateWorkspaceMutation,
@@ -125,7 +122,7 @@ describe('Workspace Module Negative testing - NST-36', () => {
         throw new Error('Expected an error, but none was returned');
       }
       expect(updateWorkspace.errors[0].message).toContain(
-        'Name cannot be blank',
+        'name should not be empty',
       );
     });
 
