@@ -21,7 +21,7 @@ export const appEnv = cleanEnv(process.env, {
     default: 'https://mailinator.com/api/v2/domains/private/messages/',
   }),
   API_BASE_URL: str({ default: 'http://localhost:4000' }),
-  ADMIN_EMAIL: str({ default: 'example+admin-1@exanple.com' }),
+  ADMIN_EMAIL: str({ default: 'example+admin-1@team930312.testinator.com' }),
   JEST_HTML_REPORTER_FILE_NAME: str({ default: 'test.html' }),
   // s3
   AWS_REGION: str({ default: 'us-east-1' }),

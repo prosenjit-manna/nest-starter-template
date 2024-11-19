@@ -30,7 +30,7 @@ describe('Workspace Module', () => {
     await dbClient.$disconnect();
   });
 
-  [UserType.ADMIN, UserType.SUPER_ADMIN].forEach((type) => {
+  [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER].forEach((type) => {
     test(`Login as a ${type}`, async () => {
       user = await dbClient.user.findFirst({
         where: {
@@ -68,6 +68,7 @@ describe('Workspace Module', () => {
       expect(createWorkspace.data?.createWorkspace.id).not.toBeNull();
     });
 
+    //This test has an issue - NST-61
     test('List of Workspace and created workspace assertion', async () => {
       const listWorkspace = await api.graphql.query<
         ListWorkSpaceQuery,
@@ -76,6 +77,7 @@ describe('Workspace Module', () => {
         query: LIST_WORKSPACE_QUERY,
       });
 
+      console.log(listWorkspace.data.listWorkSpace.workspace);
       const addedWorkspace = listWorkspace.data.listWorkSpace.workspace.find(
         (workspace) => workspace.id === workspaceId,
       );

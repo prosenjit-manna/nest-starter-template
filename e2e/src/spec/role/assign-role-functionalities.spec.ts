@@ -52,7 +52,8 @@ import { GET_ROLE_QUERY } from '../../graphql/get-role-query.gql';
       expect(response.data).toBeDefined();
     });
 
-    test('Fetch user list and store the user ID', async () => {
+    //This test NST-60 has issue
+    test('Fetch user list and store the user ID ', async () => {
       user = await dbClient.user.findFirst({
         where: {
           userType: UserType.USER,
@@ -65,8 +66,12 @@ import { GET_ROLE_QUERY } from '../../graphql/get-role-query.gql';
         GetUsersQueryVariables
       >({
         query: USER_LIST,
+        variables: {
+          getUsersInput: {
+            search: '',
+          },
+        },
       });
-
       expect(userList.data.getUsers.length).toBeGreaterThan(0);
 
       const userToBeAssigned = userList.data.getUsers.find(
