@@ -21,7 +21,10 @@ describe('Login module negative testing', () => {
         },
       },
     });
-    expect(loginResponse.data.login.id).not.toBe(null);
+    if (!loginResponse.errors) {
+      throw new Error('Expected an error, but none was returned');
+    }
+    expect(loginResponse.errors[0].message).toBe('Invalid email or password');
   });
 
   test(`Login with only email and blank password`, async () => {
@@ -63,7 +66,7 @@ describe('Login module negative testing', () => {
     if (!loginResponse.errors) {
       throw new Error('Expected an error, but none was returned');
     }
-    expect(loginResponse.errors[0].message).toBe('Account not verified');
+    expect(loginResponse.errors[0].message).toBe('Invalid email or password');
   });
 
   test(`Login with blank values in all fields`, async () => {
@@ -79,7 +82,7 @@ describe('Login module negative testing', () => {
     if (!loginResponse.errors) {
       throw new Error('Expected an error, but none was returned');
     }
-    expect(loginResponse.errors[0].message).toBe('Account not verified');
+    expect(loginResponse.errors[0].message).toBe('Invalid email or password');
   });
 
   test(`Login with invalid email format`, async () => {
@@ -95,7 +98,7 @@ describe('Login module negative testing', () => {
     if (!loginResponse.errors) {
       throw new Error('Expected an error, but none was returned');
     }
-    expect(loginResponse.errors[0].message).toBe('Account not verified');
+    expect(loginResponse.errors[0].message).toBe('Invalid email or password');
   });
 
   test(`Login with excessively long email and password`, async () => {
@@ -111,7 +114,7 @@ describe('Login module negative testing', () => {
     if (!loginResponse.errors) {
       throw new Error('Expected an error, but none was returned');
     }
-    expect(loginResponse.errors[0].message).toBe('Account not verified');
+    expect(loginResponse.errors[0].message).toBe('Invalid email or password');
   });
 
   test(`Login with wrong email and password`, async () => {

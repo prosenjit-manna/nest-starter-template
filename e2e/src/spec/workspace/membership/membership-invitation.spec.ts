@@ -21,7 +21,7 @@ import {
 import { SEND_INVITATION_MUTATION } from '../../../graphql/send-invitation-mutation.gql';
 import { VERIFY_INVITATION_MUTATION } from '../../../graphql/verify-invitation-mutation.gql';
 import { CREATE_WORKSPACE_MUTATION } from '../../../graphql/create-workspace-mutation.gql';
-import { faker } from '@faker-js/faker/.';
+import { faker } from '@faker-js/faker';
 
 describe('Membership invitation module', () => {
   let workspaceID: string | undefined;
@@ -36,7 +36,7 @@ describe('Membership invitation module', () => {
   const dbClient = new PrismaClient();
 
   afterAll(async () => {
-    await prisma.$disconnect();``
+    await prisma.$disconnect();
   });
 
   test(`Login as a ${UserType.ADMIN}`, async () => {
@@ -76,8 +76,7 @@ describe('Membership invitation module', () => {
     const data = signUpData.data?.signup;
     userId = data?.id;
     expect(data?.id).not.toBe(null);
-
-    await waitForTime();
+    await waitForTime(6000);
   }, 10000);
 
   test('Should create a verification URL', async () => {
@@ -103,22 +102,22 @@ describe('Membership invitation module', () => {
     expect(data?.refreshToken).not.toBe(null);
   });
 
-test('New Workspace created', async () => {
-  const createWorkspace = await api.graphql.mutate<
-    CreateWorkspaceMutation,
-    CreateWorkspaceMutationVariables
-  >({
-    mutation: CREATE_WORKSPACE_MUTATION,
-    variables: {
-      createWorkspaceInput: {
-        name: workspaceName,
+  test('New Workspace created', async () => {
+    const createWorkspace = await api.graphql.mutate<
+      CreateWorkspaceMutation,
+      CreateWorkspaceMutationVariables
+    >({
+      mutation: CREATE_WORKSPACE_MUTATION,
+      variables: {
+        createWorkspaceInput: {
+          name: workspaceName,
+        },
       },
-    },
-  });
+    });
 
-  workspaceID = createWorkspace.data?.createWorkspace.id;
-  expect(createWorkspace.data?.createWorkspace.id).not.toBeNull();
-});
+    workspaceID = createWorkspace.data?.createWorkspace.id;
+    expect(createWorkspace.data?.createWorkspace.id).not.toBeNull();
+  });
 
   test('Send invitation', async () => {
     if (userId && workspaceID) {
@@ -136,11 +135,12 @@ test('New Workspace created', async () => {
       });
       expect(sendInvitation.data?.sendInvitation.success).toBe(true);
     }
-  });
+    await waitForTime(6000);
+  }, 15000);
 
   test('Get the invitation link', async () => {
     invitationLink = await fetchEmailsFromInbox('Membership Invitation');
-    onboardingToken = invitationLink?.substring(61);
+    onboardingToken = invitationLink?.substring(60);
     expect(invitationLink).toContain('membership-verify');
   });
 
@@ -154,7 +154,8 @@ test('New Workspace created', async () => {
         variables: {
           acceptInvitationInput: {
             token: onboardingToken as string,
-          }
+            accept: true,
+          },
         },
       });
       expect(verifyInvitation.data?.acceptInvitation).toBe(true);

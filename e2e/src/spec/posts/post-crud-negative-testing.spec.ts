@@ -124,8 +124,8 @@ userArrays.forEach((userTypeRole) => {
         if (!createPostResponse.errors) {
           throw new Error('Expected an error, but none was returned');
         }
-        expect(createPostResponse.errors[0].message).toBe(
-          'Title cannot be blank',
+        expect(createPostResponse.errors[0].message).toContain(
+          'title should not be empty',
         );
       }
     });
@@ -157,7 +157,11 @@ userArrays.forEach((userTypeRole) => {
           GetPostListQueryVariables
         >({
           query: GET_POST_LIST_QUERY,
-          variables: {},
+          variables: {
+            getPostListInput: {
+              fromStash: false,
+            },
+          },
         });
 
         postId = sample(postList.data.getPostList.posts)?.id;
@@ -215,7 +219,7 @@ userArrays.forEach((userTypeRole) => {
           throw new Error('Expected an error, but none was returned');
         }
         expect(updatePostResponse.errors[0].message).toContain(
-          'Title cannot be blank',
+          'title should not be empty',
         );
       }
     });

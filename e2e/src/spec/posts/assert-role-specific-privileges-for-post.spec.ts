@@ -327,9 +327,14 @@ import { GraphQLError } from 'graphql';
         GetPostListQueryVariables
       >({
         query: GET_POST_LIST_QUERY,
-        variables: {},
+        variables: {
+          getPostListInput: {
+            fromStash: false,
+          },
+        },
       });
 
+      console.log(postList);
       const data = postList.data;
       expect(data.getPostList.posts.length).toBeGreaterThan(0);
 
