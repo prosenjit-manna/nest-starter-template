@@ -150,6 +150,7 @@ describe('Membership invitation module', () => {
         variables: {
           acceptInvitationInput: {
             token: onboardingToken as string,
+            accept: false
           },
         },
       });
