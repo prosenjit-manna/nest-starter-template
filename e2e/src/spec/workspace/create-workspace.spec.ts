@@ -77,7 +77,7 @@ describe('Workspace Module', () => {
         query: LIST_WORKSPACE_QUERY,
       });
 
-      console.log(listWorkspace);
+      console.log(listWorkspace.data.listWorkSpace.workspace);
       const addedWorkspace = listWorkspace.data.listWorkSpace.workspace.find(
         (workspace) => workspace.id === workspaceId,
       );

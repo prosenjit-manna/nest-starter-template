@@ -9,20 +9,17 @@ export async function fetchEmailsFromInbox(
 
   try {
     const mailResponse = await axios.get(apiUrl);
-    if (mailResponse.status === 200) {
-      if (mailResponse.data.msgs && mailResponse.data.msgs.length > 0) {
-        const emails = mailResponse.data.msgs;
-        emails.forEach((email: any, index: number) => {
-          if (email.subject === emailSubject && index === 0) {
-            console.log(email);
-            messageId = email.id;
-          }
-        });
-      } else {
-        throw new Error('No messages found in the inbox');
-      }
+    console.log(mailResponse.data.msgs.length);
+    if (mailResponse.data.msgs && mailResponse.data.msgs.length > 0) {
+      const emails = mailResponse.data.msgs;
+      emails.forEach((email: any, index: number) => {
+        if (email.subject === emailSubject && index === 0) {
+          console.log(email);
+          messageId = email.id;
+        }
+      });
     } else {
-      throw new Error(`Unexpected response status: ${mailResponse.status}`);
+      throw new Error('No messages found in the inbox');
     }
   } catch (error: any) {
     throw new Error(`${error.message}`);
