@@ -134,7 +134,7 @@ import { UNASSIGN_ROLE_MUTATION } from '../../graphql/unassign-role-mutation.gql
           throw new Error('Expected an error, but none was returned');
         }
         expect(createRoleResponse.errors[0].message).toContain(
-          'Title cannot be blank`',
+          'title should not be empty',
         );
       }
     });
@@ -181,7 +181,7 @@ import { UNASSIGN_ROLE_MUTATION } from '../../graphql/unassign-role-mutation.gql
           throw new Error('Expected an error, but none was returned');
         }
         expect(updateRole.errors[0].message).toContain(
-          'Title cannot be blank`',
+          'title should not be empty',
         );
       } else {
         throw new Error(
@@ -200,7 +200,7 @@ import { UNASSIGN_ROLE_MUTATION } from '../../graphql/unassign-role-mutation.gql
         variables: {
           roleUpdateInput: {
             id: roleId,
-            title: '',
+            title: faker.lorem.word(),
             createPrivileges: [crypto.randomUUID()],
             removePrivileges: [],
           },
@@ -225,7 +225,7 @@ import { UNASSIGN_ROLE_MUTATION } from '../../graphql/unassign-role-mutation.gql
         variables: {
           roleUpdateInput: {
             id: crypto.randomUUID(),
-            title: '',
+            title: faker.lorem.word(),
             createPrivileges: [randomPrivilege?.id],
             removePrivileges: [],
           },

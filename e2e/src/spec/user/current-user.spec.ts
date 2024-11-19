@@ -11,6 +11,7 @@ describe('Current user login module', () => {
       const user = await dbClient.user.findFirst({
         where: {
           userType: type,
+          isVerified: true,
         },
       });
       if (!user) {

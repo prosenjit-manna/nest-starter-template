@@ -156,7 +156,11 @@ userArrays.forEach((userTypeRole) => {
           GetPostListQueryVariables
         >({
           query: GET_POST_LIST_QUERY,
-          variables: {},
+          variables: {
+            getPostListInput: {
+              fromStash: false,
+            },
+          },
         });
 
         const data = postList.data;
