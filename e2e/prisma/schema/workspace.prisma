@@ -1,0 +1,32 @@
+enum workspaceStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Workspace {
+  id                  String                @id @default(uuid())
+  name                String
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  deletedAt           DateTime?
+  workspaceStatus     workspaceStatus       @default(ACTIVE)
+  workspaceMembership WorkspaceMembership[] @relation(name: "workspaceIdMembershipRelation")
+  post                Post[]                @relation(name: "workspaceIdPostRelation")
+}
+
+model WorkspaceMembership {
+  id              String    @id @default(uuid())
+  user            User      @relation(name: "userIdMembershipRelation", fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  workspace       Workspace @relation(name: "workspaceIdMembershipRelation", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId     String
+  isOwner         Boolean   @default(false)
+  isAccepted      Boolean   @default(false)
+  invitationToken String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@unique([workspaceId, userId])
+}
