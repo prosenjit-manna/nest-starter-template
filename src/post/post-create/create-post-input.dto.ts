@@ -22,5 +22,5 @@ export class CreatePostInput {
   
 
   @Field(() => String)
-  workSpaceId: string;
+  workspaceId: string;
 }
