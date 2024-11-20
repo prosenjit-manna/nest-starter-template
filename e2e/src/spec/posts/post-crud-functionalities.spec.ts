@@ -79,6 +79,7 @@ userArrays.forEach((userTypeRole) => {
     });
 
     test(`Create Post as ${userTypeRole}`, async () => {
+      const dbClient = new PrismaClient()
       if (!user) return;
       if (createFlag) {
         const createPostResponse = await api.graphql.mutate<
@@ -92,6 +93,7 @@ userArrays.forEach((userTypeRole) => {
               content: content,
               published: faker.datatype.boolean(),
               title: title,
+              workspaceId: ''
             },
           },
         });
