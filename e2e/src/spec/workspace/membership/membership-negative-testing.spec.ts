@@ -115,7 +115,9 @@ describe('Membership invitation module', () => {
       if (!sendInvitation.errors) {
         throw new Error('Expected an error, but none was returned');
       }
-      expect(sendInvitation.errors[0].message).toContain('Forbidden resource');
+      expect(sendInvitation.errors[0].message).toContain(
+        'Membership not available for this workspace',
+      );
     }
   });
 
