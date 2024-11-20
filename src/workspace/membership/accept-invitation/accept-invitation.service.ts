@@ -17,7 +17,7 @@ export class AcceptInvitationService {
         invitationToken: acceptInvitationInput.token,
       },
     });
-    if (acceptInvitationInput.token === memberShip?.invitationToken && memberShip?.isAccepted) {
+    if (acceptInvitationInput.token === memberShip?.invitationToken && acceptInvitationInput?.accept) {
       await this.prisma.workspaceMembership.update({
         where: {
           id: memberShip.id,
@@ -29,7 +29,7 @@ export class AcceptInvitationService {
       });
 
       return true;
-    } else if (acceptInvitationInput.token === memberShip?.invitationToken && !memberShip?.isAccepted) {
+    } else if (acceptInvitationInput.token === memberShip?.invitationToken && !acceptInvitationInput?.accept) {
       await this.prisma.workspaceMembership.delete({
         where: {
           id: memberShip.id,
