@@ -1,14 +1,18 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Query, Resolver } from '@nestjs/graphql';
+import { Request } from 'express';
 import { SetMetadata } from '@nestjs/common';
+import { Prisma, PrivilegeGroup, PrivilegeName } from '@prisma/client';
+import { UseGuards } from '@nestjs/common';
+
 import { PrismaService } from 'src/prisma.service';
 import { ListMembershipResponse } from './list-membership-response.dto';
 import { ListMembershipInput } from './list-membership-input.dto';
-import { Prisma, PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';
 import { Order } from 'src/shared/base-list/base-list-input.dto';
-import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
+import { WorkspaceMemberShipGuard } from 'src/auth/workspace-membership.guard';
+import { MemberShipValidationType } from 'src/auth/membership-validation-type.enum';
 
 
 @UseGuards(JwtAuthGuard)
@@ -19,12 +23,17 @@ export class ListMembershipService {
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.MEMBERSHIP)
   @SetMetadata('privilegeName', PrivilegeName.READ)
+
+  @UseGuards(WorkspaceMemberShipGuard)
+  @SetMetadata('memberShipValidationType', MemberShipValidationType.MEMBERSHIP_VALIDITY)
+
   @Query(() => ListMembershipResponse)
   async listMemberships(
     @Args('listMembershipsInput') listMembershipsInput: ListMembershipInput,
+    @Context('req') req: Request,
   ) {
     const queryObject: Prisma.WorkspaceMembershipScalarWhereInput = {
-      workspaceId: listMembershipsInput.workspaceId,
+      workspaceId: req.currentWorkspaceId,
     };
 
     const postCount = await this.prisma.workspaceMembership.count({

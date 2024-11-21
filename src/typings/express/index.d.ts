@@ -17,7 +17,19 @@ declare global {
         createdAt: Date;
         updatedAt: Date;
         deletedAt: Date | null;
-    } | null
+      } | null;
+      memberships: {
+        id: string;
+        userId: string;
+        workspaceId: string;
+        isOwner: boolean;
+        isAccepted: boolean;
+        invitationToken: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+        deletedAt: Date | null;
+      }[];
+      currentWorkspaceId?: string;
     }
   }
 }
