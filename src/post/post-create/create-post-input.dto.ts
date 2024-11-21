@@ -20,7 +20,4 @@ export class CreatePostInput {
   @Field(() => String, { nullable: false })
   authorId: string;
   
-
-  @Field(() => String)
-  workspaceId: string;
 }

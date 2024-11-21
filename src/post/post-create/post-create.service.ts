@@ -9,6 +9,8 @@ import { PrismaService } from 'src/prisma.service';
 import { RoleGuard } from 'src/auth/role.guard';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { PostMemberShipValidation } from '../post-membership-validation';
+import { WorkspaceMemberShipGuard } from 'src/auth/workspace-membership.guard';
+import { MemberShipValidationType } from 'src/auth/membership-validation-type.enum';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()
@@ -23,20 +25,20 @@ export class PostCreateService {
   @SetMetadata('privilegeGroup', PrivilegeGroup.POST)
   @SetMetadata('privilegeName', PrivilegeName.CREATE)
 
+  @UseGuards(WorkspaceMemberShipGuard)
+  @SetMetadata('memberShipValidationType', MemberShipValidationType.MEMBERSHIP_VALIDITY)
+
   async createPost(
     @Args('createPostInput') createPostInput: CreatePostInput,
     @Context('req') req: Request,
   ) {
-
-    const membership = await this.postMemberShipValidation.validateMembership(this.prisma, req?.user?.id || '', createPostInput.workspaceId);
-    this.postMemberShipValidation.validateAuthorMembership(membership, (createPostInput?.authorId || req?.user?.id) || '');
-
+    this.postMemberShipValidation.validateAuthorMembership(req.memberships, (createPostInput?.authorId || req?.user?.id) || '');
 
     const post = await this.prisma.post.create({
       data: {
         ...createPostInput,
         authorId: createPostInput.authorId || req?.user?.id,
-        workspaceId: createPostInput.workspaceId,
+        workspaceId: req.currentWorkspaceId || '',
       },
     });
     return post;

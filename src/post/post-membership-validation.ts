@@ -1,5 +1,7 @@
+import { HttpStatus } from "@nestjs/common";
 import { WorkspaceMembership } from "@prisma/client";
 import { PrismaService } from "src/prisma.service";
+import { CreateAppError } from "src/shared/create-error/create-error";
 
 export class PostMemberShipValidation {
  
@@ -14,7 +16,7 @@ export class PostMemberShipValidation {
     });
   
     if (!membership.some((m) => m.workspaceId === workSpaceId)) {
-      throw new Error('Membership not available for this workspace');
+      throw new CreateAppError({ message: 'Membership not available for this workspace', httpStatus: HttpStatus.FORBIDDEN });
     }
 
     return membership
@@ -22,7 +24,7 @@ export class PostMemberShipValidation {
 
   validateAuthorMembership(memberships: WorkspaceMembership[], authorId: string) {
     if (!memberships.some((m) => m.userId === authorId)) {
-      throw new Error('Membership not available for this author');
+      throw new CreateAppError({ message: 'Membership not available for this author', httpStatus: HttpStatus.FORBIDDEN });
     }
   }
 }
