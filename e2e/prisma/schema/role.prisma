@@ -1,0 +1,73 @@
+
+enum PrivilegeType {
+  BASE
+}
+
+enum PrivilegeName {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+}
+
+enum PrivilegeGroup {
+  POST
+  USER
+  ROLE
+  WORKSPACE
+  MEMBERSHIP
+}
+
+enum RoleName {
+  SUPER_ADMIN
+  ADMIN
+  USER
+  CUSTOM
+}
+
+
+model Privilege {
+  id        String          @id @default(uuid())
+  name      PrivilegeName
+  group     PrivilegeGroup
+  type      PrivilegeType?  @default(BASE)
+  roles     RolePrivilege[] @relation("privilegeRelation")
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  deletedAt DateTime?
+}
+
+model Role {
+  id         String          @id @default(uuid())
+  name       RoleName        @default(USER)
+  title      String
+  privileges RolePrivilege[] @relation("rolePrivelegeRelation")
+  users      UserRole[]      @relation("roleUserRelation")
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  deletedAt  DateTime?
+}
+
+model RolePrivilege {
+  id          String    @id @default(uuid())
+  role        Role      @relation(name: "rolePrivelegeRelation", fields: [roleId], references: [id], onDelete: Cascade)
+  roleId      String
+  privilege   Privilege @relation(name: "privilegeRelation", fields: [privilegeId], references: [id], onDelete: Cascade)
+  privilegeId String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@unique([privilegeId, roleId])
+}
+
+model UserRole {
+  id        String    @id @default(uuid())
+  user      User      @relation(name: "userRoleRleation", fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  role      Role      @relation(name: "roleUserRelation", fields: [roleId], references: [id], onDelete: Cascade)
+  roleId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
