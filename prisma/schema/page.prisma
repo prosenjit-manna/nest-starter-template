@@ -3,7 +3,7 @@ model Page {
   title     String
   content   String?
   published Boolean?  @default(false)
-  author    User?     @relation(name: "userPageRleation", fields: [authorId], references: [id])
+  author    User?     @relation(name: "userPageRelation", fields: [authorId], references: [id])
   authorId  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
