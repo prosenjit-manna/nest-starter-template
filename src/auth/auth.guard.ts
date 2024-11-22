@@ -20,6 +20,8 @@ export class JwtAuthGuard implements CanActivate {
 
     
     const token = this.extractTokenFromHeader(request);
+    const currentWorkspaceId = request.headers['current_workspace_id'] as string;
+
 
 
     if (!token) {
@@ -36,6 +38,7 @@ export class JwtAuthGuard implements CanActivate {
         },
       });
       request.user = user;
+      request.currentWorkspaceId = currentWorkspaceId;
 
     } catch (err) {
       console.log(err)

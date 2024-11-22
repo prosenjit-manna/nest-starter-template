@@ -1,24 +1,45 @@
 import { SetMetadata, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Request } from 'express';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
+
 import { CreatePostResponse } from './create-post-response.dto';
 import { CreatePostInput } from './create-post-input.dto';
 import { PrismaService } from 'src/prisma.service';
 import { RoleGuard } from 'src/auth/role.guard';
-import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { PostMemberShipValidation } from '../post-membership-validation';
+import { WorkspaceMemberShipGuard } from 'src/auth/workspace-membership.guard';
+import { MemberShipValidationType } from 'src/auth/membership-validation-type.enum';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()
 export class PostCreateService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private postMemberShipValidation: PostMemberShipValidation,
+    private prisma: PrismaService,
+  ) {}
 
   @Mutation(() => CreatePostResponse)
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.POST)
   @SetMetadata('privilegeName', PrivilegeName.CREATE)
-  async createPost(@Args('createPostInput') createPostInput: CreatePostInput) {
+
+  @UseGuards(WorkspaceMemberShipGuard)
+  @SetMetadata('memberShipValidationType', MemberShipValidationType.MEMBERSHIP_VALIDITY)
+
+  async createPost(
+    @Args('createPostInput') createPostInput: CreatePostInput,
+    @Context('req') req: Request,
+  ) {
+    this.postMemberShipValidation.validateAuthorMembership(req.memberships, (createPostInput?.authorId || req?.user?.id) || '');
+
     const post = await this.prisma.post.create({
-      data: createPostInput,
+      data: {
+        ...createPostInput,
+        authorId: createPostInput.authorId || req?.user?.id,
+        workspaceId: req.currentWorkspaceId || '',
+      },
     });
     return post;
   }

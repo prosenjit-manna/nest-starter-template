@@ -1,29 +1,41 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Request } from 'express';
+import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
+
 import { PrismaService } from 'src/prisma.service';
 import { CreateAppError } from 'src/shared/create-error/create-error';
-import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 import { PostDeleteInput } from './post-delete-input.dto';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { RoleGuard } from 'src/auth/role.guard';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { PostMemberShipValidation } from '../post-membership-validation';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()
 export class PostDeleteService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private postMemberShipValidation: PostMemberShipValidation,
+  ) {}
 
   @Mutation(() => Boolean)
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.POST)
   @SetMetadata('privilegeName', PrivilegeName.DELETE)
   async deletePost(
+    @Context('req') req: Request,
     @Args('postDeleteInput', { nullable: true })
     postDeleteInput: PostDeleteInput,
   ): Promise<boolean> {
 
+    
+
+
     const post = await this.prismaService.post.findUnique({
       where: { id: postDeleteInput.id, deletedAt: postDeleteInput.fromStash ? { not: null } : null },
     });
+
+    await this.postMemberShipValidation.validateMembership(this.prismaService, req?.user?.id || '', post?.workspaceId || '');
 
     if (!post) {
       throw new CreateAppError({

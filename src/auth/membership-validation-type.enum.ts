@@ -1,0 +1,4 @@
+export enum MemberShipValidationType {
+  AUTHOR_VALIDITY = 'AUTHOR_VALIDITY',
+  MEMBERSHIP_VALIDITY = 'MEMBERSHIP_VALIDITY',
+}

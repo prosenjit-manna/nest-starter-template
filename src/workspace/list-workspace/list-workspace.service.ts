@@ -49,14 +49,14 @@ export class ListWorkSpaceService {
         : null,
     };
 
-    const postCount = await this.prisma.workspace.count({
+    const workspaceCount = await this.prisma.workspace.count({
       where: queryObject,
     });
 
     const paginationMeta = paginationInputTransformer({
       page: listWorkspaceInput?.page,
       pageSize: listWorkspaceInput?.pageSize,
-      totalRowCount: postCount,
+      totalRowCount: workspaceCount,
     });
 
     let orderByQuery: any = {
@@ -88,3 +88,4 @@ export class ListWorkSpaceService {
     };
   }
 }
+

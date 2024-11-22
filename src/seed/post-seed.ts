@@ -9,6 +9,7 @@ export async function postSeed() {
   
   //  Get one user
   const user = await prismaClient.user.findFirst();
+  const workspace = await prismaClient.workspace.findFirst();
 
   // Create Post
   await prismaClient.post.create({
@@ -16,6 +17,7 @@ export async function postSeed() {
       title: faker.lorem.words(5),
       content: faker.lorem.paragraphs(3),
       authorId: user?.id,
+      workspaceId: workspace?.id || '',
     },
   });
 }
