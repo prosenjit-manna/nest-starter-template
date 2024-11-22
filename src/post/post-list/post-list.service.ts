@@ -17,8 +17,7 @@ export class PostListService {
   @Query(() => PostListResponse)
   async getPostList(
     @Context('req') req: Request,
-    @Args('getPostListInput', { nullable: true })
-    getPostListInput: GetPostListInput,
+    @Args('getPostListInput', { nullable: true }) getPostListInput: GetPostListInput,
   ): Promise<PostListResponse> {
 
    
@@ -38,21 +37,10 @@ export class PostListService {
       } : null,
     };
 
-    if (req.user) {
-      const membership = await this.prisma.workspaceMembership.findMany({
-        where: {
-          userId: req?.user?.id,
-          isAccepted: true,
-        },
-      });
-
-      queryObject = {
-        ...queryObject,
-        workspaceId: {
-          in: membership.map((m) => m.workspaceId),
-        },
-      }
-    }
+    queryObject = {
+      ...queryObject,
+      workspaceId: req.currentWorkspaceId,
+    };
 
 
     const postCount = await this.prisma.post.count({
@@ -80,9 +68,7 @@ export class PostListService {
       skip: paginationMeta.skip,
       take: paginationMeta.perPage,
       orderBy: orderByQuery,
-      where: {
-        ...queryObject,
-      },
+      where: queryObject,
     });
     
     return {
