@@ -24,7 +24,7 @@ import { GET_POST_LIST_QUERY } from '../../graphql/get-post-list-query.gql';
 import { UPDATE_POST_MUTATION } from '../../graphql/update-post-mutation.gql';
 import { CURRENT_USER_QUERY } from '../../graphql/current-user.gql';
 import { faker } from '@faker-js/faker';
-import { CREATE_WORKSPACE_MUTATION } from '../../graphql/create-post-mutation.gql'
+import { CREATE_WORKSPACE_MUTATION } from '../../graphql/create-workspace-mutation.gql';
 
 
 const userArrays = [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER];
@@ -32,6 +32,7 @@ userArrays.forEach((userTypeRole) => {
   describe(`Post CRUD functionalities for ${userTypeRole}`, () => {
     let user: User | null;
     let postId: string | undefined;
+    let workspaceId: string | undefined; // Declare workspaceId here.
     const content = faker.lorem.paragraph();
     const title = faker.lorem.word();
     const updatedContent = faker.lorem.paragraph();
@@ -39,7 +40,6 @@ userArrays.forEach((userTypeRole) => {
     let createFlag = false;
     let updateFlag = false;
     let deleteFlag = false;
-    const workspaceId: string | undefined;
     const workspaceName = faker.lorem.word();
 
     const api = new GraphQlApi();
@@ -102,7 +102,7 @@ userArrays.forEach((userTypeRole) => {
     });
 
     test(`Create Post as ${userTypeRole}`, async () => {
-      const dbClient = new PrismaClient()
+      // const dbClient = new PrismaClient()
       if (!user) return;
       if (createFlag) {
         const createPostResponse = await api.graphql.mutate<

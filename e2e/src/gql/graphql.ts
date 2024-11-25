@@ -45,6 +45,7 @@ export type CreatePostInput = {
   content?: InputMaybe<Scalars['String']['input']>;
   published?: Scalars['Boolean']['input'];
   title: Scalars['String']['input'];
+  workspaceId: Scalars['String']['input'];
 };
 
 export type CreatePostResponse = {
