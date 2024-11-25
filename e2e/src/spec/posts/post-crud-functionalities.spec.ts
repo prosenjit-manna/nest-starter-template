@@ -4,6 +4,8 @@ import { appEnv } from '../../lib/app-env';
 import {
   CreatePostMutation,
   CreatePostMutationVariables,
+  CreateWorkspaceMutation,
+  CreateWorkspaceMutationVariables,
   CurrentUserQuery,
   CurrentUserQueryVariables,
   DeletePostMutation,
@@ -22,6 +24,8 @@ import { GET_POST_LIST_QUERY } from '../../graphql/get-post-list-query.gql';
 import { UPDATE_POST_MUTATION } from '../../graphql/update-post-mutation.gql';
 import { CURRENT_USER_QUERY } from '../../graphql/current-user.gql';
 import { faker } from '@faker-js/faker';
+import { CREATE_WORKSPACE_MUTATION } from '../../graphql/create-post-mutation.gql'
+
 
 const userArrays = [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.USER];
 userArrays.forEach((userTypeRole) => {
@@ -35,6 +39,8 @@ userArrays.forEach((userTypeRole) => {
     let createFlag = false;
     let updateFlag = false;
     let deleteFlag = false;
+    const workspaceId: string | undefined;
+    const workspaceName = faker.lorem.word();
 
     const api = new GraphQlApi();
 
@@ -54,6 +60,23 @@ userArrays.forEach((userTypeRole) => {
         password: appEnv.SEED_PASSWORD,
       });
       expect(response.data).toBeDefined();
+    });
+
+    test('New Workspace created', async () => {
+      const createWorkspace = await api.graphql.mutate<
+        CreateWorkspaceMutation,
+        CreateWorkspaceMutationVariables
+      >({
+        mutation: CREATE_WORKSPACE_MUTATION,
+        variables: {
+          createWorkspaceInput: {
+            name: workspaceName,
+          },
+        },
+      });
+
+      workspaceId = createWorkspace.data?.createWorkspace.id;
+      expect(createWorkspace.data?.createWorkspace.id).not.toBeNull();
     });
 
     test('Get current user privileges', async () => {
