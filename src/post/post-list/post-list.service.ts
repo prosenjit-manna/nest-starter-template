@@ -9,6 +9,7 @@ import { PostListResponse } from './post-list-response.dto';
 import { GetPostListInput } from './get-post-list-input.dto';
 import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';
 import { Order } from 'src/shared/base-list/base-list-input.dto';
+import { appConfig } from 'src/app.config';
 
 @Injectable()
 export class PostListService {
@@ -20,9 +21,12 @@ export class PostListService {
     @Args('getPostListInput', { nullable: true }) getPostListInput: GetPostListInput,
   ): Promise<PostListResponse> {
 
-   
+    const currentWorkspaceId = req.headers[appConfig.current_workspace_id] as string | undefined;
     
     let queryObject: Prisma.PostWhereInput = {
+      workspaceId: {
+        equals: currentWorkspaceId,
+      },
       title: {
         contains: getPostListInput?.title || undefined,
         mode: 'insensitive',
@@ -39,7 +43,6 @@ export class PostListService {
 
     queryObject = {
       ...queryObject,
-      workspaceId: req.currentWorkspaceId,
     };
 
 
