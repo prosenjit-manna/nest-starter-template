@@ -9,6 +9,8 @@ import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { RoleGuard } from 'src/auth/role.guard';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { PostMemberShipValidation } from '../post-membership-validation';
+import { WorkspaceMemberShipGuard } from 'src/auth/workspace-membership.guard';
+import { MemberShipValidationType } from 'src/auth/membership-validation-type.enum';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()
@@ -22,14 +24,15 @@ export class PostDeleteService {
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.POST)
   @SetMetadata('privilegeName', PrivilegeName.DELETE)
+
+  @UseGuards(WorkspaceMemberShipGuard)
+  @SetMetadata('memberShipValidationType', MemberShipValidationType.MEMBERSHIP_VALIDITY)
+
   async deletePost(
     @Context('req') req: Request,
     @Args('postDeleteInput', { nullable: true })
     postDeleteInput: PostDeleteInput,
   ): Promise<boolean> {
-
-    
-
 
     const post = await this.prismaService.post.findUnique({
       where: { id: postDeleteInput.id, deletedAt: postDeleteInput.fromStash ? { not: null } : null },
