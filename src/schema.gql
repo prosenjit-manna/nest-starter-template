@@ -330,6 +330,7 @@ input AcceptInvitationInput {
 
 input RoleCreateInput {
   title: String!
+  description: String
   name: RoleName! = CUSTOM
   privileges: [String!]!
 }

@@ -29,7 +29,9 @@ export class WorkspaceMemberShipGuard implements CanActivate {
     request.memberships = memberships;
 
 
-    if (user && validationType === MemberShipValidationType.AUTHOR_VALIDITY && request.currentWorkspaceId) {
+    if (!request.currentWorkspaceId) {
+      throw new CreateAppError({ message: 'WorkspaceId has not been set with header', httpStatus: HttpStatus.FORBIDDEN });
+    } else if (user && validationType === MemberShipValidationType.AUTHOR_VALIDITY && request.currentWorkspaceId) {
       return this.validateAuthorMembership(memberships, user.id);
     } else if (user && validationType === MemberShipValidationType.MEMBERSHIP_VALIDITY && request.currentWorkspaceId) { 
       return this.validateMembership(memberships, request.currentWorkspaceId);
