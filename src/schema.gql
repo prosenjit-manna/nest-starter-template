@@ -369,7 +369,7 @@ input CreatePostInput {
   title: String!
   content: String
   published: Boolean! = false
-  authorId: String!
+  authorId: String
 }
 
 input UpdatePostInput {
