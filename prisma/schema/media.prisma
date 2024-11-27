@@ -1,3 +1,8 @@
+enum AccessLevel {
+  PUBLIC
+  RESTRICTED
+}
+
 model Folder {
   id   String @id @default(uuid())
   name String
@@ -27,6 +32,8 @@ model File {
   url      String // Path or URL to the file
   folderId String?
   folder   Folder? @relation(fields: [folderId], references: [id])
+
+  accessLevel AccessLevel @default(RESTRICTED)
 
   authorId String
   author   User   @relation(name: "FileUserRelation", fields: [authorId], references: [id])

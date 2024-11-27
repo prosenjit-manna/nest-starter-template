@@ -15,6 +15,7 @@ enum PrivilegeGroup {
   ROLE
   WORKSPACE
   MEMBERSHIP
+  MEDIA
 }
 
 enum RoleName {
