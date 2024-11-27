@@ -77,7 +77,6 @@ export class PostListService {
       }
     });
 
-    console.log(posts);
     
     return {
       posts: posts,
