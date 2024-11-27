@@ -72,7 +72,12 @@ export class PostListService {
       take: paginationMeta.perPage,
       orderBy: orderByQuery,
       where: queryObject,
+      include: {
+        author: true,
+      }
     });
+
+    console.log(posts);
     
     return {
       posts: posts,

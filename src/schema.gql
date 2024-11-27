@@ -78,12 +78,17 @@ type UnAssignRoleResponse {
   success: Boolean!
 }
 
+type PostAuthor {
+  id: String!
+  name: String!
+}
+
 type PostResponse {
   title: String!
   content: String!
   id: String!
   published: Boolean!
-  authorId: String!
+  author: PostAuthor!
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
