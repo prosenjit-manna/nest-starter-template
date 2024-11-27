@@ -75,6 +75,7 @@ userArrays.forEach((userTypeRole) => {
         },
       });
 
+     
       workspaceId = createWorkspace.data?.createWorkspace.id;
       expect(createWorkspace.data?.createWorkspace.id).not.toBeNull();
     });
@@ -102,7 +103,6 @@ userArrays.forEach((userTypeRole) => {
     });
 
     test(`Create Post as ${userTypeRole}`, async () => {
-      // const dbClient = new PrismaClient()
       if (!user) return;
       if (createFlag) {
         const createPostResponse = await api.graphql.mutate<
@@ -115,12 +115,16 @@ userArrays.forEach((userTypeRole) => {
               authorId: user?.id,
               content: content,
               published: faker.datatype.boolean(),
-              title: title,
-              workspaceId: ''
+              title: title
             },
           },
+          context: {
+            headers: {
+              'current_workspace_id': workspaceId,           
+             },
+          },
         });
-
+        console.log(createPostResponse.errors);
         const data = createPostResponse.data;
         expect(data?.createPost.id).toBeDefined();
 

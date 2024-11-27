@@ -45,7 +45,6 @@ export type CreatePostInput = {
   content?: InputMaybe<Scalars['String']['input']>;
   published?: Scalars['Boolean']['input'];
   title: Scalars['String']['input'];
-  workspaceId: Scalars['String']['input'];
 };
 
 export type CreatePostResponse = {
@@ -115,7 +114,6 @@ export type ListMembershipInput = {
   orderBy?: InputMaybe<Order>;
   page?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
-  workspaceId: Scalars['String']['input'];
 };
 
 export type ListMembershipResponse = {
