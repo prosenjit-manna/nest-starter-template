@@ -31,4 +31,12 @@ export const appEnv = cleanEnv(process.env, {
   AWS_BUCKET_UPLOAD_PATH: str({ default: 'example' }),
   AWS_BUCKET_PUBLIC_URL: str(),
   AWS_REPORT_UPLOAD: bool({ default: false }),
+
+
+  // Imap 
+  IMAP_HOST: str({ default: 'imap.hostinger.com' }),
+  IMAP_PORT: num({ default: 993 }),
+  IMAP_TLS: bool({ default: true }),
+  IMAP_USER: str(),
+  IMAP_PASSWORD: str(),
 });

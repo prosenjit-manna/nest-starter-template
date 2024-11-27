@@ -18,18 +18,20 @@ async function main() {
   }
 
   try {
+    await workSpaceSeed();
+    console.log('Workspace Success');
+  } catch (error) {
+    console.error('Failed workspace Seed', error);
+  }
+
+  try {
     await postSeed();
     console.log('Post Seed Success');
   } catch (error) {
     console.error('Failed Post Seed', error);
   }
 
-  try {
-    await workSpaceSeed();
-    console.log('Workspace Success');
-  } catch (error) {
-    console.error('Failed workspace Seed', error);
-  }
+  
 }
 
 main();

@@ -26,7 +26,10 @@ export class PasswordResetService {
   ) {
     // check if user exists
     const user = await this.prisma.user.findFirst({
-      where: { email: passwordReset.email },
+      where: { email: {
+        equals: passwordReset.email,
+        mode: 'insensitive',
+      }, },
     });
 
     if (!user) {

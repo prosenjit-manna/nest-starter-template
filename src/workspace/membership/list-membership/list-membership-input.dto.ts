@@ -1,4 +1,4 @@
-import { Field, InputType, registerEnumType } from '@nestjs/graphql';
+import { InputType, registerEnumType } from '@nestjs/graphql';
 import { BaseListInput } from 'src/shared/base-list/base-list-input.dto';
 
 export enum MembershipListOrderByField {
@@ -11,8 +11,6 @@ registerEnumType(MembershipListOrderByField, {
 
 @InputType()
 export class ListMembershipInput extends BaseListInput {
-  @Field()
-  workspaceId: string;
 
   orderByField?: MembershipListOrderByField;
 }

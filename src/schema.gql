@@ -233,7 +233,6 @@ input ListMembershipInput {
   pageSize: Int
   orderBy: Order = DESC
   fromStash: Boolean = false
-  workspaceId: String!
 }
 
 input RoleListInput {
@@ -370,7 +369,6 @@ input CreatePostInput {
   content: String
   published: Boolean! = false
   authorId: String!
-  workspaceId: String!
 }
 
 input UpdatePostInput {

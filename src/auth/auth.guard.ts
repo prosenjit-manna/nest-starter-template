@@ -2,6 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { appConfig } from 'src/app.config';
 import appEnv from 'src/env';
 import { PrismaService } from 'src/prisma.service';
 import { CreateAppError, CustomApolloServerErrorCode } from 'src/shared/create-error/create-error';
@@ -20,6 +21,8 @@ export class JwtAuthGuard implements CanActivate {
 
     
     const token = this.extractTokenFromHeader(request);
+    const currentWorkspaceId = request.headers[appConfig.current_workspace_id] as string;
+
 
 
     if (!token) {
@@ -36,6 +39,7 @@ export class JwtAuthGuard implements CanActivate {
         },
       });
       request.user = user;
+      request.currentWorkspaceId = currentWorkspaceId;
 
     } catch (err) {
       console.log(err)

@@ -9,6 +9,7 @@ import { PostListResponse } from './post-list-response.dto';
 import { GetPostListInput } from './get-post-list-input.dto';
 import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';
 import { Order } from 'src/shared/base-list/base-list-input.dto';
+import { appConfig } from 'src/app.config';
 
 @Injectable()
 export class PostListService {
@@ -17,13 +18,15 @@ export class PostListService {
   @Query(() => PostListResponse)
   async getPostList(
     @Context('req') req: Request,
-    @Args('getPostListInput', { nullable: true })
-    getPostListInput: GetPostListInput,
+    @Args('getPostListInput', { nullable: true }) getPostListInput: GetPostListInput,
   ): Promise<PostListResponse> {
 
-   
+    const currentWorkspaceId = req.headers[appConfig.current_workspace_id] as string | undefined;
     
     let queryObject: Prisma.PostWhereInput = {
+      workspaceId: {
+        equals: currentWorkspaceId,
+      },
       title: {
         contains: getPostListInput?.title || undefined,
         mode: 'insensitive',
@@ -38,21 +41,9 @@ export class PostListService {
       } : null,
     };
 
-    if (req.user) {
-      const membership = await this.prisma.workspaceMembership.findMany({
-        where: {
-          userId: req?.user?.id,
-          isAccepted: true,
-        },
-      });
-
-      queryObject = {
-        ...queryObject,
-        workspaceId: {
-          in: membership.map((m) => m.workspaceId),
-        },
-      }
-    }
+    queryObject = {
+      ...queryObject,
+    };
 
 
     const postCount = await this.prisma.post.count({
@@ -80,9 +71,7 @@ export class PostListService {
       skip: paginationMeta.skip,
       take: paginationMeta.perPage,
       orderBy: orderByQuery,
-      where: {
-        ...queryObject,
-      },
+      where: queryObject,
     });
     
     return {

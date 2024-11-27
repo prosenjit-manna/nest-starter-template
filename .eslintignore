@@ -3,3 +3,4 @@ dist
 .prettierrc.js
 global.d.ts
 src/typings
+src/typings/express/index.d.ts
