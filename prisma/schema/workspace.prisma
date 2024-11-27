@@ -12,6 +12,7 @@ model Workspace {
   workspaceStatus     workspaceStatus       @default(ACTIVE)
   workspaceMembership WorkspaceMembership[] @relation(name: "workspaceIdMembershipRelation")
   post                Role[]                @relation(name: "workSpaceRoles")
+  media               File[]                @relation(name: "workspaceIdFileRelation")
   roles               Post[]                @relation(name: "workspaceIdPostRelation")
 }
 

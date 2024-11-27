@@ -1,0 +1,71 @@
+model Folder {
+  id   String @id @default(uuid())
+  name String
+
+  parentId   String?
+  parent     Folder?  @relation("subFolders", fields: [parentId], references: [id])
+  subFolders Folder[] @relation("subFolders")
+
+  files File[]
+
+  authorId String
+  author   User   @relation(name: "FolderUserRelation", fields: [authorId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@unique([name, parentId]) // Prevent duplicate folder names under the same parent
+}
+
+model File {
+  id       String  @id @default(uuid())
+  name     String
+  description String?
+  size     Int // File size in kb
+  mimeType String // MIME type (e.g., "image/png", "application/pdf")
+  url      String // Path or URL to the file
+  folderId String?
+  folder   Folder? @relation(fields: [folderId], references: [id])
+
+  authorId String
+  author   User   @relation(name: "FileUserRelation", fields: [authorId], references: [id])
+
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
+
+  workspaceId String
+  workspace   Workspace @relation(name: "workspaceIdFileRelation", fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  S3AccessSession S3AccessSession[] @relation("fileS3AccessSession")
+  assets    FileAsset[]     @relation("fileAssets")
+
+  @@unique([name, folderId]) // Prevent duplicate file names in the same folder
+}
+
+model FileAsset {
+  id        String   @id @default(uuid())
+  size      Int      // File size in kb
+  mimeType  String   // MIME type (e.g., "image/png", "application/pdf")
+  url       String   // Path or URL to the file
+  fileId    String
+  file      File     @relation(name: "fileAssets", fields: [fileId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([fileId, size]) // Ensure unique size for each file
+}
+
+model S3AccessSession {
+  id        String   @id @default(uuid())
+  signedUrl String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  fileId String
+  file   File   @relation(name: "fileS3AccessSession", fields: [fileId], references: [id])
+
+  @@unique([fileId, signedUrl]) // Ensure unique signed URL for each file
+}
