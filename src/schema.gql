@@ -239,6 +239,7 @@ input ListMembershipInput {
   pageSize: Int
   orderBy: Order = DESC
   fromStash: Boolean = false
+  search: String
 }
 
 input RoleListInput {
