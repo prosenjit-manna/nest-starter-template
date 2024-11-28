@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { Prisma, PrismaClient, UserType } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
+import { sample } from 'lodash';
 const prismaClient = new PrismaClient();
 
 export async function workSpaceSeed() {
@@ -22,24 +23,26 @@ export async function workSpaceSeed() {
   // Get all workspaces
   const workspaces = await prismaClient.workspace.findMany();
   // Get Admin Users
-  const adminUser = await prismaClient.user.findMany({
-    where: {
-      userType: UserType.ADMIN,
-    },
-  });
+  const users = await prismaClient.user.findMany();
+
 
 
   // Attach membership
   const membershipData:
     | Prisma.WorkspaceMembershipCreateManyInput
     | Prisma.WorkspaceMembershipCreateManyInput[] = [];
-  adminUser.forEach((user, i) => {
+
+
+  users.forEach((user) => {
     membershipData.push({
-      workspaceId: workspaces[i].id,
+      workspaceId: sample(workspaces)?.id || '',
       userId: user.id,
       isAccepted: true,
+      isOwner: true,
     });
   });
+
+
   await prismaClient.workspaceMembership.createMany({
     data: membershipData,
   });
