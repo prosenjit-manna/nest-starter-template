@@ -84,6 +84,7 @@ export class PostListService {
         currentPage: paginationMeta.page,
         totalPage: paginationMeta.totalPage,
         perPage: paginationMeta.perPage,
+        totalRows: postCount,
       }
     };
   }

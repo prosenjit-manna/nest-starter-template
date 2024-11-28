@@ -6,6 +6,7 @@ type BaseListResponse {
   totalPage: Float!
   currentPage: Float!
   perPage: Float!
+  totalRows: Float!
 }
 
 type RoleResponse {

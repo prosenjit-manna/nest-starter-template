@@ -87,6 +87,7 @@ export class RoleListService {
         currentPage: paginationMeta.page,
         totalPage: paginationMeta.totalPage,
         perPage: paginationMeta.perPage,
+        totalRows: rolesCount,
       },
     };
   }
