@@ -6,6 +6,7 @@ import { PrismaService } from 'src/prisma.service';
 import { Express } from 'express';
 import { join, dirname } from 'path';
 import { promises as fs } from 'fs';
+import appEnv from 'src/env';
 
 @Injectable()
 export class UploadMediaService {
@@ -22,7 +23,7 @@ export class UploadMediaService {
         name: file.originalname,
         mimeType: file.mimetype,
         size: file.size,
-        url: file.path,
+        url: `${appEnv.BACKEND_URL}/uploads/${file.originalname}`,
       },
     });
 

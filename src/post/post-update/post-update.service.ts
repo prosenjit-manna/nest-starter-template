@@ -2,6 +2,7 @@ import { UseGuards, SetMetadata } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { Request } from 'express';
+import * as sanitizeHtml from 'sanitize-html';
 
 import { UpdatePostResponse } from './update-post-response.dto';
 import { UpdatePostInput } from './update-post.dto';
@@ -48,7 +49,7 @@ export class PostUpdateService {
 
     const post = await this.prisma.post.update({
       where: { id: postId },
-      data: updatePostInput,
+      data: {...updatePostInput, content: sanitizeHtml(updatePostInput.content),},
     });
     return post;
   }
