@@ -17,7 +17,7 @@ export class CreatePostInput {
   @Field(() => Boolean)
   published: boolean = false;
 
-  @Field(() => String, { nullable: false })
+  @Field(() => String, { nullable: true })
   authorId: string;
   
 }
