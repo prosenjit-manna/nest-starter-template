@@ -5,7 +5,7 @@ import { AssignRoleResponse } from './assign-role-response.dto';
 import { AssignRoleInput } from './assign-role-input.dto';
 import { PrismaService } from 'src/prisma.service';
 import { CreateAppError } from 'src/shared/create-error/create-error';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 

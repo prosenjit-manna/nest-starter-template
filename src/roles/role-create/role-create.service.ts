@@ -7,7 +7,7 @@ import { RoleCreateResponse } from './role-create-response.dto';
 import { PrismaService } from 'src/prisma.service';
 import { RoleCreateInput } from './role-create-input.dto';
 import { RoleGuard } from 'src/auth/role.guard';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { WorkspaceMemberShipGuard } from 'src/auth/workspace-membership.guard';
 import { MemberShipValidationType } from 'src/auth/membership-validation-type.enum';
 

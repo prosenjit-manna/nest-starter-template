@@ -5,7 +5,7 @@ import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 import { RoleDeleteInput } from './role-delete-input.dto';
 import { RoleGuard } from 'src/auth/role.guard';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()

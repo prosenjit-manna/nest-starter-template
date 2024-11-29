@@ -13,16 +13,9 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { WorkspaceModule } from './workspace/workspace.module';
 import { MediaModule } from './media/media.module';
-import { RateLimiterGuard, RateLimiterModule } from 'nestjs-rate-limiter';
-import { APP_GUARD } from '@nestjs/core'
-import appEnv from './env';
 
 @Module({
   imports: [
-    RateLimiterModule.register({
-      for: 'ExpressGraphql',
-      duration: appEnv.RATE_LIMIT_DURATION,
-    }),
     SentryModule.forRoot(),
     PrismaModule,
     WorkspaceModule,
@@ -45,11 +38,5 @@ import appEnv from './env';
       rootPath: join(__dirname, '..', 'public'),
     }),
   ],
-  providers: [
-    {
-        provide: APP_GUARD,
-        useClass: RateLimiterGuard,
-    },
-],
 })
 export class AppModule {}

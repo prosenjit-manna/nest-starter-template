@@ -9,7 +9,7 @@ import { RoleGetInput } from './role-get-input.dto';
 import { CreateAppError } from 'src/shared/create-error/create-error';
 import { RoleGuard } from 'src/auth/role.guard';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()

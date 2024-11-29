@@ -8,7 +8,7 @@ import { SendInvitationResponse } from './send-invitation-response.dto';
 import { RoleGuard } from 'src/auth/role.guard';
 import { SendInvitationInput } from './send-invitation-input.dto';
 import { PrismaService } from 'src/prisma.service';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateAppError } from 'src/shared/create-error/create-error';
 import { randomBytes } from 'crypto';
 import { MailerService } from 'src/mailer/mailer.service';

@@ -4,7 +4,7 @@ import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { Request } from 'express';
 
 import { UpdateWorkspaceResponse } from './update-workspace-response.dto';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
 import { PrismaService } from 'src/prisma.service';
 import { UpdateWorkspaceInput } from './update-workspace-input.dto';

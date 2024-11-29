@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma.service';
 import { UpdateProfileResponse } from './update-profile.response.dto';
 import { UpdateProfileInput } from './update-profile.input.dto';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Resolver()
 @UseGuards(JwtAuthGuard)

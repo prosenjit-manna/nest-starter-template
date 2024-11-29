@@ -1,5 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { GqlExecutionContext } from '@nestjs/graphql';
+import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { appConfig } from 'src/app.config';
@@ -15,15 +15,9 @@ export class JwtAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-
-    const ctx = GqlExecutionContext.create(context);
-    const request = ctx.getContext().req as Request;
-
-    
+    const request = this.getRequest(context);
     const token = this.extractTokenFromHeader(request);
     const currentWorkspaceId = request.headers[appConfig.current_workspace_id] as string;
-
-
 
     if (!token) {
       throw new UnauthorizedException('No token provided');
@@ -50,6 +44,16 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     return true;
+  }
+
+  private getRequest(context: ExecutionContext): Request {
+    if (context.getType() === 'http') {
+      return context.switchToHttp().getRequest();
+    } else if (context.getType<GqlContextType>() === 'graphql') {
+      const ctx = GqlExecutionContext.create(context);
+      return ctx.getContext().req;
+    }
+    throw new UnauthorizedException('Invalid context type');
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
