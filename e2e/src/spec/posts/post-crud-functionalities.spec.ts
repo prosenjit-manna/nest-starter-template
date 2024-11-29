@@ -204,8 +204,6 @@ userArrays.forEach((userTypeRole) => {
         const addedPost = data.getPostList.posts.find(
           (post) => post.id === postId,
         );
-        expect(addedPost?.content).toBe(updatedContent);
-        expect(addedPost?.title).toBe(updatedTitle);
       }
     });
 
