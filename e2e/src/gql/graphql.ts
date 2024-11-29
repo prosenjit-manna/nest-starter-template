@@ -38,10 +38,11 @@ export type BaseListResponse = {
   currentPage: Scalars['Float']['output'];
   perPage: Scalars['Float']['output'];
   totalPage: Scalars['Float']['output'];
+  totalRows: Scalars['Float']['output'];
 };
 
 export type CreatePostInput = {
-  authorId: Scalars['String']['input'];
+  authorId?: InputMaybe<Scalars['String']['input']>;
   content?: InputMaybe<Scalars['String']['input']>;
   published?: Scalars['Boolean']['input'];
   title: Scalars['String']['input'];
@@ -114,7 +115,7 @@ export type ListMembershipInput = {
   orderBy?: InputMaybe<Order>;
   page?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
-  workspaceId: Scalars['String']['input'];
+  search?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ListMembershipResponse = {
@@ -295,6 +296,12 @@ export type PasswordResetRequestInput = {
   email: Scalars['String']['input'];
 };
 
+export type PostAuthor = {
+  __typename?: 'PostAuthor';
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+};
+
 export type PostDeleteInput = {
   fromStash?: InputMaybe<Scalars['Boolean']['input']>;
   id: Scalars['String']['input'];
@@ -308,7 +315,7 @@ export type PostListResponse = {
 
 export type PostResponse = {
   __typename?: 'PostResponse';
-  authorId: Scalars['String']['output'];
+  author: PostAuthor;
   content: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   deletedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -393,6 +400,7 @@ export type RefreshAccessTokenInput = {
 };
 
 export type RoleCreateInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
   name?: RoleName;
   privileges: Array<Scalars['String']['input']>;
   title: Scalars['String']['input'];
@@ -639,7 +647,7 @@ export type GetPostListQueryVariables = Exact<{
 }>;
 
 
-export type GetPostListQuery = { __typename?: 'Query', getPostList: { __typename?: 'PostListResponse', posts: Array<{ __typename?: 'PostResponse', title: string, content: string, id: string, published: boolean, authorId: string, createdAt: any, updatedAt: any, deletedAt?: any | null }>, pagination: { __typename?: 'BaseListResponse', totalPage: number, currentPage: number, perPage: number } } };
+export type GetPostListQuery = { __typename?: 'Query', getPostList: { __typename?: 'PostListResponse', posts: Array<{ __typename?: 'PostResponse', title: string, content: string, id: string, published: boolean, createdAt: any, updatedAt: any, deletedAt?: any | null, author: { __typename?: 'PostAuthor', id: string, name: string } }>, pagination: { __typename?: 'BaseListResponse', totalPage: number, currentPage: number, perPage: number } } };
 
 export type GetPostQueryVariables = Exact<{
   getPostInput: GetPostInput;
@@ -775,7 +783,7 @@ export const CurrentUserDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const DeletePostDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeletePost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postDeleteInput"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"PostDeleteInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deletePost"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"postDeleteInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postDeleteInput"}}}]}]}}]} as unknown as DocumentNode<DeletePostMutation, DeletePostMutationVariables>;
 export const DeleteRoleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteRole"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"roleDeleteInput"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoleDeleteInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteRole"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"roleDeleteInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"roleDeleteInput"}}}]}]}}]} as unknown as DocumentNode<DeleteRoleMutation, DeleteRoleMutationVariables>;
 export const DeleteWorkSpaceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteWorkSpace"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"deleteWorkspaceInput"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"WorkspaceDeleteInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteWorkSpace"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"deleteWorkspaceInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"deleteWorkspaceInput"}}}]}]}}]} as unknown as DocumentNode<DeleteWorkSpaceMutation, DeleteWorkSpaceMutationVariables>;
-export const GetPostListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPostList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"getPostListInput"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"GetPostListInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPostList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"getPostListInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"getPostListInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"published"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalPage"}},{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"perPage"}}]}}]}}]}}]} as unknown as DocumentNode<GetPostListQuery, GetPostListQueryVariables>;
+export const GetPostListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPostList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"getPostListInput"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"GetPostListInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPostList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"getPostListInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"getPostListInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"published"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalPage"}},{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"perPage"}}]}}]}}]}}]} as unknown as DocumentNode<GetPostListQuery, GetPostListQueryVariables>;
 export const GetPostDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"getPostInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"GetPostInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPost"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"getPostInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"getPostInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"published"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}}]}}]} as unknown as DocumentNode<GetPostQuery, GetPostQueryVariables>;
 export const RoleListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RoleList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"roleListInput"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoleListInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roleList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"roleListInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"roleListInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalPage"}},{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"perPage"}}]}}]}}]}}]} as unknown as DocumentNode<RoleListQuery, RoleListQueryVariables>;
 export const GetRoleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRole"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"roleGetInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RoleGetInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getRole"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"roleGetInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"roleGetInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}},{"kind":"Field","name":{"kind":"Name","value":"privilege"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"group"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}}]} as unknown as DocumentNode<GetRoleQuery, GetRoleQueryVariables>;

@@ -1,7 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, MaxLength } from 'class-validator';
-
 @InputType()
 export class CreatePostInput {
   @Field(() => String, { nullable: false })
@@ -11,7 +10,7 @@ export class CreatePostInput {
 
 
   @Field(() => String, { nullable: true })
-  @MaxLength(3000)
+  @MaxLength(20000)
   content: string;
 
   @Field(() => Boolean)

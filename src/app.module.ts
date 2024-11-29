@@ -12,6 +12,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { WorkspaceModule } from './workspace/workspace.module';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { WorkspaceModule } from './workspace/workspace.module';
     RoleModule,
     PostModule,
     UserModule,
+    MediaModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       introspection: true,

@@ -3,9 +3,10 @@ import { AppModule } from './app.module';
 import appEnv from './env';
 import './shared/sentry/sentry-init';
 import { AppValidationPipe } from './validator.pipe';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors({
     origin:
       appEnv.CORS_ORIGIN === '*'
