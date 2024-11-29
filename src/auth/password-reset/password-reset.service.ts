@@ -11,6 +11,7 @@ import { PassWordResetResponse } from './password-reset-response.dto';
 import { TokenService } from '../token.service';
 import { JwtAuthGuard } from '../auth.guard';
 import { UseGuards } from '@nestjs/common';
+import { User } from '@prisma/client';
 
 @Resolver()
 export class PasswordResetService {
@@ -24,13 +25,17 @@ export class PasswordResetService {
   async requestPasswordReset(
     @Args('passwordReset') passwordReset: PasswordResetRequestInput,
   ) {
+    let user: User | null = null;
+
     // check if user exists
-    const user = await this.prisma.user.findFirst({
-      where: { email: {
-        equals: passwordReset.email,
-        mode: 'insensitive',
-      }, },
-    });
+    try {
+       user = await this.prisma.user.findFirst({
+        where: { email: passwordReset.email.toLowerCase(), },
+      });
+    } catch (error) {
+      return { message: 'Password reset email sent' };
+    }
+    
 
     if (!user) {
       return { message: 'Password reset email sent' };
@@ -51,7 +56,7 @@ export class PasswordResetService {
 
     // update user with password reset token
     await this.prisma.user.update({
-      where: { email: passwordReset.email },
+      where: { email: passwordReset.email.toLowerCase() },
       data: { passwordResetToken: token },
     });
 
