@@ -1,6 +1,9 @@
 import { cleanEnv, str, email, num, bool } from 'envalid';
 
 export const appEnv = cleanEnv(process.env, {
+  RATE_LIMIT_DURATION: num({ default: 10 }),
+
+
   DATABASE_URL: str({
     default:
       'postgresql://nodeProdUser:postgresPasswword@localhost:5433/nest_starter',
