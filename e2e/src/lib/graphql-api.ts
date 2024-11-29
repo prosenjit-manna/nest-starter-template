@@ -40,6 +40,10 @@ export class GraphQlApi {
 
   private authLink() {
     return setContext((_, { headers }) => {
+      console.log({headers: {
+        ...headers,
+        authorization: this.token ? `Bearer ${this.token}` : '',
+      },});
       return {
         headers: {
           ...headers,

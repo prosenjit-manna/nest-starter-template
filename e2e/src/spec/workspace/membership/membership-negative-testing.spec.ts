@@ -16,7 +16,7 @@ import { SEND_INVITATION_MUTATION } from '../../../graphql/send-invitation-mutat
 import { VERIFY_INVITATION_MUTATION } from '../../../graphql/verify-invitation-mutation.gql';
 import { USER_LIST } from '../../../graphql/get-user-list.gql';
 import { sample } from 'lodash';
-
+ 
 describe('Membership invitation module', () => {
   let workspaceID: string | undefined;
   const onboardingToken: string =
