@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:ci": "npm run prisma:generate && jest --runInBand --ci --verbose=false",
+    "test": "npm run prisma:generate && npm run gql:generate && jest",
+    "test:ci": "npm run prisma:generate && npm run gql:generate && jest --runInBand --ci --verbose=false",
     "gql:generate": "graphql-codegen",
     "prisma:generate": "npm run prisma -- generate",
     "prisma": "prisma",

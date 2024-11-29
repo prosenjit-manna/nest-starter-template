@@ -1,0 +1,54 @@
+
+
+enum UserType {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
+enum userStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model User {
+  id                 String     @id @default(uuid())
+  email              String     @unique
+  name               String?
+  password           String?
+  verificationToken  String?
+  passwordResetToken String?
+  isVerified         Boolean    @default(false)
+  userStatus         userStatus @default(ACTIVE)
+  userType           UserType   @default(USER)
+  posts              Post[]
+
+  roles              UserRole[] @relation(name: "userRoleRelation")
+  pages              Page[]     @relation(name: "userPageRelation")
+
+  workspaceMembership WorkspaceMembership[] @relation(name: "userIdMembershipRelation")
+  session             Session[]             @relation(name: "userSessionRelation")
+
+  folder Folder[] @relation(name: "FolderUserRelation")
+  file File[] @relation(name: "FileUserRelation")
+
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  deletedAt           DateTime?
+  
+}
+
+model Session {
+  id     String @id @default(uuid())
+  user   User   @relation(name: "userSessionRelation", fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  ipAddress String?
+
+  refreshToken       String?
+  refreshTokenExpiry DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+

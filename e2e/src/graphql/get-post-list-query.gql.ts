@@ -8,7 +8,10 @@ export const GET_POST_LIST_QUERY = graphql(`
         content
         id
         published
-        authorId
+        author {
+          id
+          name
+        }
         createdAt
         updatedAt
         deletedAt
