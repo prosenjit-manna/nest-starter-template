@@ -6,6 +6,7 @@ type BaseListResponse {
   totalPage: Float!
   currentPage: Float!
   perPage: Float!
+  totalRows: Float!
 }
 
 type RoleResponse {
@@ -78,12 +79,17 @@ type UnAssignRoleResponse {
   success: Boolean!
 }
 
+type PostAuthor {
+  id: String!
+  name: String!
+}
+
 type PostResponse {
   title: String!
   content: String!
   id: String!
   published: Boolean!
-  authorId: String!
+  author: PostAuthor!
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
@@ -113,12 +119,6 @@ type GetPostResponse {
   deletedAt: DateTime
 }
 
-type GetUserResponse {
-  email: String!
-  name: String
-  id: String!
-}
-
 type CurrentUserResponse {
   email: String!
   name: String
@@ -127,6 +127,12 @@ type CurrentUserResponse {
   sessionCount: Float!
   roles: [String!]!
   privilege: [RolePrivilegeResponse!]!
+}
+
+type GetUserResponse {
+  email: String!
+  name: String
+  id: String!
 }
 
 type PassWordResetRequestResponse {
@@ -203,8 +209,8 @@ type Query {
   getRole(roleGetInput: RoleGetInput!): RoleGetResponse!
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
   getPost(getPostInput: GetPostInput!): GetPostResponse
-  currentUser: CurrentUserResponse!
   getUsers(getUsersInput: GetUsersInput): [GetUserResponse!]!
+  currentUser: CurrentUserResponse!
   login(loginInput: LoginInput!): LoginResponse!
 }
 
@@ -233,6 +239,7 @@ input ListMembershipInput {
   pageSize: Int
   orderBy: Order = DESC
   fromStash: Boolean = false
+  search: String
 }
 
 input RoleListInput {
@@ -330,6 +337,7 @@ input AcceptInvitationInput {
 
 input RoleCreateInput {
   title: String!
+  description: String
   name: RoleName! = CUSTOM
   privileges: [String!]!
 }
@@ -368,7 +376,7 @@ input CreatePostInput {
   title: String!
   content: String
   published: Boolean! = false
-  authorId: String!
+  authorId: String
 }
 
 input UpdatePostInput {

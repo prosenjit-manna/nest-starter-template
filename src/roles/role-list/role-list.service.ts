@@ -1,13 +1,17 @@
 import { SetMetadata, UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Request } from 'express';
+import { Args, Context, Query, Resolver } from '@nestjs/graphql';
+import { Prisma, PrivilegeGroup, PrivilegeName } from '@prisma/client';
+
 import { PrismaService } from 'src/prisma.service';
 import { RoleListResponse } from './role-list.response.dto';
 import { Order } from 'src/shared/base-list/base-list-input.dto';
 import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';
 import { RoleListInput } from './role-list-input.dto';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
-import { Prisma, PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { RoleGuard } from 'src/auth/role.guard';
+import { WorkspaceMemberShipGuard } from 'src/auth/workspace-membership.guard';
+import { MemberShipValidationType } from 'src/auth/membership-validation-type.enum';
 
 @Resolver()
 @UseGuards(JwtAuthGuard)
@@ -16,11 +20,16 @@ export class RoleListService {
   @UseGuards(RoleGuard)
   @SetMetadata('privilegeGroup', PrivilegeGroup.ROLE)
   @SetMetadata('privilegeName', PrivilegeName.READ)
+
+  @UseGuards(WorkspaceMemberShipGuard)
+  @SetMetadata('memberShipValidationType', MemberShipValidationType.MEMBERSHIP_VALIDITY)
+  
   @Query(() => RoleListResponse)
   async roleList(
-    @Args('roleListInput', { nullable: true })
-    roleListInput: RoleListInput,
+    @Args('roleListInput', { nullable: true }) roleListInput: RoleListInput,
+    @Context('req') req: Request,
   ): Promise<RoleListResponse> {
+    
     
     const queryObject: Prisma.RoleWhereInput = {
       title: {
@@ -32,6 +41,14 @@ export class RoleListService {
           not: null,
         }
       } : null,
+      OR: [
+        {
+          workspaceId: req.currentWorkspaceId,
+        },
+        {
+          workspaceId: null,
+        },
+      ]
     };
 
     const rolesCount = await this.prisma.role.count({
@@ -70,6 +87,7 @@ export class RoleListService {
         currentPage: paginationMeta.page,
         totalPage: paginationMeta.totalPage,
         perPage: paginationMeta.perPage,
+        totalRows: rolesCount,
       },
     };
   }

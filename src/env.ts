@@ -18,7 +18,7 @@ export const appEnv = cleanEnv(process.env, {
     default: '*',
     desc: 'Comma separated list of origins examples http://localhost:4000,http://localhost:3020',
   }),
-  BACKEND_URL: str({ default: 'http://localhost' }),
+  BACKEND_URL: str({ default: 'http://localhost:4000' }),
   FRONTEND_URL: str({ default: 'http://localhost:3020' }),
   ACCESS_TOKEN_EXPIRY: str({ default: '30m' }),
   REFRESH_TOKEN_EXPIRY: num({ default: 7 }),

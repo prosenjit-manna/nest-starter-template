@@ -31,10 +31,18 @@ export class ListMembershipService {
   async listMemberships(
     @Args('listMembershipsInput') listMembershipsInput: ListMembershipInput,
     @Context('req') req: Request,
-  ) {
-    const queryObject: Prisma.WorkspaceMembershipScalarWhereInput = {
+  ): Promise<ListMembershipResponse> {
+
+    const queryObject: Prisma.WorkspaceMembershipWhereInput = {
       workspaceId: req.currentWorkspaceId,
+      user: {
+        name: {
+          contains: listMembershipsInput.search,
+          mode: 'insensitive', 
+        },
+      },
     };
+    
 
     const postCount = await this.prisma.workspaceMembership.count({
       where: queryObject,
@@ -74,6 +82,7 @@ export class ListMembershipService {
         currentPage: paginationMeta.page,
         totalPage: paginationMeta.totalPage,
         perPage: paginationMeta.perPage,
+        totalRows: postCount,
       },
     };
   }

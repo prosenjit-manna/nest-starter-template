@@ -72,7 +72,11 @@ export class PostListService {
       take: paginationMeta.perPage,
       orderBy: orderByQuery,
       where: queryObject,
+      include: {
+        author: true,
+      }
     });
+
     
     return {
       posts: posts,
@@ -80,6 +84,7 @@ export class PostListService {
         currentPage: paginationMeta.page,
         totalPage: paginationMeta.totalPage,
         perPage: paginationMeta.perPage,
+        totalRows: postCount,
       }
     };
   }
