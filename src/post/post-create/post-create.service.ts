@@ -11,6 +11,7 @@ import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { PostMemberShipValidation } from '../post-membership-validation';
 import { WorkspaceMemberShipGuard } from 'src/auth/workspace-membership.guard';
 import { MemberShipValidationType } from 'src/auth/membership-validation-type.enum';
+import * as sanitizeHtml from 'sanitize-html';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()
@@ -32,11 +33,13 @@ export class PostCreateService {
     @Args('createPostInput') createPostInput: CreatePostInput,
     @Context('req') req: Request,
   ) {
+
     this.postMemberShipValidation.validateAuthorMembership(req.memberships, (createPostInput?.authorId || req?.user?.id) || '');
 
     const post = await this.prisma.post.create({
       data: {
         ...createPostInput,
+        content: sanitizeHtml(createPostInput.content),
         authorId: createPostInput.authorId || req?.user?.id,
         workspaceId: req.currentWorkspaceId || '',
       },
