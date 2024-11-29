@@ -135,6 +135,10 @@ type GetUserResponse {
   id: String!
 }
 
+type UpdateProfileResponse {
+  success: Boolean!
+}
+
 type PassWordResetRequestResponse {
   message: String!
 }
@@ -304,6 +308,7 @@ type Mutation {
   createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   updatePost(postId: String!, updatePostInput: UpdatePostInput!): UpdatePostResponse!
   deletePost(postDeleteInput: PostDeleteInput): Boolean!
+  updateProfile(updateProfileInput: UpdateProfileInput): UpdateProfileResponse!
   requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
   resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
   signup(signupInput: SignupInput!): SignupResponse!
@@ -389,6 +394,11 @@ input UpdatePostInput {
 input PostDeleteInput {
   id: String!
   fromStash: Boolean
+}
+
+input UpdateProfileInput {
+  name: String
+  password: String
 }
 
 input PasswordResetRequestInput {
