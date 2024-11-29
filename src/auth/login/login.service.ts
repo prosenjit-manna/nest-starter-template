@@ -1,13 +1,12 @@
-import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { LoginResponse } from './login-response.dto';
-import { Args, Context, Query } from '@nestjs/graphql';
+import { Args, Context, Query, Resolver } from '@nestjs/graphql';
 import { LoginInput } from './login-input.dto';
 import { PrismaService } from 'src/prisma.service';
 import { TokenService } from '../token.service';
 import * as bcrypt from 'bcrypt';
 
-@Injectable()
+@Resolver()
 export class LoginService {
   constructor(
     private prisma: PrismaService,
