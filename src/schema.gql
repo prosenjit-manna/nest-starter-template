@@ -119,12 +119,6 @@ type GetPostResponse {
   deletedAt: DateTime
 }
 
-type GetUserResponse {
-  email: String!
-  name: String
-  id: String!
-}
-
 type CurrentUserResponse {
   email: String!
   name: String
@@ -133,6 +127,12 @@ type CurrentUserResponse {
   sessionCount: Float!
   roles: [String!]!
   privilege: [RolePrivilegeResponse!]!
+}
+
+type GetUserResponse {
+  email: String!
+  name: String
+  id: String!
 }
 
 type PassWordResetRequestResponse {
@@ -209,8 +209,8 @@ type Query {
   getRole(roleGetInput: RoleGetInput!): RoleGetResponse!
   getPostList(getPostListInput: GetPostListInput): PostListResponse!
   getPost(getPostInput: GetPostInput!): GetPostResponse
-  currentUser: CurrentUserResponse!
   getUsers(getUsersInput: GetUsersInput): [GetUserResponse!]!
+  currentUser: CurrentUserResponse!
   login(loginInput: LoginInput!): LoginResponse!
 }
 
