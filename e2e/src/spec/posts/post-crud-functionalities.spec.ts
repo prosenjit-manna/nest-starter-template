@@ -145,8 +145,9 @@ userArrays.forEach((userTypeRole) => {
             },
           },
         });
-
+        
         const data = getPost.data;
+        console.log(data.getPost?.id);
         expect(data.getPost?.id).toBe(postId);
         expect(data.getPost?.content).toBe(content);
         expect(data.getPost?.title).toBe(title);
@@ -170,6 +171,11 @@ userArrays.forEach((userTypeRole) => {
               published: faker.datatype.boolean(),
               title: updatedTitle,
             },
+          },
+          context: {
+            headers: {
+              'current_workspace_id': workspaceId,           
+             },
           },
         });
 
@@ -218,6 +224,11 @@ userArrays.forEach((userTypeRole) => {
               fromStash: false,
             },
           },
+          context: {
+            headers: {
+              'current_workspace_id': workspaceId,           
+             },
+          },
         });
         expect(deletePostResponse.data?.deletePost).toBe(true);
       }
@@ -237,6 +248,11 @@ userArrays.forEach((userTypeRole) => {
               id: postId,
               fromStash: true,
             },
+          },
+          context: {
+            headers: {
+              'current_workspace_id': workspaceId,           
+             },
           },
         });
         expect(deletePostResponse.data?.deletePost).toBe(true);
