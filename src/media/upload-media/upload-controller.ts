@@ -13,7 +13,7 @@ export class UploadMediaController {
   ) {
     // const userId = req.user.id; // Assuming you have user information in the request
     const filePath = await this.uploadMediaService.saveFile(file);
-    // const media = await this.uploadMedia({ ...file, path: filePath });
-    return filePath;
+    const media = await this.uploadMediaService.uploadMedia({ ...file, path: filePath });
+    return media;
   }
 }
