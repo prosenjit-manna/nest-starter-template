@@ -1,8 +1,8 @@
 {
-  "name": "nest-starter",
+  "name": "nest-starter-backend",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Prosenjit Manna",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
