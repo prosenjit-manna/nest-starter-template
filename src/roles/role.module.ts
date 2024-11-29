@@ -9,8 +9,6 @@ import { AssignRoleService } from './assign-role/assign-role.service';
 import { UnAssignRoleService } from './unassign-role/unassign-role.service';
 
 @Module({
-  imports: [],
-  controllers: [],
   providers: [
     RoleListService,
     RoleCreateService,
