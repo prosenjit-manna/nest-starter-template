@@ -6,12 +6,10 @@ import { PrismaService } from 'src/prisma.service';
 import { GetPostInput } from './get-post-input.dto';
 import { GetPostResponse } from './get-post-response.dto';
 import { CreateAppError } from 'src/shared/create-error/create-error';
-import { PostMemberShipValidation } from '../post-membership-validation';
 
 @Resolver()
 export class GetPostService {
   constructor(
-    private postMemberShipValidation: PostMemberShipValidation,
     private prisma: PrismaService,
   ) {}
 
@@ -26,15 +24,6 @@ export class GetPostService {
       },
     });
 
-    const membership = await this.postMemberShipValidation.validateMembership(
-      this.prisma,
-      req?.user?.id || '',
-      post?.workspaceId || '',
-    );
-    this.postMemberShipValidation.validateAuthorMembership(
-      membership,
-      post?.authorId || req?.user?.id || '',
-    );
 
     if (!post) {
       throw new CreateAppError({
