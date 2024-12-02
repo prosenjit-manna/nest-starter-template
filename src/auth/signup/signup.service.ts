@@ -38,6 +38,7 @@ export class SignupService {
 
     const user = await this.prisma.user.create({
       data: {
+        name: singUpInput.name,
         email: singUpInput.email.toLowerCase(),
         password: hashedPassword,
         verificationToken: verifyToken,
