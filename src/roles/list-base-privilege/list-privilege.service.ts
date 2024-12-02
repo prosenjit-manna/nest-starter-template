@@ -4,7 +4,7 @@ import { PrismaService } from 'src/prisma.service';
 import { PrivilegeListResponse } from './list-privilege.response.dto';
 import { SetMetadata, UseGuards } from '@nestjs/common';
 import { RoleGuard } from 'src/auth/role.guard';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()

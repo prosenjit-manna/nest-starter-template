@@ -1,12 +1,9 @@
-import {
-  Injectable,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { Express } from 'express';
 import { join, dirname } from 'path';
 import { promises as fs } from 'fs';
-import appEnv from 'src/env';
+import { v4 as uuidv4 } from 'uuid';
+import * as path from 'path';
 
 @Injectable()
 export class UploadMediaService {
@@ -23,7 +20,7 @@ export class UploadMediaService {
         name: file.originalname,
         mimeType: file.mimetype,
         size: file.size,
-        url: `${appEnv.BACKEND_URL}/uploads/${file.originalname}`,
+        url: file.path,
       },
     });
 
@@ -31,14 +28,31 @@ export class UploadMediaService {
   }
 
   async saveFile(file: Express.Multer.File): Promise<string> {
-    const uploadPath = join(process.cwd(), 'public', 'uploads', file.originalname);
-    const uploadDir = dirname(uploadPath);
+    const uploadPath = this.uploadPath(join(
+      'uploads',
+      file.originalname,
+    ))
+
+    const absUploadPath = join(
+      process.cwd(),
+      'public',
+      uploadPath
+    );
+    const uploadDir = dirname(absUploadPath);
 
     // Ensure the uploads directory exists
     await fs.mkdir(uploadDir, { recursive: true });
 
     // Save the file
-    await fs.writeFile(uploadPath, file.buffer);
-    return uploadPath;
+    await fs.writeFile(absUploadPath, file.buffer);
+
+    return `/${uploadPath}`;
+  }
+
+  uploadPath(originalFilePath: string): string {
+    const extension = path.extname(originalFilePath);
+    const newFilename = `${uuidv4()}${extension}`;
+    const newFilePath = path.join(path.dirname(originalFilePath), newFilename);
+    return newFilePath;
   }
 }

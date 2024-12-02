@@ -8,7 +8,7 @@ import { ListWorkSpaceResponse } from './list-workspace-response.dto';
 import { ListWorkSpaceInput } from './list-workspace-input.dto';
 import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';
 import { Order } from 'src/shared/base-list/base-list-input.dto';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
 
 @UseGuards(JwtAuthGuard)

@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma.service';
 import { RoleUpdateInput } from './role-update-input.dto';
 import { RoleGuard } from 'src/auth/role.guard';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
 @Resolver()

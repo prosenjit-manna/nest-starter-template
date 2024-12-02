@@ -4,7 +4,7 @@ import { PrismaService } from 'src/prisma.service';
 import { GetUserResponse } from './get-users.response.dto';
 import { GetUsersInput } from './get-users-input.dto';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { appConfig } from 'src/app.config';
 import { Prisma } from '@prisma/client';
 

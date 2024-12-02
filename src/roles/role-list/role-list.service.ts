@@ -8,7 +8,7 @@ import { RoleListResponse } from './role-list.response.dto';
 import { Order } from 'src/shared/base-list/base-list-input.dto';
 import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';
 import { RoleListInput } from './role-list-input.dto';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
 import { WorkspaceMemberShipGuard } from 'src/auth/workspace-membership.guard';
 import { MemberShipValidationType } from 'src/auth/membership-validation-type.enum';

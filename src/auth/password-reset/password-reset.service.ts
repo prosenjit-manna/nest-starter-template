@@ -9,7 +9,7 @@ import { PassWordResetRequestResponse } from './password-reset-request-response.
 import { PasswordResetInput } from './password-reset-input.dto';
 import { PassWordResetResponse } from './password-reset-response.dto';
 import { TokenService } from '../token.service';
-import { JwtAuthGuard } from '../auth.guard';
+import { JwtAuthGuard } from '../jwt-auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { User } from '@prisma/client';
 

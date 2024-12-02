@@ -7,7 +7,7 @@ import { CreatePostResponse } from './create-post-response.dto';
 import { CreatePostInput } from './create-post-input.dto';
 import { PrismaService } from 'src/prisma.service';
 import { RoleGuard } from 'src/auth/role.guard';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { PostMemberShipValidation } from '../post-membership-validation';
 import { WorkspaceMemberShipGuard } from 'src/auth/workspace-membership.guard';
 import { MemberShipValidationType } from 'src/auth/membership-validation-type.enum';

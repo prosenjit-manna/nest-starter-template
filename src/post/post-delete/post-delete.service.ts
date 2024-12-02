@@ -7,7 +7,7 @@ import { CreateAppError } from 'src/shared/create-error/create-error';
 import { PostDeleteInput } from './post-delete-input.dto';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { RoleGuard } from 'src/auth/role.guard';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { PostMemberShipValidation } from '../post-membership-validation';
 import { WorkspaceMemberShipGuard } from 'src/auth/workspace-membership.guard';
 import { MemberShipValidationType } from 'src/auth/membership-validation-type.enum';

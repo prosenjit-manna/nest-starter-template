@@ -2,7 +2,7 @@ import { Context, Query, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
 import { PrismaService } from 'src/prisma.service';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolePrivilegeResponse } from 'src/roles/get-role/role-get-response.dto';
 import { orderBy, unionBy } from 'lodash';
 import { CurrentUserResponse } from './current-user.response.dto';
