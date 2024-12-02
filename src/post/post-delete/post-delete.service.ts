@@ -8,7 +8,6 @@ import { PostDeleteInput } from './post-delete-input.dto';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { RoleGuard } from 'src/auth/role.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { PostMemberShipValidation } from '../post-membership-validation';
 import { WorkspaceMemberShipGuard } from 'src/auth/workspace-membership.guard';
 import { MemberShipValidationType } from 'src/auth/membership-validation-type.enum';
 
@@ -17,7 +16,6 @@ import { MemberShipValidationType } from 'src/auth/membership-validation-type.en
 export class PostDeleteService {
   constructor(
     private prismaService: PrismaService,
-    private postMemberShipValidation: PostMemberShipValidation,
   ) {}
 
   @Mutation(() => Boolean)
@@ -38,7 +36,6 @@ export class PostDeleteService {
       where: { id: postDeleteInput.id, deletedAt: postDeleteInput.fromStash ? { not: null } : null },
     });
 
-    await this.postMemberShipValidation.validateMembership(this.prismaService, req?.user?.id || '', post?.workspaceId || '');
 
     if (!post) {
       throw new CreateAppError({

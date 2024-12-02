@@ -13,7 +13,10 @@ export class CurrentUserResponse {
   @Field(() => String) 
   id: string;
 
-  @Field(() => String) 
+  @Field(() => String, { nullable: true }) 
+  profileImage: string | null;
+
+  @Field(() => String, { nullable: true }) 
   userType: UserType;
 
   @Field(() => Number) 

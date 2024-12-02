@@ -5,6 +5,9 @@ import { appConfig } from '../../app.config';
 
 @InputType()
 export class SignupInput {
+  @Field({ nullable: true })
+  name: string;
+
   @Field(() => String)
   @IsEmail({}, { message: 'Invalid email format' })
   email: string;

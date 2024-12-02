@@ -22,10 +22,10 @@ export class CurrentUserService {
         session: true
       }
     });
+
     if (!user) {
       throw new Error('User not found');
     }
-
 
     const roles = await this.prisma.userRole.findMany({
       where: {
