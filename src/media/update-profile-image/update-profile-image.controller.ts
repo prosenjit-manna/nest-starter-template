@@ -21,10 +21,8 @@ export class UpdateProfileImageController {
     @UploadedFile() file: Express.Multer.File,
     @Req() req: Request,
   ) {
-
     const filePath = await this.uploadMediaService.saveFile(file);
     const media = await this.uploadMediaService.uploadMedia({ ...file, path: filePath });
-    console.log('media', media, req.user?.id);
     return await this.updateProfileImage.updateProfileMedia(media, req.user?.id || '');
   }
 }

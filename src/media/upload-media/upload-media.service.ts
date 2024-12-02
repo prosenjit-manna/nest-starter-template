@@ -10,10 +10,6 @@ export class UploadMediaService {
   constructor(private readonly prisma: PrismaService) {}
 
   async uploadMedia(file: Express.Multer.File) {
-    if (!file) {
-      throw new BadRequestException('No file provided');
-    }
-
     // Save file information to the database
     const media = await this.prisma.file.create({
       data: {
@@ -28,6 +24,9 @@ export class UploadMediaService {
   }
 
   async saveFile(file: Express.Multer.File): Promise<string> {
+    if (!file) {
+      throw new BadRequestException('No file provided');
+    }
     const uploadPath = this.uploadPath(join(
       'uploads',
       file.originalname,
