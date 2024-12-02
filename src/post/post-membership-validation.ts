@@ -6,7 +6,6 @@ import { CreateAppError } from "src/shared/create-error/create-error";
 export class PostMemberShipValidation {
  
   async validateMembership(prisma: PrismaService, userId: string, workSpaceId: string) {
-    console.log(userId, workSpaceId);
 
     const membership = await prisma.workspaceMembership.findMany({
       where: {
