@@ -84,7 +84,7 @@ export class SendInvitationService {
       templateName: 'membership',
       context: {
         workspace: workspace?.name,
-        verifyURl: `${appEnv.FRONTEND_URL}${appEnv.FRONTEND_URL}${appEnv.MEMBERSHIP_VERIFY_URL}${verifyToken}`,
+        verifyURl: `${appEnv.FRONTEND_URL}${appEnv.FRONTEND_URL}${appEnv.MEMBERSHIP_VERIFY_URL}?token=${verifyToken}`,
       },
     });
 
