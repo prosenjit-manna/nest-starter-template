@@ -10,4 +10,70 @@ model Post {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
+
+  category PostCategory[] @relation("postCategoryPostIdRelation")
+  tag PostTag[] @relation("postTagPostIdRelation")
+
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String
+  slug String
+  parentId String?
+  parent Category? @relation("parentCategoryIdRelation", fields: [parentId], references: [id])
+  children Category[] @relation("parentCategoryIdRelation")
+
+  category PostCategory[] @relation("postCategoryIdRelation")
+
+  workspaceId String
+  workspace   Workspace @relation(name: "workspaceIdCategoryRelation", fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model PostCategory {
+  postId       String
+  post         Post   @relation(name: "postCategoryPostIdRelation", fields: [postId], references: [id], onDelete: Cascade)
+
+  category   Category @relation(name: "postCategoryIdRelation", fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@id([postId, categoryId])
+}
+
+
+model Tag {
+  id   String @id @default(uuid())
+  name String
+  slug String
+
+  tag PostTag[] @relation("postTagIdRelation")
+
+  workspaceId String
+  workspace   Workspace @relation(name: "workspaceIdTagRelation", fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model PostTag {
+  postId       String
+  post         Post   @relation(name: "postTagPostIdRelation", fields: [postId], references: [id], onDelete: Cascade)
+
+  tag   Tag @relation(name: "postTagIdRelation", fields: [tagId], references: [id], onDelete: Cascade)
+  tagId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@id([postId, tagId])
 }
