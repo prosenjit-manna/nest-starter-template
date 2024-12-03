@@ -4,8 +4,8 @@ import { UseGuards } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 
 import { PrismaService } from "src/prisma.service";
-import { ListMediaInput } from "./list-media.input.dto";
-import { ListMediaResponse } from "./list-media.response.dto";
+import { ListMediaInput } from "./list-file.input.dto";
+import { ListMediaResponse } from "./list-file.response.dto";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { paginationInputTransformer } from "src/shared/base-list/base-list-input-transform";
 import { Order } from "src/shared/base-list/base-list-input.dto";
