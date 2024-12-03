@@ -58,8 +58,11 @@ model FileAsset {
   url       String   // Path or URL to the file
   fileId    String
   file      File     @relation(name: "fileAssets", fields: [fileId], references: [id])
+  usedLocation String[] @default([]) // List of locations where the asset is used
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deletedAt       DateTime?
 
   @@unique([fileId, size]) // Ensure unique size for each file
 }
@@ -68,8 +71,10 @@ model S3AccessSession {
   id        String   @id @default(uuid())
   signedUrl String
   expiresAt DateTime
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deletedAt       DateTime?
 
   fileId String
   file   File   @relation(name: "fileS3AccessSession", fields: [fileId], references: [id])
