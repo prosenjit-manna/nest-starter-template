@@ -1,8 +1,8 @@
-import { Controller, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Request } from 'express';
 
 import { UploadMediaService } from './upload-media.service';
-import { UpdateProfileImageService } from '../update-profile-image/update-profile-image.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
@@ -10,7 +10,6 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class UploadMediaController {
   constructor(
     private readonly uploadMediaService: UploadMediaService,
-    private readonly updateProfileImage: UpdateProfileImageService,
     
   ) {}
 
@@ -18,9 +17,11 @@ export class UploadMediaController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
+    @Req() req: Request,
   ) {
+    const workspaceId = req.currentWorkspaceId as string;
     const filePath = await this.uploadMediaService.saveFile(file);
-    const media = await this.uploadMediaService.uploadMedia({ ...file, path: filePath });
+    const media = await this.uploadMediaService.uploadMedia({ ...file, path: filePath }, { workspaceId });
     return media;
   }
 }

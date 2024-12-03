@@ -206,6 +206,26 @@ type ListMembershipResponse {
   pagination: BaseListResponse!
 }
 
+type FileResponse {
+  id: String!
+  name: String!
+  description: String
+  size: Int!
+  mimeType: String!
+  url: String!
+  folderId: String
+  authorId: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  workspaceId: String
+}
+
+type ListMediaResponse {
+  file: [FileResponse!]!
+  pagination: BaseListResponse!
+}
+
 type Query {
   listWorkSpace(listWorkspaceInput: ListWorkSpaceInput): ListWorkSpaceResponse!
   listMemberships(listMembershipsInput: ListMembershipInput!): ListMembershipResponse!
@@ -216,6 +236,7 @@ type Query {
   getPost(getPostInput: GetPostInput!): GetPostResponse
   getUsers(getUsersInput: GetUsersInput): [GetUserResponse!]!
   currentUser: CurrentUserResponse!
+  listMedia(listMediaInput: ListMediaInput): ListMediaResponse!
   login(loginInput: LoginInput!): LoginResponse!
 }
 
@@ -288,6 +309,20 @@ input GetPostInput {
 
 input GetUsersInput {
   search: String
+}
+
+input ListMediaInput {
+  page: Int
+  pageSize: Int
+  orderBy: Order = DESC
+  fromStash: Boolean = false
+  orderByField: mediaOrderByField = createdAt
+}
+
+enum mediaOrderByField {
+  createdAt
+  updatedAt
+  size
 }
 
 input LoginInput {

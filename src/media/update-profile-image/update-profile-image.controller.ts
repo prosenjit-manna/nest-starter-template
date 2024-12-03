@@ -22,7 +22,7 @@ export class UpdateProfileImageController {
     @Req() req: Request,
   ) {
     const filePath = await this.uploadMediaService.saveFile(file);
-    const media = await this.uploadMediaService.uploadMedia({ ...file, path: filePath });
+    const media = await this.uploadMediaService.uploadMedia({ ...file, path: filePath }, { workspaceId: req.currentWorkspaceId as string });
     return await this.updateProfileImage.updateProfileMedia(media, req.user?.id || '');
   }
 }

@@ -9,7 +9,7 @@ import * as path from 'path';
 export class UploadMediaService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async uploadMedia(file: Express.Multer.File) {
+  async uploadMedia(file: Express.Multer.File, { workspaceId }: { workspaceId: string }): Promise<any> {
     // Save file information to the database
     const media = await this.prisma.file.create({
       data: {
@@ -17,6 +17,7 @@ export class UploadMediaService {
         mimeType: file.mimetype,
         size: file.size,
         url: file.path,
+        workspaceId
       },
     });
 

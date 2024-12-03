@@ -1,10 +1,12 @@
+
+
 import { Field, ObjectType } from "@nestjs/graphql";
 import { BaseListResponse } from "src/shared/base-list/base-list-response.dto";
-import { PostResponse } from "../post-response.dto";
-import { Post } from "@prisma/client";
+import { FileResponse } from "./file-response.dto";
+import { File } from "@prisma/client";
 
 @ObjectType()
-export class PostListResponse {
-  @Field(() => [PostResponse]) posts: Post[];
+export class ListMediaResponse {
+  @Field(() => [FileResponse]) file: File[];
   @Field(() => BaseListResponse) pagination: BaseListResponse;
 }
