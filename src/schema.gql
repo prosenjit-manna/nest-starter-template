@@ -345,6 +345,7 @@ type Mutation {
   updatePost(postId: String!, updatePostInput: UpdatePostInput!): UpdatePostResponse!
   deletePost(postDeleteInput: PostDeleteInput): Boolean!
   updateProfile(updateProfileInput: UpdateProfileInput): UpdateProfileResponse!
+  deleteFile(fileDeleteInput: FileDeleteInput): Boolean!
   requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
   resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
   signup(signupInput: SignupInput!): SignupResponse!
@@ -435,6 +436,11 @@ input PostDeleteInput {
 input UpdateProfileInput {
   name: String
   password: String
+}
+
+input FileDeleteInput {
+  id: String!
+  fromStash: Boolean
 }
 
 input PasswordResetRequestInput {

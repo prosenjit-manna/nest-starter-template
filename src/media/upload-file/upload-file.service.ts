@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
 
 @Injectable()
-export class UploadMediaService {
+export class FileService {
   constructor(private readonly prisma: PrismaService) {}
 
   async uploadMedia(file: Express.Multer.File, { workspaceId }: { workspaceId: string }): Promise<any> {
@@ -54,5 +54,11 @@ export class UploadMediaService {
     const newFilename = `${uuidv4()}${extension}`;
     const newFilePath = path.join(path.dirname(originalFilePath), newFilename);
     return newFilePath;
+  }
+
+  async deleteFile(path: string): Promise<void> {
+
+    // Delete file from the filesystem
+    await fs.unlink(join(process.cwd(), 'public', path));
   }
 }

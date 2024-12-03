@@ -2,7 +2,7 @@ import { Controller, Post, Req, UploadedFile, UseGuards, UseInterceptors } from 
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Request } from "express";
 
-import { UploadMediaService } from "../upload-file/upload-file.service";
+import { FileService } from "../upload-file/upload-file.service";
 import { UpdateProfileImageService } from "./update-profile-image.service";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
@@ -11,7 +11,7 @@ import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 @Controller('media')
 export class UpdateProfileImageController {
   constructor(
-    private readonly uploadMediaService: UploadMediaService,
+    private readonly uploadMediaService: FileService,
     private readonly updateProfileImage: UpdateProfileImageService,
   ) {}
 
