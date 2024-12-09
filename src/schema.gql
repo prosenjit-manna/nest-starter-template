@@ -292,7 +292,7 @@ input GetPostListInput {
   orderBy: Order = DESC
   fromStash: Boolean = false
   title: String
-  authorId: Int
+  authorId: String
   orderByField: orderByField = id
 }
 

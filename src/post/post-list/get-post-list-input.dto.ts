@@ -1,4 +1,4 @@
-import { Field, InputType, Int, registerEnumType } from '@nestjs/graphql';
+import { Field, InputType, registerEnumType } from '@nestjs/graphql';
 import { BaseListInput } from 'src/shared/base-list/base-list-input.dto';
 
 
@@ -18,7 +18,7 @@ export class GetPostListInput extends BaseListInput {
   @Field(() => String, { nullable: true })
   title: string;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => String, { nullable: true })
   authorId: string;
 
   @Field(() => PostListOrderByField, { nullable: true, defaultValue: PostListOrderByField.id })
