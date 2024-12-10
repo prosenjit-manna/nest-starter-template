@@ -34,7 +34,10 @@ export class PostCreateService {
     @Context('req') req: Request,
   ) {
 
-    this.postMemberShipValidation.validateAuthorMembership(req.memberships, (createPostInput?.authorId || req?.user?.id) || '');
+    if (createPostInput.authorId) {
+      await this.postMemberShipValidation.validateMembership(this.prisma, createPostInput?.authorId, req.currentWorkspaceId || '');
+    }
+    
 
     const post = await this.prisma.post.create({
       data: {

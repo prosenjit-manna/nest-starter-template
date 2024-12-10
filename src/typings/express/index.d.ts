@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Express } from 'express';
 
 declare global {
@@ -18,7 +19,7 @@ declare global {
         updatedAt: Date;
         deletedAt: Date | null;
       } | null;
-      memberships: {
+      currentUserMemberships: {
         id: string;
         userId: string;
         workspaceId: string;

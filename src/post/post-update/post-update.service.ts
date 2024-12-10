@@ -35,7 +35,7 @@ export class PostUpdateService {
     @Context('req') req: Request,
   ) {
 
-    this.postMemberShipValidation.validateAuthorMembership(req.memberships, (updatePostInput?.authorId || req?.user?.id) || '');
+    this.postMemberShipValidation.validateAuthorMembership(req.currentUserMemberships, (updatePostInput?.authorId || req?.user?.id) || '');
 
     const existingPost = await this.prisma.post.findUnique({
       where: { id: postId },

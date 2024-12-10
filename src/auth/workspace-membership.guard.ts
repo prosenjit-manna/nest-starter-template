@@ -26,7 +26,7 @@ export class WorkspaceMemberShipGuard implements CanActivate {
 
     const user = request.user;
     const memberships = await this.getMemberShips(user?.id || '');
-    request.memberships = memberships;
+    request.currentUserMemberships = memberships;
 
 
     if (memberships.length === 0) {
