@@ -6,6 +6,7 @@ import { UpdateProfileImageController } from './update-profile-image/update-prof
 import { ListMediaService } from './list-file/list-file.service';
 import { DeleteFileService } from './delete-file/delete-file.service';
 import { ResizeFileService } from './resize-file/resize-file.service';
+import { GetFileService } from './get-file/get-file.service';
 
 @Module({
   controllers: [UploadMediaController, UpdateProfileImageController],
@@ -15,6 +16,7 @@ import { ResizeFileService } from './resize-file/resize-file.service';
     ListMediaService,
     DeleteFileService,
     ResizeFileService,
+    GetFileService,
   ],
 })
 export class MediaModule {}
