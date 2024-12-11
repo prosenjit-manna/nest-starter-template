@@ -36,6 +36,15 @@ export class ResizeFileService {
     }
 
 
+    const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+    if (!imageMimeTypes.includes(file.mimeType)) {
+      throw new CreateAppError({
+        message: 'Only Images can be resized',
+      });
+    }
+
+
     const filePath = await this.fileService.resizeFile(file, resizeFileInput.resizeOptions);
 
     await this.prismaService.file.deleteMany({
