@@ -1,6 +1,6 @@
 import { Resolver, Query } from '@nestjs/graphql';
 import { PrivilegeGroup, PrivilegeName, PrivilegeType } from '@prisma/client';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { PrivilegeListResponse } from './list-privilege.response.dto';
 import { SetMetadata, UseGuards } from '@nestjs/common';
 import { RoleGuard } from 'src/auth/role.guard';

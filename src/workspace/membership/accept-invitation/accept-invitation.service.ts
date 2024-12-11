@@ -1,7 +1,7 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
 import { AcceptInvitationInput } from './accept-invitation-input.dto';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppError } from 'src/shared/create-error/create-error';
 
 @Resolver()

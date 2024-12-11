@@ -4,7 +4,7 @@ import { SetMetadata } from '@nestjs/common';
 import { Prisma, PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { UseGuards } from '@nestjs/common';
 
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { ListMembershipResponse } from './list-membership-response.dto';
 import { ListMembershipInput } from './list-membership-input.dto';
 import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';

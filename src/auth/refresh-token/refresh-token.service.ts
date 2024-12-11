@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Args, Mutation } from '@nestjs/graphql';
 import { User } from '@prisma/client';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { TokenService } from '../token.service';
 import { VerifyEmailResponse } from '../verify-email/verify-email-response.dto';
 import { RefreshAccessTokenInput } from '../refresh-access-token.dto';

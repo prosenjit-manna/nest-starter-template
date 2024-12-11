@@ -2,7 +2,7 @@ import { Args, Resolver, Query, Context } from '@nestjs/graphql';
 import { Request } from 'express';
 import { HttpStatus } from '@nestjs/common';
 
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { GetPostInput } from './get-post-input.dto';
 import { GetPostResponse } from './get-post-response.dto';
 import { CreateAppError } from 'src/shared/create-error/create-error';

@@ -2,7 +2,7 @@ import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
 import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppError } from 'src/shared/create-error/create-error';
 import { PostDeleteInput } from './post-delete-input.dto';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';

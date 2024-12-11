@@ -1,5 +1,5 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppError } from 'src/shared/create-error/create-error';
 import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 import { RoleDeleteInput } from './role-delete-input.dto';

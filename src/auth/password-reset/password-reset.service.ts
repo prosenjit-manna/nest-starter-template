@@ -1,6 +1,6 @@
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { MailerService } from 'src/mailer/mailer.service';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import appEnv from 'src/env';
 import { Request } from 'express';
 import * as bcrypt from 'bcrypt';

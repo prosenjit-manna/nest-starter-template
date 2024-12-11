@@ -7,7 +7,7 @@ import { Request } from 'express';
 import { SendInvitationResponse } from './send-invitation-response.dto';
 import { RoleGuard } from 'src/auth/role.guard';
 import { SendInvitationInput } from './send-invitation-input.dto';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateAppError } from 'src/shared/create-error/create-error';
 import { randomBytes } from 'crypto';

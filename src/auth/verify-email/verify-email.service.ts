@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { TokenService } from '../token.service';
 import { Args, Mutation } from '@nestjs/graphql';
 import { VerifyEmailResponse } from './verify-email-response.dto';

@@ -6,7 +6,7 @@ import * as sanitizeHtml from 'sanitize-html';
 
 import { UpdatePostResponse } from './update-post-response.dto';
 import { UpdatePostInput } from './update-post.dto';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { RoleGuard } from 'src/auth/role.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { PostMemberShipValidation } from '../post-membership-validation';

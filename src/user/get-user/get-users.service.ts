@@ -1,6 +1,6 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { User } from '@prisma/client';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { GetUserResponse } from './get-users.response.dto';
 import { GetUsersInput } from './get-users-input.dto';
 import { UseGuards } from '@nestjs/common';

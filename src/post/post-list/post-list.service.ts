@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 import { Args, Context, Query } from '@nestjs/graphql';
 import { Request } from 'express';
 
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { PostListResponse } from './post-list-response.dto';
 import { GetPostListInput } from './get-post-list-input.dto';
 import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';

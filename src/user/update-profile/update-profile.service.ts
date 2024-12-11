@@ -3,7 +3,7 @@ import { UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import * as bcrypt from 'bcrypt';
 
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateProfileResponse } from './update-profile.response.dto';
 import { UpdateProfileInput } from './update-profile.input.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Args, Mutation } from '@nestjs/graphql';
 import { MailerService } from 'src/mailer/mailer.service';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { SignupResponse } from './signup-response.dto';
 import { SignupInput } from './signup-input.dto';
 import * as bcrypt from 'bcrypt';

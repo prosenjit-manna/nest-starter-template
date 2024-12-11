@@ -4,7 +4,7 @@ import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 
 import { RoleCreateResponse } from './role-create-response.dto';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { RoleCreateInput } from './role-create-input.dto';
 import { RoleGuard } from 'src/auth/role.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';

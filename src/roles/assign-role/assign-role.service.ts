@@ -3,7 +3,7 @@ import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 
 import { AssignRoleResponse } from './assign-role-response.dto';
 import { AssignRoleInput } from './assign-role-input.dto';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppError } from 'src/shared/create-error/create-error';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';

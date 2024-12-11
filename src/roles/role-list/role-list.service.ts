@@ -3,7 +3,7 @@ import { Request } from 'express';
 import { Args, Context, Query, Resolver } from '@nestjs/graphql';
 import { Prisma, PrivilegeGroup, PrivilegeName } from '@prisma/client';
 
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { RoleListResponse } from './role-list.response.dto';
 import { Order } from 'src/shared/base-list/base-list-input.dto';
 import { paginationInputTransformer } from 'src/shared/base-list/base-list-input-transform';

@@ -6,7 +6,7 @@ import { Request } from 'express';
 import { CreateWorkspaceResponse } from './create-workspace-response.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateWorkspaceInput } from './create-workspace-input.dto';
 
 @UseGuards(JwtAuthGuard)

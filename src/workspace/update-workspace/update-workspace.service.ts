@@ -6,7 +6,7 @@ import { Request } from 'express';
 import { UpdateWorkspaceResponse } from './update-workspace-response.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateWorkspaceInput } from './update-workspace-input.dto';
 import { CreateAppError } from 'src/shared/create-error/create-error';
 

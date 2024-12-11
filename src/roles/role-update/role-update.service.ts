@@ -1,7 +1,7 @@
 import { SetMetadata, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { RoleUpdateResponse } from './role-update-response.dto';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { RoleUpdateInput } from './role-update-input.dto';
 import { RoleGuard } from 'src/auth/role.guard';
 import { PrivilegeGroup, PrivilegeName } from '@prisma/client';

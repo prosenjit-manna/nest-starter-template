@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { LoginResponse } from './login-response.dto';
 import { Args, Context, Query, Resolver } from '@nestjs/graphql';
 import { LoginInput } from './login-input.dto';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { TokenService } from '../token.service';
 import * as bcrypt from 'bcrypt';
 

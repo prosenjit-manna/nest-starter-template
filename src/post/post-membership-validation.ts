@@ -1,6 +1,6 @@
 import { HttpStatus } from "@nestjs/common";
 import { WorkspaceMembership } from "@prisma/client";
-import { PrismaService } from "src/prisma.service";
+import { PrismaService } from "src/prisma/prisma.service";
 import { CreateAppError } from "src/shared/create-error/create-error";
 
 export class PostMemberShipValidation {

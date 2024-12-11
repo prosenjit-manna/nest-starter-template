@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { appConfig } from 'src/app.config';
 import appEnv from 'src/env';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppError, CustomApolloServerErrorCode } from 'src/shared/create-error/create-error';
 
 @Injectable()

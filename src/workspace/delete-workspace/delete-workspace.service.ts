@@ -3,7 +3,7 @@ import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppError } from 'src/shared/create-error/create-error';
 import { WorkspaceDeleteInput } from './workspace-delete-input.dto';
 import { RoleGuard } from 'src/auth/role.guard';

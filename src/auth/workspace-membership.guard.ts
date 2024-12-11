@@ -4,7 +4,7 @@ import { GqlExecutionContext } from "@nestjs/graphql";
 import { WorkspaceMembership } from "@prisma/client";
 import { Request } from "express";
 
-import { PrismaService } from "src/prisma.service";
+import { PrismaService } from "src/prisma/prisma.service";
 import { MemberShipValidationType } from "./membership-validation-type.enum";
 import { CreateAppError } from "src/shared/create-error/create-error";
 

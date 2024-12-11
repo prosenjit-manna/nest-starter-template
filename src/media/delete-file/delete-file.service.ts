@@ -3,7 +3,7 @@ import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 import { Request } from "express";
 
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
-import { PrismaService } from "src/prisma.service";
+import { PrismaService } from "src/prisma/prisma.service";
 import { CreateAppError } from "src/shared/create-error/create-error";
 import { FileDeleteInput } from "./delete-file.input";
 import { FileService } from "../upload-file/upload-file.service";
