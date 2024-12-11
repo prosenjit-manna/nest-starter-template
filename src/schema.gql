@@ -254,6 +254,8 @@ type Query {
   currentUser: CurrentUserResponse!
   listMedia(listMediaInput: ListMediaInput): ListMediaResponse!
   getFile(getFileInput: GetFileInput): GetFileResponse
+  getFolder: String!
+  listFolder: String!
   login(loginInput: LoginInput!): LoginResponse!
 }
 
@@ -369,6 +371,8 @@ type Mutation {
   updateProfile(updateProfileInput: UpdateProfileInput): UpdateProfileResponse!
   deleteFile(fileDeleteInput: FileDeleteInput): Boolean!
   resizeFile(resizeFileInput: ResizeFileInput): JSON!
+  createFolder: String!
+  deleteFolder: String!
   requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
   resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
   signup(signupInput: SignupInput!): SignupResponse!
