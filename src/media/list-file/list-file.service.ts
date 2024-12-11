@@ -23,6 +23,7 @@ export class ListMediaService {
     const currentWorkspaceId = req.currentWorkspaceId;
     
     let queryObject: Prisma.FileWhereInput = {
+      resizeImageId: null,
       workspaceId: {
         equals: currentWorkspaceId,
       },

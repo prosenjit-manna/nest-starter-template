@@ -8,8 +8,8 @@ model Folder {
   name String
 
   parentId   String?
-  parent     Folder?  @relation("subFolders", fields: [parentId], references: [id])
-  subFolders Folder[] @relation("subFolders")
+  parent     Folder?  @relation("folderRelation", fields: [parentId], references: [id])
+  subFolders Folder[] @relation("folderRelation")
 
   files File[]
 
@@ -27,6 +27,12 @@ model File {
   id       String  @id @default(uuid())
   name     String
   description String?
+
+  resizeImageId   String?
+  resizeImagesRef     File?  @relation("resizeImagesRelation", fields: [resizeImageId], references: [id])
+  resizeImages File[] @relation("resizeImagesRelation")
+
+
   size     Int // File size in kb
   mimeType String // MIME type (e.g., "image/png", "application/pdf")
   url      String // Path or URL to the file
@@ -46,25 +52,8 @@ model File {
   workspace   Workspace? @relation(name: "workspaceIdFileRelation", fields: [workspaceId], references: [id], onDelete: Cascade)
 
   S3AccessSession S3AccessSession[] @relation("fileS3AccessSession")
-  assets    FileAsset[]     @relation("fileAssets")
 
   @@unique([name, folderId]) // Prevent duplicate file names in the same folder
-}
-
-model FileAsset {
-  id        String   @id @default(uuid())
-  size      Int      // File size in kb
-  mimeType  String   // MIME type (e.g., "image/png", "application/pdf")
-  url       String   // Path or URL to the file
-  fileId    String
-  file      File     @relation(name: "fileAssets", fields: [fileId], references: [id])
-  usedLocation String[] @default([]) // List of locations where the asset is used
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt       DateTime?
-
-  @@unique([fileId, size]) // Ensure unique size for each file
 }
 
 model S3AccessSession {

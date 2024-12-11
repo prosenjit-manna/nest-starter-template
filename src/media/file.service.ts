@@ -5,10 +5,13 @@ import { promises as fs } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
 import { File } from '@prisma/client';
+import * as sharp from 'sharp';
 
 @Injectable()
 export class FileService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+  ) {}
 
   async uploadMedia(file: Express.Multer.File, { workspaceId }: { workspaceId: string }): Promise<File> {
     // Save file information to the database
@@ -61,5 +64,29 @@ export class FileService {
 
     // Delete file from the filesystem
     await fs.unlink(join(process.cwd(), 'public', path));
+  }
+
+
+  async resizeFile(file: File, resizeInput: sharp.ResizeOptions) {
+
+    const originalFilePath = join(process.cwd(), 'public',file.url);
+
+    const extension = path.extname(originalFilePath);
+    const basePath = originalFilePath.replace(extension, '');
+
+    let filePath = '';
+    if (resizeInput.width) {
+      filePath += 'w-' + resizeInput.width;
+    }
+    if (resizeInput.width && resizeInput.height) {
+      filePath += 'x';
+    }
+    if (resizeInput.height) {
+      filePath += 'h-' + resizeInput.height;
+    }
+
+    const newFilePath = `${basePath}${filePath ? '-' + filePath : ''}${extension}`;
+    await sharp(originalFilePath).resize(resizeInput).toFile(newFilePath);
+    return newFilePath.replace(join(process.cwd(), 'public'), '');
   }
 }
