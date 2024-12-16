@@ -1,7 +1,6 @@
 import { cleanEnv, str, email, num, bool } from 'envalid';
 
 export const appEnv = cleanEnv(process.env, {
-  RATE_LIMIT_DURATION: num({ default: 10 }),
 
 
   DATABASE_URL: str({
@@ -55,6 +54,12 @@ export const appEnv = cleanEnv(process.env, {
   SENTRY_URL: str({ desc: 'Please provide SENTRY URL' }),
 
   PRISMA_DEBUG: bool({ default: false }),
+
+  THROTTLE_TTL: num({ default: 60000 }),
+  THROTTLE_LIMIT: num({ default: 50 }),
+
+  // Pagination 
+  PAGE_SIZE: num({ default: 10 }),
 });
 
 // Read an environment variable, which is validated and cleaned during

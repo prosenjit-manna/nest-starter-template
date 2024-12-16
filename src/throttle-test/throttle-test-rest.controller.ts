@@ -1,22 +1,24 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { SkipThrottle, Throttle } from '@nestjs/throttler';
+import appEnv from 'src/env';
 
-@Controller('throttle')
+@Controller('rate-limit')
 export class ThrottleTestController {
+
   @Get('public')
   getPublic() {
-    return 'This is public and not throttled!';
+    return `has rate limit per  ${appEnv.THROTTLE_TTL/ 1000 / 60} min ${appEnv.THROTTLE_LIMIT}`;
   }
 
   @SkipThrottle()
-  @Get('throttled')
-  getThrottled() {
-    return 'This is a throttled GET request!';
+  @Get('skip')
+  getSkip() {
+    return 'This request has no rate limit';
   }
 
   @Throttle({ default: { limit: 2, ttl: 60000 } })
-  @Post('throttled')
-  postThrottled() {
-    return 'This is a throttled POST request!';
+  @Get('custom')
+  getCustom() {
+    return `has rate limit per ${appEnv.THROTTLE_TTL/ 1000 / 60}  min 2`;
   }
 }

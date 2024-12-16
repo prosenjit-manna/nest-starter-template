@@ -255,7 +255,7 @@ type Query {
   listMedia(listMediaInput: ListMediaInput): ListMediaResponse!
   getFile(getFileInput: GetFileInput): GetFileResponse
   login(loginInput: LoginInput!): LoginResponse!
-  sayHello: String!
+  rateLimitGlobal: String!
 }
 
 input ListWorkSpaceInput {
@@ -375,7 +375,8 @@ type Mutation {
   signup(signupInput: SignupInput!): SignupResponse!
   verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
   refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
-  throttleTest: String!
+  rateLimitSkip: String!
+  rateLimitCustomize: String!
 }
 
 input CreateWorkspaceInput {

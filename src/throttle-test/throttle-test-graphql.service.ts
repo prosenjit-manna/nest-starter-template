@@ -1,17 +1,23 @@
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Throttle } from '@nestjs/throttler';
-// import { Throttle } from 'src/throttle/throttle.decorator';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
+import appEnv from 'src/env';
 
 @Resolver()
 export class ThrottleTestGraphqlService {
   @Query(() => String)
-  sayHello(): string {
-    return 'Hello World!';
+  rateLimitGlobal(): string {
+    return `has rate limit per  ${(appEnv.THROTTLE_TTL/ 1000/ 60)} min ${appEnv.THROTTLE_LIMIT}`;
   }
 
+  @SkipThrottle()
+  @Mutation(() => String)
+  rateLimitSkip(): string {
+    return `has no rate limit`;
+  }
+  
   @Throttle({ default: { limit: 2, ttl: 60000 } })
   @Mutation(() => String)
-  throttleTest(): string {
-    return 'This is throttled!';
+  rateLimitCustomize(): string {
+    return `has rate limit per ${appEnv.THROTTLE_TTL/ 1000 / 60}  min 2`;
   }
 }
