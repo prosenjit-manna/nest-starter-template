@@ -243,6 +243,8 @@ type GetFileResponse {
 }
 
 type Query {
+  login(loginInput: LoginInput!): LoginResponse!
+  rateLimitGlobal: String!
   listWorkSpace(listWorkspaceInput: ListWorkSpaceInput): ListWorkSpaceResponse!
   listMemberships(listMembershipsInput: ListMembershipInput!): ListMembershipResponse!
   roleList(roleListInput: RoleListInput): RoleListResponse!
@@ -254,8 +256,11 @@ type Query {
   currentUser: CurrentUserResponse!
   listMedia(listMediaInput: ListMediaInput): ListMediaResponse!
   getFile(getFileInput: GetFileInput): GetFileResponse
-  login(loginInput: LoginInput!): LoginResponse!
-  rateLimitGlobal: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 input ListWorkSpaceInput {
@@ -348,12 +353,14 @@ input GetFileInput {
   fromStash: Boolean
 }
 
-input LoginInput {
-  email: String!
-  password: String!
-}
-
 type Mutation {
+  requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
+  resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
+  signup(signupInput: SignupInput!): SignupResponse!
+  verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
+  refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
+  rateLimitSkip: String!
+  rateLimitCustomize: String!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): CreateWorkspaceResponse!
   updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): UpdateWorkspaceResponse!
   deleteWorkSpace(deleteWorkspaceInput: WorkspaceDeleteInput): Boolean!
@@ -370,13 +377,28 @@ type Mutation {
   updateProfile(updateProfileInput: UpdateProfileInput): UpdateProfileResponse!
   deleteFile(fileDeleteInput: FileDeleteInput): Boolean!
   resizeFile(resizeFileInput: ResizeFileInput): JSON!
-  requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
-  resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
-  signup(signupInput: SignupInput!): SignupResponse!
-  verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
-  refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
-  rateLimitSkip: String!
-  rateLimitCustomize: String!
+}
+
+input PasswordResetRequestInput {
+  email: String!
+}
+
+input PasswordResetInput {
+  password: String!
+}
+
+input SignupInput {
+  name: String
+  email: String!
+  password: String!
+}
+
+input VerifyEmailInput {
+  token: String!
+}
+
+input RefreshAccessTokenInput {
+  refreshToken: String!
 }
 
 input CreateWorkspaceInput {
@@ -480,28 +502,8 @@ input ResizeFileInput {
 }
 
 input ImageResizeOptions {
-  width: Int
-  height: Int
-}
-
-input PasswordResetRequestInput {
-  email: String!
-}
-
-input PasswordResetInput {
-  password: String!
-}
-
-input SignupInput {
-  name: String
-  email: String!
-  password: String!
-}
-
-input VerifyEmailInput {
-  token: String!
-}
-
-input RefreshAccessTokenInput {
-  refreshToken: String!
+  width: Int!
+  height: Int!
+  left: Int!
+  top: Int!
 }
