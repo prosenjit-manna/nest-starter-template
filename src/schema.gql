@@ -65,6 +65,7 @@ type RolePrivilegeResponse {
 type RoleGetResponse {
   title: String!
   name: String!
+  description: String
   id: String!
   createdAt: DateTime!
   updatedAt: DateTime!

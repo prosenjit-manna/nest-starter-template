@@ -54,6 +54,7 @@ export class RoleGetService {
     return {
       ...role,
       deletedAt: role.deletedAt as any,
+      description: role.description || '',
       privilege: transformPrivileges,
     };
   }
