@@ -432,7 +432,7 @@ type Mutation {
   deleteFile(fileDeleteInput: FileDeleteInput): Boolean!
   resizeFile(resizeFileInput: ResizeFileInput): JSON!
   createFolder(createFolderInput: CreateFolderInput): CreateFolderResponse!
-  deleteFolder: String!
+  deleteFolder(folderDeleteInput: DeleteFolderInput): Boolean!
 }
 
 input PasswordResetRequestInput {
@@ -567,4 +567,9 @@ input ImageResizeOptions {
 input CreateFolderInput {
   name: String!
   parentId: String
+}
+
+input DeleteFolderInput {
+  id: String!
+  fromStash: Boolean
 }
