@@ -11,6 +11,7 @@ import { CreateFolderService } from './folder/create-folder/create-folder.servic
 import { GetFolderService } from './folder/get-folder/get-folder.service';
 import { DeleteFolderService } from './folder/delete-folder/delete-folder.service';
 import { ListFolderService } from './folder/list-folder/list-folder.service';
+import { UpdateFolderService } from './folder/update-folder/update-folder.service';
 
 @Module({
   controllers: [UploadMediaController, UpdateProfileImageController],
@@ -25,6 +26,7 @@ import { ListFolderService } from './folder/list-folder/list-folder.service';
     GetFolderService,
     DeleteFolderService,
     ListFolderService,
+    UpdateFolderService,
   ],
 })
 export class MediaModule {}
