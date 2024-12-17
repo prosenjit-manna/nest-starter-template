@@ -14,7 +14,7 @@ export class UpdateFolderService {
   ): Promise<boolean> {
     await this.prismaService.folder.update({
       where: { id: updateFolderInput.id },
-      data: { ...updateFolderInput },
+      data: { name: updateFolderInput.name, parentId: updateFolderInput.parentId },
     })
 
     return true;

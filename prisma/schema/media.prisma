@@ -23,7 +23,6 @@ model Folder {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  @@unique([name, parentId]) // Prevent duplicate folder names under the same parent
 }
 
 model File {
