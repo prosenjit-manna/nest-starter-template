@@ -9,6 +9,7 @@ import { LoginService } from './login/login.service';
 import { SignupService } from './signup/signup.service';
 import { VerifyEmailService } from './verify-email/verify-email.service';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
+import { OtpLoginService } from './otp/otp-login.service';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { RefreshTokenService } from './refresh-token/refresh-token.service';
     SignupService,
     VerifyEmailService,
     RefreshTokenService,
+    OtpLoginService,
   ],
 })
 export class AuthModule {}

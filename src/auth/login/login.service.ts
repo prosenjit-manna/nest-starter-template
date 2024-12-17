@@ -5,13 +5,34 @@ import { LoginInput } from './login-input.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { TokenService } from '../token.service';
 import * as bcrypt from 'bcrypt';
+import appEnv from 'src/env';
+import { codeGenerator } from 'src/shared/helper/codeGenerator';
+import { MailerService } from 'src/mailer/mailer.service';
 
 @Resolver()
 export class LoginService {
   constructor(
     private prisma: PrismaService,
     private tokenService: TokenService,
+    private mailerService: MailerService,
   ) {}
+
+  async updateOtp(email: string): Promise<number> {
+    try {
+      const otp = codeGenerator(6);
+      await this.prisma.user.update({
+        where: {
+          email,
+        },
+        data: {
+          code: otp,
+        },
+      });
+      return otp;
+    } catch (error) {
+      throw new Error('Failed to Send OTP');
+    }
+  }
 
   @Query(() => LoginResponse)
   async login(
@@ -42,10 +63,58 @@ export class LoginService {
     );
 
     if (!isPasswordValid) {
+      await this.prisma.user.update({
+        where: { email: user.email },
+        data: {
+          failedLoginCount: user.failedLoginCount + 1,
+          loginAttemptTime: new Date(),
+        },
+      });
       throw new Error('Invalid email or password');
     }
 
-    const { token, expiryDate, refreshToken } = await this.tokenService.generateToken(user);
+    const timeDifference = Math.round(
+      (new Date().getTime() - new Date(user.loginAttemptTime || '').getTime()) /
+        (1000 * 60),
+    );
+
+    const accountLock = timeDifference <= appEnv.ACCOUNT_LOCK_TIME;
+
+    if (user.failedLoginCount >= appEnv.ACCOUNT_LOCK_ATTEMPT && accountLock) {
+      throw new Error(
+        `Maximum retry count reached. Please try after ${appEnv.ACCOUNT_LOCK_TIME - timeDifference ? appEnv.ACCOUNT_LOCK_TIME - timeDifference : 1} minutes!`,
+      );
+    }
+
+    if (appEnv.OTP_FEATURE === true) {
+      try {
+        const otp = await this.updateOtp(user.email);
+        await this.mailerService.sendMail({
+          to: loginInput.email,
+          subject: 'OTP Verification',
+          templateName: 'otp-verification',
+          context: {
+            name: user.name,
+            otp,
+          },
+        });
+        return {
+          message: 'OTP sent successfully',
+          twoFA: true,
+          id: user?.id,
+          token: null,
+          refreshToken: null,
+        };
+      } catch (error) {
+        return {
+          message:
+            'OTP email is not sent successfully. Please try to login again',
+        };
+      }
+    }
+
+    const { token, expiryDate, refreshToken } =
+      await this.tokenService.generateToken(user);
 
     await this.prisma.session.create({
       data: {
@@ -66,10 +135,20 @@ export class LoginService {
       },
     });
 
+    await this.prisma.user.update({
+      where: { email: user.email },
+      data: {
+        failedLoginCount: 0,
+        loginAttemptTime: new Date(),
+        code: null,
+      },
+    });
+
     return {
       id: user?.id,
       token,
       refreshToken,
+      twoFA: false,
     };
   }
 }

@@ -1,5 +1,3 @@
-
-
 enum UserType {
   SUPER_ADMIN
   ADMIN
@@ -12,10 +10,13 @@ enum userStatus {
 }
 
 model User {
-  id                 String     @id @default(uuid())
-  email              String     @unique
-  name               String?
-  profileImage       String?
+  id               String    @id @default(uuid())
+  email            String    @unique
+  name             String?
+  profileImage     String?
+  code             Int?
+  failedLoginCount Int       @default(0)
+  loginAttemptTime DateTime?
 
   password           String?
   verificationToken  String?
@@ -25,19 +26,18 @@ model User {
   userType           UserType   @default(USER)
   posts              Post[]
 
-  roles              UserRole[] @relation(name: "userRoleRelation")
-  pages              Page[]     @relation(name: "userPageRelation")
+  roles UserRole[] @relation(name: "userRoleRelation")
+  pages Page[]     @relation(name: "userPageRelation")
 
   workspaceMembership WorkspaceMembership[] @relation(name: "userIdMembershipRelation")
   session             Session[]             @relation(name: "userSessionRelation")
 
   folder Folder[] @relation(name: "FolderUserRelation")
-  file File[] @relation(name: "FileUserRelation")
+  file   File[]   @relation(name: "FileUserRelation")
 
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
-  deletedAt           DateTime?
-  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
 
 model Session {
@@ -53,4 +53,3 @@ model Session {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-

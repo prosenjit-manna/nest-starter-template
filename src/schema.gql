@@ -151,9 +151,10 @@ type PassWordResetResponse {
 }
 
 type LoginResponse {
-  token: String!
-  refreshToken: String!
+  token: String
+  refreshToken: String
   id: String!
+  twoFA: Boolean
 }
 
 type SignupResponse {
@@ -361,6 +362,7 @@ type Mutation {
   signup(signupInput: SignupInput!): SignupResponse!
   verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
   refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
+  otpLogin(otpLoginInput: OtpLoginInput!): LoginResponse!
   rateLimitSkip: String!
   rateLimitCustomize: String!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): CreateWorkspaceResponse!
@@ -401,6 +403,11 @@ input VerifyEmailInput {
 
 input RefreshAccessTokenInput {
   refreshToken: String!
+}
+
+input OtpLoginInput {
+  email: String!
+  otp: Float!
 }
 
 input CreateWorkspaceInput {
