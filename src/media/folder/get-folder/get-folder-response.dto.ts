@@ -6,6 +6,9 @@ export class GetFolderResponse {
   @Field() id: string;
   @Field({ nullable: true }) parentId: string;
 
+  @Field(() => [GetFolderResponse], { nullable: true })
+  subFolders?: GetFolderResponse[];
+
   @Field() createdAt: Date;
   @Field() updatedAt: Date;
   @Field({ nullable: true }) deletedAt: Date;

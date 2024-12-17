@@ -254,6 +254,7 @@ type GetFolderResponse {
   name: String!
   id: String!
   parentId: String
+  subFolders: [GetFolderResponse!]
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime

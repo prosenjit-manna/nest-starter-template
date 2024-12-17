@@ -14,9 +14,7 @@ import { Order } from 'src/shared/base-list/base-list-input.dto';
 @Resolver()
 @UseGuards(JwtAuthGuard)
 export class ListFolderService {
-  constructor(private prisma: PrismaService) {
-    
-  }
+  constructor(private prisma: PrismaService) {}
 
 
   @Query(() => FolderListResponse)
@@ -35,6 +33,7 @@ export class ListFolderService {
         contains: listFolderInput?.name || undefined,
         mode: 'insensitive',
       },
+      parentId: null,
       deletedAt: listFolderInput?.fromStash
         ? {
             not: {

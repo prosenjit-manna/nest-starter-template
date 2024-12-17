@@ -13,10 +13,21 @@ export class GetFolderService {
     @Args('getFolderInput') getFolderInput: GetFolderInput,
   ) {
 
-    return await this.prisma.folder.findUnique({
+    const folder =  await this.prisma.folder.findUnique({
       where: {
         id: getFolderInput.id,
+      },
+      include: {
+        parent: true,
       }
     });
+
+    const subFolders = await this.prisma.folder.findMany({
+      where: {
+        parentId: folder?.id,
+      },
+    });
+
+    return {...folder, subFolders};
   }
 }
