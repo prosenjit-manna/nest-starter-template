@@ -250,6 +250,20 @@ type CreateFolderResponse {
   parentId: String
 }
 
+type FolderResponse {
+  name: String!
+  id: String!
+  parentId: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type FolderListResponse {
+  folder: [FolderResponse!]!
+  pagination: BaseListResponse!
+}
+
 type Query {
   login(loginInput: LoginInput!): LoginResponse!
   rateLimitGlobal: String!
@@ -265,7 +279,7 @@ type Query {
   listMedia(listMediaInput: ListMediaInput): ListMediaResponse!
   getFile(getFileInput: GetFileInput): GetFileResponse
   getFolder: String!
-  listFolder: String!
+  listFolder(listFolderInput: ListFolderInput): FolderListResponse!
 }
 
 input LoginInput {
@@ -361,6 +375,22 @@ enum mediaOrderByField {
 input GetFileInput {
   id: String!
   fromStash: Boolean
+}
+
+input ListFolderInput {
+  page: Int
+  pageSize: Int
+  orderBy: Order = DESC
+  fromStash: Boolean = false
+  name: String
+  orderByField: FolderOrderByField = id
+}
+
+enum FolderOrderByField {
+  id
+  title
+  authorId
+  published
 }
 
 type Mutation {
