@@ -13,7 +13,7 @@ type RoleResponse {
   title: String!
   name: String!
   id: String!
-  description: String!
+  description: String
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
