@@ -244,6 +244,12 @@ type GetFileResponse {
   resizeImages: [GetFileResponse!]
 }
 
+type CreateFolderResponse {
+  id: String!
+  name: String!
+  parentId: String
+}
+
 type Query {
   login(loginInput: LoginInput!): LoginResponse!
   rateLimitGlobal: String!
@@ -381,7 +387,7 @@ type Mutation {
   updateProfile(updateProfileInput: UpdateProfileInput): UpdateProfileResponse!
   deleteFile(fileDeleteInput: FileDeleteInput): Boolean!
   resizeFile(resizeFileInput: ResizeFileInput): JSON!
-  createFolder: String!
+  createFolder(createFolderInput: CreateFolderInput): CreateFolderResponse!
   deleteFolder: String!
 }
 
@@ -512,4 +518,9 @@ input ImageResizeOptions {
   height: Int!
   left: Int!
   top: Int!
+}
+
+input CreateFolderInput {
+  name: String!
+  parentId: String
 }
