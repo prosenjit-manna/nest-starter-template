@@ -13,6 +13,7 @@ type RoleResponse {
   title: String!
   name: String!
   id: String!
+  description: String!
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
@@ -64,6 +65,7 @@ type RolePrivilegeResponse {
 type RoleGetResponse {
   title: String!
   name: String!
+  description: String
   id: String!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -243,6 +245,8 @@ type GetFileResponse {
 }
 
 type Query {
+  login(loginInput: LoginInput!): LoginResponse!
+  rateLimitGlobal: String!
   listWorkSpace(listWorkspaceInput: ListWorkSpaceInput): ListWorkSpaceResponse!
   listMemberships(listMembershipsInput: ListMembershipInput!): ListMembershipResponse!
   roleList(roleListInput: RoleListInput): RoleListResponse!
@@ -256,7 +260,11 @@ type Query {
   getFile(getFileInput: GetFileInput): GetFileResponse
   getFolder: String!
   listFolder: String!
-  login(loginInput: LoginInput!): LoginResponse!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 input ListWorkSpaceInput {
@@ -349,12 +357,14 @@ input GetFileInput {
   fromStash: Boolean
 }
 
-input LoginInput {
-  email: String!
-  password: String!
-}
-
 type Mutation {
+  requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
+  resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
+  signup(signupInput: SignupInput!): SignupResponse!
+  verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
+  refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
+  rateLimitSkip: String!
+  rateLimitCustomize: String!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): CreateWorkspaceResponse!
   updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): UpdateWorkspaceResponse!
   deleteWorkSpace(deleteWorkspaceInput: WorkspaceDeleteInput): Boolean!
@@ -373,11 +383,28 @@ type Mutation {
   resizeFile(resizeFileInput: ResizeFileInput): JSON!
   createFolder: String!
   deleteFolder: String!
-  requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
-  resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
-  signup(signupInput: SignupInput!): SignupResponse!
-  verifyEmail(verifyEmailInput: VerifyEmailInput!): VerifyEmailResponse!
-  refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): VerifyEmailResponse!
+}
+
+input PasswordResetRequestInput {
+  email: String!
+}
+
+input PasswordResetInput {
+  password: String!
+}
+
+input SignupInput {
+  name: String
+  email: String!
+  password: String!
+}
+
+input VerifyEmailInput {
+  token: String!
+}
+
+input RefreshAccessTokenInput {
+  refreshToken: String!
 }
 
 input CreateWorkspaceInput {
@@ -481,28 +508,8 @@ input ResizeFileInput {
 }
 
 input ImageResizeOptions {
-  width: Int
-  height: Int
-}
-
-input PasswordResetRequestInput {
-  email: String!
-}
-
-input PasswordResetInput {
-  password: String!
-}
-
-input SignupInput {
-  name: String
-  email: String!
-  password: String!
-}
-
-input VerifyEmailInput {
-  token: String!
-}
-
-input RefreshAccessTokenInput {
-  refreshToken: String!
+  width: Int!
+  height: Int!
+  left: Int!
+  top: Int!
 }

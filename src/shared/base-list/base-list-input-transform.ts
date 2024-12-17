@@ -1,4 +1,4 @@
-import { appConfig } from 'src/app.config';
+import appEnv from 'src/env';
 
 export function paginationInputTransformer(options: {
   page?: number;
@@ -7,7 +7,7 @@ export function paginationInputTransformer(options: {
 }): { skip: number; page: number; perPage: number, totalPage: number} {
   let skip = 0;
   const page = Number(options?.page) || 0;
-  const perPage = Number(options?.pageSize) || appConfig.pageSize;
+  const perPage = Number(options?.pageSize) || appEnv.PAGE_SIZE;
 
   if (page > 0) {
     skip = (page - 1) * perPage;

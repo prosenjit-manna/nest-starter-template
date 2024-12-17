@@ -7,6 +7,7 @@ import * as path from 'path';
 import { File } from '@prisma/client';
 import * as sharp from 'sharp';
 
+
 @Injectable()
 export class FileService {
   constructor(
@@ -67,7 +68,7 @@ export class FileService {
   }
 
 
-  async resizeFile(file: File, resizeInput: sharp.ResizeOptions) {
+  async resizeFile(file: File, resizeInput: sharp.Region) {
 
     const originalFilePath = join(process.cwd(), 'public',file.url);
 
@@ -75,6 +76,15 @@ export class FileService {
     const basePath = originalFilePath.replace(extension, '');
 
     let filePath = '';
+
+    if (resizeInput.left) {
+      filePath += 'x-' + resizeInput.left;
+    }
+
+    if (resizeInput.top) {
+      filePath += 'y-' + resizeInput.top;
+    }
+
     if (resizeInput.width) {
       filePath += 'w-' + resizeInput.width;
     }
@@ -86,7 +96,7 @@ export class FileService {
     }
 
     const newFilePath = `${basePath}${filePath ? '-' + filePath : ''}${extension}`;
-    await sharp(originalFilePath).resize(resizeInput).toFile(newFilePath);
+    await sharp(originalFilePath).extract(resizeInput).toFile(newFilePath);
     return newFilePath.replace(join(process.cwd(), 'public'), '');
   }
 }

@@ -13,11 +13,26 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { WorkspaceModule } from './workspace/workspace.module';
 import { MediaModule } from './media/media.module';
+import { ThrottleTestModule } from './throttle-test/throttle-test.module';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { GqlThrottlerGuard } from './auth/throttler.guard';
+import appEnv from './env';
 
 @Module({
   imports: [
     SentryModule.forRoot(),
     PrismaModule,
+    ThrottlerModule.forRootAsync({
+      useFactory: () => [
+        {
+          ttl: appEnv.THROTTLE_TTL,
+          limit: appEnv.THROTTLE_LIMIT,
+        },
+      ],
+    }), 
+    AuthModule,
+    ThrottleTestModule,
     WorkspaceModule,
     RoleModule,
     PostModule,
@@ -31,12 +46,17 @@ import { MediaModule } from './media/media.module';
       csrfPrevention: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
-    AuthModule,
-
+    
     // Always place to bottom
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: GqlThrottlerGuard,
+    },
   ],
 })
 export class AppModule {}
