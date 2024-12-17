@@ -22,12 +22,10 @@ export class ListFolderService {
     @Context('req') req: Request,
     @Args('listFolderInput', { nullable: true }) listFolderInput: ListFolderInput,
   ): Promise<FolderListResponse> {
-
-    const currentWorkspaceId = req.currentWorkspaceId;
-
+    
     let queryObject: Prisma.FolderWhereInput = {
       workspaceId: {
-        equals: currentWorkspaceId,
+        equals: req.currentWorkspaceId,
       },
       name: {
         contains: listFolderInput?.name || undefined,
