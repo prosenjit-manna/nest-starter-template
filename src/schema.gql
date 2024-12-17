@@ -250,6 +250,15 @@ type CreateFolderResponse {
   parentId: String
 }
 
+type GetFolderResponse {
+  name: String!
+  id: String!
+  parentId: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
 type FolderResponse {
   name: String!
   id: String!
@@ -278,7 +287,7 @@ type Query {
   currentUser: CurrentUserResponse!
   listMedia(listMediaInput: ListMediaInput): ListMediaResponse!
   getFile(getFileInput: GetFileInput): GetFileResponse
-  getFolder: String!
+  getFolder(getFolderInput: GetFolderInput!): GetFolderResponse!
   listFolder(listFolderInput: ListFolderInput): FolderListResponse!
 }
 
@@ -375,6 +384,10 @@ enum mediaOrderByField {
 input GetFileInput {
   id: String!
   fromStash: Boolean
+}
+
+input GetFolderInput {
+  id: String!
 }
 
 input ListFolderInput {
