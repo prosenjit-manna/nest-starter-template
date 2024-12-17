@@ -14,7 +14,7 @@ model Folder {
   files File[] @relation("fileFolderRelation")
 
   authorId String
-  author   User   @relation(name: "FolderUserRelation", fields: [authorId], references: [id])
+  author   User   @relation(name: "FolderUserRelation", fields: [authorId], references: [id], onDelete: Cascade)
 
   workspaceId String?
   workspace   Workspace? @relation(name: "workspaceIdFolderRelation", fields: [workspaceId], references: [id], onDelete: Cascade)

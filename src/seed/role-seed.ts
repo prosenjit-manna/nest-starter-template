@@ -16,7 +16,7 @@ export async function roleSeed() {
 
   // create privileges data
   const privilegeData: Prisma.PrivilegeCreateManyInput | Prisma.PrivilegeCreateManyInput[] = [];
-  const models = [PrivilegeGroup.POST, PrivilegeGroup.USER, PrivilegeGroup.ROLE, PrivilegeGroup.WORKSPACE, PrivilegeGroup.MEMBERSHIP];
+  const models = [PrivilegeGroup.POST, PrivilegeGroup.USER, PrivilegeGroup.ROLE, PrivilegeGroup.WORKSPACE, PrivilegeGroup.MEMBERSHIP, PrivilegeGroup.MEDIA];
   models.forEach((model) => {
     [PrivilegeName.CREATE, PrivilegeName.DELETE, PrivilegeName.UPDATE, PrivilegeName.READ].forEach((name) => {
       privilegeData.push({
