@@ -22,6 +22,20 @@ export class AssignRoleService {
     @Args('assignRoleInput') assignRoleInput: AssignRoleInput,
   ): Promise<AssignRoleResponse> {
 
+    const role = await this.prismaService.role.findUnique({
+      where: {
+        id: assignRoleInput.roleId,
+        deletedAt: null,
+      },
+    });
+
+    if (!role) {
+      throw new CreateAppError({
+        message: 'Role not found',
+        httpStatus: HttpStatus.NOT_FOUND,
+      });
+    }
+
     // Logic to assign role to user
 
     // 1: if already role exists for current user then don't create a new row instead show a message that role already exists
