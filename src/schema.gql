@@ -13,7 +13,7 @@ type RoleResponse {
   title: String!
   name: String!
   id: String!
-  description: String!
+  description: String
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
@@ -245,6 +245,36 @@ type GetFileResponse {
   resizeImages: [GetFileResponse!]
 }
 
+type CreateFolderResponse {
+  id: String!
+  name: String!
+  parentId: String
+}
+
+type GetFolderResponse {
+  name: String!
+  id: String!
+  parentId: String
+  subFolders: [GetFolderResponse!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type FolderResponse {
+  name: String!
+  id: String!
+  parentId: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type FolderListResponse {
+  folder: [FolderResponse!]!
+  pagination: BaseListResponse!
+}
+
 type Query {
   login(loginInput: LoginInput!): LoginResponse!
   rateLimitGlobal: String!
@@ -259,6 +289,8 @@ type Query {
   currentUser: CurrentUserResponse!
   listMedia(listMediaInput: ListMediaInput): ListMediaResponse!
   getFile(getFileInput: GetFileInput): GetFileResponse
+  getFolder(getFolderInput: GetFolderInput!): GetFolderResponse!
+  listFolder(listFolderInput: ListFolderInput): FolderListResponse!
 }
 
 input LoginInput {
@@ -356,6 +388,26 @@ input GetFileInput {
   fromStash: Boolean
 }
 
+input GetFolderInput {
+  id: String!
+}
+
+input ListFolderInput {
+  page: Int
+  pageSize: Int
+  orderBy: Order = DESC
+  fromStash: Boolean = false
+  name: String
+  orderByField: FolderOrderByField = id
+}
+
+enum FolderOrderByField {
+  id
+  title
+  authorId
+  published
+}
+
 type Mutation {
   requestPasswordReset(passwordReset: PasswordResetRequestInput!): PassWordResetRequestResponse!
   resetPassword(resetPassword: PasswordResetInput!): PassWordResetResponse!
@@ -381,6 +433,9 @@ type Mutation {
   updateProfile(updateProfileInput: UpdateProfileInput): UpdateProfileResponse!
   deleteFile(fileDeleteInput: FileDeleteInput): Boolean!
   resizeFile(resizeFileInput: ResizeFileInput): JSON!
+  createFolder(createFolderInput: CreateFolderInput): CreateFolderResponse!
+  deleteFolder(folderDeleteInput: DeleteFolderInput): Boolean!
+  updateFolder(updateFolderInput: UpdateFolderInput!): Boolean!
 }
 
 input PasswordResetRequestInput {
@@ -515,4 +570,20 @@ input ImageResizeOptions {
   height: Int!
   left: Int!
   top: Int!
+}
+
+input CreateFolderInput {
+  name: String!
+  parentId: String
+}
+
+input DeleteFolderInput {
+  id: String!
+  fromStash: Boolean
+}
+
+input UpdateFolderInput {
+  id: String!
+  name: String
+  parentId: String
 }

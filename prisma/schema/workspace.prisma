@@ -13,6 +13,7 @@ model Workspace {
   workspaceMembership WorkspaceMembership[] @relation(name: "workspaceIdMembershipRelation")
   post                Role[]                @relation(name: "workSpaceRoles")
   media               File[]                @relation(name: "workspaceIdFileRelation")
+  folder              Folder[]              @relation(name: "workspaceIdFolderRelation")
   roles               Post[]                @relation(name: "workspaceIdPostRelation")
   postCategory        Category[]            @relation(name: "workspaceIdCategoryRelation")
   postTag             Tag[]                 @relation(name: "workspaceIdTagRelation")

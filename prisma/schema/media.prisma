@@ -11,16 +11,18 @@ model Folder {
   parent     Folder?  @relation("folderRelation", fields: [parentId], references: [id])
   subFolders Folder[] @relation("folderRelation")
 
-  files File[]
+  files File[] @relation("fileFolderRelation")
 
   authorId String
-  author   User   @relation(name: "FolderUserRelation", fields: [authorId], references: [id])
+  author   User   @relation(name: "FolderUserRelation", fields: [authorId], references: [id], onDelete: Cascade)
+
+  workspaceId String?
+  workspace   Workspace? @relation(name: "workspaceIdFolderRelation", fields: [workspaceId], references: [id], onDelete: Cascade)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  @@unique([name, parentId]) // Prevent duplicate folder names under the same parent
 }
 
 model File {
@@ -37,7 +39,7 @@ model File {
   mimeType String // MIME type (e.g., "image/png", "application/pdf")
   url      String // Path or URL to the file
   folderId String?
-  folder   Folder? @relation(fields: [folderId], references: [id])
+  folder   Folder? @relation(name: "fileFolderRelation", fields: [folderId], references: [id])
 
   accessLevel AccessLevel? @default(RESTRICTED)
 
