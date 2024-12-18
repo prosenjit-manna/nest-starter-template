@@ -57,6 +57,19 @@ export class LoginService {
       throw new Error('Account not verified');
     }
 
+    const timeDifference = Math.round(
+      (new Date().getTime() - new Date(user.loginAttemptTime || '').getTime()) /
+        (1000 * 60),
+    );
+
+    const accountLock = timeDifference <= appEnv.ACCOUNT_LOCK_TIME;
+
+    if (user.failedLoginCount >= appEnv.ACCOUNT_LOCK_ATTEMPT && accountLock) {
+      throw new Error(
+        `Maximum retry count reached. Please try after ${appEnv.ACCOUNT_LOCK_TIME - timeDifference ? appEnv.ACCOUNT_LOCK_TIME - timeDifference : 1} minutes!`,
+      );
+    }
+
     const isPasswordValid = await bcrypt.compare(
       loginInput.password,
       String(user?.password),
@@ -71,19 +84,6 @@ export class LoginService {
         },
       });
       throw new Error('Invalid email or password');
-    }
-
-    const timeDifference = Math.round(
-      (new Date().getTime() - new Date(user.loginAttemptTime || '').getTime()) /
-        (1000 * 60),
-    );
-
-    const accountLock = timeDifference <= appEnv.ACCOUNT_LOCK_TIME;
-
-    if (user.failedLoginCount >= appEnv.ACCOUNT_LOCK_ATTEMPT && accountLock) {
-      throw new Error(
-        `Maximum retry count reached. Please try after ${appEnv.ACCOUNT_LOCK_TIME - timeDifference ? appEnv.ACCOUNT_LOCK_TIME - timeDifference : 1} minutes!`,
-      );
     }
 
     if (appEnv.OTP_FEATURE === true) {

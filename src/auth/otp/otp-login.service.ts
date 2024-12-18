@@ -36,17 +36,6 @@ export class OtpLoginService {
       throw new Error('Account not verified');
     }
 
-    if (user.code !== otpLoginInput.otp) {
-      await this.prisma.user.update({
-        where: { email: user.email },
-        data: {
-          failedLoginCount: user.failedLoginCount + 1,
-          loginAttemptTime: new Date(),
-        },
-      });
-      throw new Error('Invalid otp');
-    }
-
     const timeDifference = Math.round(
       (new Date().getTime() - new Date(user.loginAttemptTime || '').getTime()) /
         (1000 * 60),
@@ -58,6 +47,17 @@ export class OtpLoginService {
       throw new Error(
         `Maximum retry count reached. Please try after ${appEnv.ACCOUNT_LOCK_TIME - timeDifference ? appEnv.ACCOUNT_LOCK_TIME - timeDifference : 1} minutes!`,
       );
+    }
+
+    if (user.code !== otpLoginInput.otp) {
+      await this.prisma.user.update({
+        where: { email: user.email },
+        data: {
+          failedLoginCount: user.failedLoginCount + 1,
+          loginAttemptTime: new Date(),
+        },
+      });
+      throw new Error('Invalid otp');
     }
 
     const { token, expiryDate, refreshToken } =
