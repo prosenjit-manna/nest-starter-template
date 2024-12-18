@@ -1,8 +1,6 @@
 import { cleanEnv, str, email, num, bool } from 'envalid';
 
 export const appEnv = cleanEnv(process.env, {
-
-
   DATABASE_URL: str({
     default:
       'postgresql://nodeProdUser:postgresPasswword@localhost:5433/nest_starter',
@@ -24,6 +22,9 @@ export const appEnv = cleanEnv(process.env, {
   FRONTEND_URL: str({ default: 'http://localhost:3020' }),
   ACCESS_TOKEN_EXPIRY: str({ default: '30m' }),
   REFRESH_TOKEN_EXPIRY: num({ default: 7 }),
+  OTP_FEATURE: bool({ default: false }),
+  ACCOUNT_LOCK_TIME: num({ desc: 'Account lock time, in Min', default: 30 }),
+  ACCOUNT_LOCK_ATTEMPT: num({ desc: 'Account lock attempts', default: 5 }),
 
   // SMTP
   SMTP_HOST: str({ desc: 'SMTP HOST' }),
@@ -58,7 +59,7 @@ export const appEnv = cleanEnv(process.env, {
   THROTTLE_TTL: num({ default: 60000 }),
   THROTTLE_LIMIT: num({ default: 50 }),
 
-  // Pagination 
+  // Pagination
   PAGE_SIZE: num({ default: 10 }),
 });
 
