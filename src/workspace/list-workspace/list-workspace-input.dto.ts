@@ -3,7 +3,7 @@ import { BaseListInput } from 'src/shared/base-list/base-list-input.dto';
 
 export enum WorkSpaceOrderByField {
   createdAt = 'createdAt',
-  name = 'title',
+  name = 'name',
 }
 
 registerEnumType(WorkSpaceOrderByField, {
