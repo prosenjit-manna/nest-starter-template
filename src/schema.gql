@@ -303,7 +303,7 @@ input ListWorkSpaceInput {
   orderBy: Order = DESC
   fromStash: Boolean = false
   name: String
-  authorId: Int
+  authorId: String
   orderByField: workspaceOrderByField = createdAt
 }
 
