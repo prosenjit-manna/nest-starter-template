@@ -58,6 +58,7 @@ export class LoginService {
       throw new Error('Account not verified');
     }
 
+    // time difference in minutes between the current time and the user's last login attempt time.
     const timeDifference = Math.round(
       (new Date().getTime() - new Date(user.loginAttemptTime || '').getTime()) /
         (1000 * 60),

@@ -29,13 +29,14 @@ export class OtpLoginService {
     });
 
     if (!user) {
-      throw new Error('Invalid email or password');
+      throw new Error('Invalid email or OTP');
     }
 
     if (!user.isVerified) {
       throw new Error('Account not verified');
     }
 
+    // time difference in minutes between the current time and the user's last login attempt time.
     const timeDifference = Math.round(
       (new Date().getTime() - new Date(user.loginAttemptTime || '').getTime()) /
         (1000 * 60),
@@ -57,7 +58,7 @@ export class OtpLoginService {
           loginAttemptTime: new Date(),
         },
       });
-      throw new Error('Invalid otp');
+      throw new Error('Invalid email or OTP');
     }
 
     const { token, expiryDate, refreshToken } = await this.tokenService.generateToken(user);
