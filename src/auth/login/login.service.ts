@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import appEnv from 'src/env';
 import { codeGenerator } from 'src/shared/helper/codeGenerator';
 import { MailerService } from 'src/mailer/mailer.service';
+import { CreateAppError } from 'src/shared/create-error/create-error';
 
 @Resolver()
 export class LoginService {
@@ -25,7 +26,7 @@ export class LoginService {
           email,
         },
         data: {
-          code: otp,
+          twoFactorOtp: otp,
         },
       });
       return otp;
@@ -106,15 +107,11 @@ export class LoginService {
           refreshToken: null,
         };
       } catch (error) {
-        return {
-          message:
-            'OTP email is not sent successfully. Please try to login again',
-        };
+       throw new CreateAppError({ message: error.message });
       }
     }
 
-    const { token, expiryDate, refreshToken } =
-      await this.tokenService.generateToken(user);
+    const { token, expiryDate, refreshToken } = await this.tokenService.generateToken(user);
 
     await this.prisma.session.create({
       data: {
@@ -140,7 +137,7 @@ export class LoginService {
       data: {
         failedLoginCount: 0,
         loginAttemptTime: new Date(),
-        code: null,
+        twoFactorOtp: null,
       },
     });
 

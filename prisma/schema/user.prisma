@@ -14,7 +14,7 @@ model User {
   email            String    @unique
   name             String?
   profileImage     String?
-  code             Int?
+  twoFactorOtp     Int?
   failedLoginCount Int       @default(0)
   loginAttemptTime DateTime?
 

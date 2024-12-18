@@ -14,7 +14,7 @@ export class OtpLoginService {
   ) {}
 
   @Mutation(() => LoginResponse)
-  async otpLogin(
+  async verifyOtp(
     @Context('req') req: Request,
     @Args('otpLoginInput')
     otpLoginInput: OtpLoginInput,
@@ -49,7 +49,7 @@ export class OtpLoginService {
       );
     }
 
-    if (user.code !== otpLoginInput.otp) {
+    if (user.twoFactorOtp !== otpLoginInput.otp) {
       await this.prisma.user.update({
         where: { email: user.email },
         data: {
@@ -60,8 +60,7 @@ export class OtpLoginService {
       throw new Error('Invalid otp');
     }
 
-    const { token, expiryDate, refreshToken } =
-      await this.tokenService.generateToken(user);
+    const { token, expiryDate, refreshToken } = await this.tokenService.generateToken(user);
 
     await this.prisma.session.create({
       data: {
@@ -87,7 +86,7 @@ export class OtpLoginService {
       data: {
         failedLoginCount: 0,
         loginAttemptTime: new Date(),
-        code: null,
+        twoFactorOtp: null,
       },
     });
 
