@@ -16,3 +16,16 @@
 - Create .env file and add required variables 
 - once you start dev server in console required variables will be listed 
 
+
+
+## Sonar Analysis 
+docker run --name sonarqube-custom -p 9000:9000 sonarqube:community
+docker run \
+    --rm \
+    -e SONAR_HOST_URL="http://${SONARQUBE_URL}"  \
+    -e SONAR_TOKEN="myAuthenticationToken" \
+    -v "${YOUR_REPO}:/usr/src" \
+    sonarsource/sonar-scanner-cli
+
+
+ 

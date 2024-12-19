@@ -1,4 +1,8 @@
 {
   "cSpell.words": ["TESTINATOR"],
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "sonarlint.connectedMode.project": {
+    "connectionId": "localhost",
+    "projectKey": "nest-starter-backend"
+  }
 }
