@@ -6,7 +6,7 @@ import appEnv from 'src/env';
 export class ThrottleTestGraphqlService {
   @Query(() => String)
   rateLimitGlobal(): string {
-    return `has rate limit per  ${(appEnv.THROTTLE_TTL/ 1000/ 60)} min ${appEnv.THROTTLE_LIMIT}`;
+    return `has rate limit. per  ${(appEnv.THROTTLE_TTL/ 1000/ 60)} min ${appEnv.THROTTLE_LIMIT} request`;
   }
 
   @SkipThrottle()
