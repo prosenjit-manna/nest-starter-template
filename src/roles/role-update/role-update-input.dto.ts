@@ -1,7 +1,7 @@
 import { Field, InputType, registerEnumType } from '@nestjs/graphql';
 import { RoleName } from '@prisma/client'; // Assuming Prisma is properly set up
 import { Transform } from 'class-transformer';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
 // Register the RoleName enum for GraphQL
 registerEnumType(RoleName, {
@@ -18,13 +18,15 @@ export class RoleUpdateInput {
   @IsNotEmpty()
   title: string;
 
-  @Field(() => RoleName, { defaultValue: RoleName.CUSTOM })
-  name: RoleName;
+  @Field(() => String, { nullable: true })
+  @Transform(({ value }) => value?.trim() || null)
+  @IsOptional()
+  @MaxLength(255)
+  description: string | null;
 
   @Field(() => [String])
   createPrivileges: string[];
 
   @Field(() => [String])
   removePrivileges: string[];
-  
 }

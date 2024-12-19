@@ -22,9 +22,6 @@ export class RoleCreateInput {
   @MaxLength(255)
   description: string | null;
 
-  @Field(() => RoleName, { defaultValue: RoleName.CUSTOM })
-  name: RoleName;
-
   @Field(() => [String])
   privileges: string[];
 }

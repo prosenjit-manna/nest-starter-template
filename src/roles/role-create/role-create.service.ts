@@ -30,7 +30,6 @@ export class RoleCreateService {
   ): Promise<RoleCreateResponse> {
     const role = await this.prisma.role.create({
       data: {
-        name: roleCreateInput.name,
         title: roleCreateInput.title,
         description: roleCreateInput.description,
         workspaceId: req.currentWorkspaceId,

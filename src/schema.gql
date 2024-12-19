@@ -492,21 +492,13 @@ input AcceptInvitationInput {
 input RoleCreateInput {
   title: String!
   description: String
-  name: RoleName! = CUSTOM
   privileges: [String!]!
-}
-
-enum RoleName {
-  SUPER_ADMIN
-  ADMIN
-  USER
-  CUSTOM
 }
 
 input RoleUpdateInput {
   id: String!
   title: String!
-  name: RoleName! = CUSTOM
+  description: String
   createPrivileges: [String!]!
   removePrivileges: [String!]!
 }

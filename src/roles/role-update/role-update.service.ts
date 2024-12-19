@@ -25,6 +25,7 @@ export class RoleUpdateService {
       },
       data: {
         title: roleUpdateInput.title,
+        description: roleUpdateInput.description,
       },
     });
 
