@@ -56,8 +56,10 @@ export const appEnv = cleanEnv(process.env, {
 
   PRISMA_DEBUG: bool({ default: false }),
 
+  // Rate Limit 
   THROTTLE_TTL: num({ default: 60000 }),
   THROTTLE_LIMIT: num({ default: 50 }),
+  RATE_LIMIT_ENABLED: bool({ default: true }),
 
   // Pagination
   PAGE_SIZE: num({ default: 10 }),

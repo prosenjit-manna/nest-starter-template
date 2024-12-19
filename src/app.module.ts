@@ -14,7 +14,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { WorkspaceModule } from './workspace/workspace.module';
 import { MediaModule } from './media/media.module';
 import { ThrottleTestModule } from './throttle-test/throttle-test.module';
-import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { GqlThrottlerGuard } from './auth/throttler.guard';
 import appEnv from './env';
@@ -23,14 +23,14 @@ import appEnv from './env';
   imports: [
     SentryModule.forRoot(),
     PrismaModule,
-    ThrottlerModule.forRootAsync({
-      useFactory: () => [
+    ...(appEnv.RATE_LIMIT_ENABLED ? [ThrottlerModule.forRootAsync({
+      useFactory: (): ThrottlerModuleOptions => ([
         {
           ttl: appEnv.THROTTLE_TTL,
           limit: appEnv.THROTTLE_LIMIT,
         },
-      ],
-    }), 
+      ]),
+    })] : []),
     AuthModule,
     ThrottleTestModule,
     WorkspaceModule,
