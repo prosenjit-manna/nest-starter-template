@@ -1,6 +1,12 @@
 name: nest-starter
 version: '3.7'
 services:
+  mailhog:
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - 1025:1025
+      - 8025:8025
   postgres:
       image: postgres:15.4
       volumes:

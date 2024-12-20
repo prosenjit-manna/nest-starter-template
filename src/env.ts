@@ -27,11 +27,11 @@ export const appEnv = cleanEnv(process.env, {
   ACCOUNT_LOCK_ATTEMPT: num({ desc: 'Account lock attempts', default: 5 }),
 
   // SMTP
-  SMTP_HOST: str({ desc: 'SMTP HOST' }),
-  SMTP_USER: str({ desc: 'SMTP User' }),
-  SMTP_PASSWORD: str({ desc: 'SMTP Password' }),
-  SMTP_PORT: num({ desc: 'SMTP Port' }),
-  SMTP_SENDER: str({ desc: 'Sender Email' }),
+  SMTP_HOST: str({ desc: 'SMTP HOST', default: 'localhost' }),
+  SMTP_USER: str({ desc: 'SMTP User', default: 'test' }),
+  SMTP_PASSWORD: str({ desc: 'SMTP Password', default: 'test' }),
+  SMTP_PORT: num({ desc: 'SMTP Port', default: 1025 }),
+  SMTP_SENDER: str({ desc: 'Sender Email', default: 'nest-starter@example.com' }),
 
   //  Mail sending
   MAIL_FROM_USER: str({ desc: 'Mail from user' }),
