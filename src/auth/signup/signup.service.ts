@@ -8,7 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import { VerifyRegisterEmailContent } from './verify-register-email-content.interface';
 import appEnv from 'src/env';
-import { RoleName } from '@prisma/client';
+import { RoleType } from '@prisma/client';
 
 @Injectable()
 export class SignupService {
@@ -46,7 +46,7 @@ export class SignupService {
     });
 
     const userRole = await this.prisma.role.findFirst({
-      where: { name: RoleName.USER },
+      where: { type: RoleType.USER },
     });
   
   

@@ -1,4 +1,4 @@
-import { PrismaClient, RoleName, UserType } from '@prisma/client';
+import { PrismaClient, RoleType, UserType } from '@prisma/client';
 import appEnv from 'src/env';
 const prismaClient = new PrismaClient();
 import * as bcrypt from 'bcrypt';
@@ -13,7 +13,7 @@ export async function userSeed() {
 
   // get admin roles 
   const superAdminRole = await prismaClient.role.findFirst({
-    where: { name: RoleName.SUPER_ADMIN },
+    where: { type: RoleType.SUPER_ADMIN },
   });
 
 
@@ -65,7 +65,7 @@ export async function userSeed() {
 
   // get admin roles
   const adminRole = await prismaClient.role.findFirst({
-    where: { name: RoleName.ADMIN },
+    where: { type: RoleType.ADMIN },
   });
 
   // Get Admin User
@@ -102,7 +102,7 @@ export async function userSeed() {
   
   // get user role
   const userRole = await prismaClient.role.findFirst({
-    where: { name: RoleName.USER },
+    where: { type: RoleType.USER },
   });
 
   // Get  Users

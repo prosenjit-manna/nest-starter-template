@@ -18,7 +18,7 @@ enum PrivilegeGroup {
   MEDIA
 }
 
-enum RoleName {
+enum RoleType {
   SUPER_ADMIN
   ADMIN
   USER
@@ -38,7 +38,7 @@ model Privilege {
 
 model Role {
   id          String          @id @default(uuid())
-  name        RoleName        @default(USER)
+  type        RoleType        @default(USER)
   title       String
   description String?
   workspace   Workspace?      @relation(name: "workSpaceRoles", fields: [workspaceId], references: [id], onDelete: Cascade)
