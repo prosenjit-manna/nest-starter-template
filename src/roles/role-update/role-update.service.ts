@@ -1,4 +1,4 @@
-import { SetMetadata, UseGuards } from '@nestjs/common';
+import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { PrivilegeGroup, PrivilegeName, RoleType, UserType } from '@prisma/client';
@@ -28,6 +28,13 @@ export class RoleUpdateService {
         id: roleUpdateInput.id,
       },
     });
+
+      if (!role) {
+        throw new CreateAppError({
+          message: 'Role not found',
+          httpStatus: HttpStatus.NOT_FOUND,
+        });
+      }
 
     if (req.user?.userType !== UserType.SUPER_ADMIN && role?.type !== RoleType.CUSTOM) {
       throw new CreateAppError({ message: 'You are not allowed to update this role. Only Custom role can be modified.'});

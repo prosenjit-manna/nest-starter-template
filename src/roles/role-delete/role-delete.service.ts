@@ -1,10 +1,12 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Request } from 'express';
+import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
+import { PrivilegeGroup, PrivilegeName, RoleType, UserType } from '@prisma/client';
+
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppError } from 'src/shared/create-error/create-error';
-import { HttpStatus, SetMetadata, UseGuards } from '@nestjs/common';
 import { RoleDeleteInput } from './role-delete-input.dto';
 import { RoleGuard } from 'src/auth/role.guard';
-import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
@@ -17,19 +19,25 @@ export class RoleDeleteService {
   @SetMetadata('privilegeGroup', PrivilegeGroup.ROLE)
   @SetMetadata('privilegeName', PrivilegeName.DELETE)
   async deleteRole(
-    @Args('roleDeleteInput', { nullable: true })
-    roleDeleteInput: RoleDeleteInput,
+    @Args('roleDeleteInput', { nullable: true }) roleDeleteInput: RoleDeleteInput,
+    @Context('req') req: Request,
   ): Promise<boolean> {
 
     const role = await this.prismaService.role.findUnique({
       where: { id: roleDeleteInput.id, deletedAt: roleDeleteInput.fromStash ? { not: null } : null },
     });
 
+   
+
     if (!role) {
       throw new CreateAppError({
         message: 'Role not found',
         httpStatus: HttpStatus.NOT_FOUND,
       });
+    }
+
+    if (req.user?.userType !== UserType.SUPER_ADMIN && role?.type !== RoleType.CUSTOM) {
+      throw new CreateAppError({ message: 'You are not allowed to delete this role. Only Custom role can be deleted.'});
     }
 
     try {
