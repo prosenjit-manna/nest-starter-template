@@ -1,7 +1,7 @@
 import { SetMetadata, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { Args, Context, Query, Resolver } from '@nestjs/graphql';
-import { Prisma, PrivilegeGroup, PrivilegeName } from '@prisma/client';
+import { $Enums, Prisma, PrivilegeGroup, PrivilegeName, RoleType, UserType } from '@prisma/client';
 
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RoleListResponse } from './role-list.response.dto';
@@ -30,11 +30,23 @@ export class RoleListService {
     @Context('req') req: Request,
   ): Promise<RoleListResponse> {
     
+    let roleTypeQuery: $Enums.RoleType[] | Prisma.FieldRef<"Role", "RoleType[]"> | undefined = [];
+
+    if (req?.user?.userType === UserType.SUPER_ADMIN) {
+      roleTypeQuery = [RoleType.SUPER_ADMIN, RoleType.ADMIN, RoleType.USER, RoleType.CUSTOM];
+    }
+
+    if (req?.user?.userType === UserType.ADMIN) {
+      roleTypeQuery = [RoleType.ADMIN, RoleType.USER, RoleType.CUSTOM];
+    }
     
     const queryObject: Prisma.RoleWhereInput = {
       title: {
         contains: roleListInput?.title || undefined,
         mode: 'insensitive',
+      },
+      type: {
+        in: roleTypeQuery
       },
       deletedAt: roleListInput?.fromStash ? {
         not: {

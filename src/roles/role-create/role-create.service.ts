@@ -1,7 +1,7 @@
 import { SetMetadata, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import { PrivilegeGroup, PrivilegeName } from '@prisma/client';
+import { PrivilegeGroup, PrivilegeName, RoleType, UserType } from '@prisma/client';
 
 import { RoleCreateResponse } from './role-create-response.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -33,6 +33,7 @@ export class RoleCreateService {
         title: roleCreateInput.title,
         description: roleCreateInput.description,
         workspaceId: req.currentWorkspaceId,
+        type: req?.user?.userType === UserType.SUPER_ADMIN ? RoleType.ADMIN : RoleType.CUSTOM,
       },
     });
 
