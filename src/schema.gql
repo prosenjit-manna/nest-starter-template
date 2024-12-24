@@ -11,7 +11,7 @@ type BaseListResponse {
 
 type RoleResponse {
   title: String!
-  name: String!
+  type: String!
   id: String!
   description: String
   createdAt: DateTime!
