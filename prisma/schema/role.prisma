@@ -38,7 +38,7 @@ model Privilege {
 
 model Role {
   id          String          @id @default(uuid())
-  type        RoleType        @default(USER)
+  type        RoleType        @default(CUSTOM)
   title       String
   description String?
   workspace   Workspace?      @relation(name: "workSpaceRoles", fields: [workspaceId], references: [id], onDelete: Cascade)
