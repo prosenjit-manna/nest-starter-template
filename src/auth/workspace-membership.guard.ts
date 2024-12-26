@@ -1,12 +1,11 @@
 import { CanActivate, ExecutionContext, HttpStatus, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { GqlExecutionContext } from "@nestjs/graphql";
 import { WorkspaceMembership } from "@prisma/client";
-import { Request } from "express";
 
 import { PrismaService } from "src/prisma/prisma.service";
 import { MemberShipValidationType } from "./membership-validation-type.enum";
 import { CreateAppError } from "src/shared/create-error/create-error";
+import { getRequest } from "./get-request";
 
 @Injectable()
 export class WorkspaceMemberShipGuard implements CanActivate {
@@ -19,10 +18,7 @@ export class WorkspaceMemberShipGuard implements CanActivate {
     // Retrieve roles metadata set by `@SetMetadata`
     const validationType = this.reflector.get<MemberShipValidationType>('memberShipValidationType', context.getHandler());
 
-    const ctx = GqlExecutionContext.create(context);
-
-    // Retrieve user from request object
-    const request = ctx.getContext().req as Request;
+    const request = getRequest(context);
 
     const user = request.user;
     const memberships = await this.getMemberShips(user?.id || '');
@@ -42,6 +38,8 @@ export class WorkspaceMemberShipGuard implements CanActivate {
       return false;
     }
   }
+
+  
 
   async getMemberShips(userId: string) {
     return await this.prisma.workspaceMembership.findMany({
