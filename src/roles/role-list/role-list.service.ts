@@ -39,6 +39,10 @@ export class RoleListService {
     if (req?.user?.userType === UserType.ADMIN) {
       roleTypeQuery = [RoleType.ADMIN, RoleType.USER, RoleType.CUSTOM];
     }
+
+    if (req?.user?.userType === UserType.USER) {
+      roleTypeQuery = [RoleType.USER, RoleType.CUSTOM];
+    }
     
     const queryObject: Prisma.RoleWhereInput = {
       title: {
