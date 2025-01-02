@@ -4,19 +4,20 @@ enum workspaceStatus {
 }
 
 model Workspace {
-  id                  String                @id @default(uuid())
-  name                String
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
-  deletedAt           DateTime?
-  workspaceStatus     workspaceStatus       @default(ACTIVE)
-  workspaceMembership WorkspaceMembership[] @relation(name: "workspaceIdMembershipRelation")
-  post                Role[]                @relation(name: "workSpaceRoles")
-  media               File[]                @relation(name: "workspaceIdFileRelation")
-  folder              Folder[]              @relation(name: "workspaceIdFolderRelation")
-  roles               Post[]                @relation(name: "workspaceIdPostRelation")
-  postCategory        Category[]            @relation(name: "workspaceIdCategoryRelation")
-  postTag             Tag[]                 @relation(name: "workspaceIdTagRelation")
+  id                     String                   @id @default(uuid())
+  name                   String
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  deletedAt              DateTime?
+  workspaceStatus        workspaceStatus          @default(ACTIVE)
+  workspaceMembership    WorkspaceMembership[]    @relation(name: "workspaceIdMembershipRelation")
+  post                   Role[]                   @relation(name: "workSpaceRoles")
+  media                  File[]                   @relation(name: "workspaceIdFileRelation")
+  folder                 Folder[]                 @relation(name: "workspaceIdFolderRelation")
+  roles                  Post[]                   @relation(name: "workspaceIdPostRelation")
+  postCategory           Category[]               @relation(name: "workspaceIdCategoryRelation")
+  postTag                Tag[]                    @relation(name: "workspaceIdTagRelation")
+  WorkspaceEmailTemplate WorkspaceEmailTemplate[] @relation(name: "workspaceIdEmailTemplate")
 }
 
 model WorkspaceMembership {
@@ -34,4 +35,24 @@ model WorkspaceMembership {
   deletedAt DateTime?
 
   @@unique([workspaceId, userId])
+}
+
+enum EmailTemplateType {
+  MEMBERSHIP
+  OTP_VERIFICATION
+  PASSWORD_RESET_REQUEST
+  WELCOME
+}
+
+model WorkspaceEmailTemplate {
+  id          String            @id @default(uuid())
+  type        EmailTemplateType @default(WELCOME)
+  workspaceId String
+  workspace   Workspace         @relation(name: "workspaceIdEmailTemplate", fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@unique([type, workspaceId])
 }
