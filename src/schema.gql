@@ -420,6 +420,7 @@ type Mutation {
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): CreateWorkspaceResponse!
   updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): UpdateWorkspaceResponse!
   deleteWorkSpace(deleteWorkspaceInput: WorkspaceDeleteInput): Boolean!
+  restoreWorkSpace(restoreWorkspaceInput: WorkspaceRestoreInput): Boolean!
   sendInvitation(sendInvitationInput: SendInvitationInput!): SendInvitationResponse!
   acceptInvitation(acceptInvitationInput: AcceptInvitationInput!): Boolean!
   createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
@@ -478,6 +479,10 @@ input UpdateWorkspaceInput {
 input WorkspaceDeleteInput {
   id: String!
   fromStash: Boolean
+}
+
+input WorkspaceRestoreInput {
+  id: String!
 }
 
 input SendInvitationInput {

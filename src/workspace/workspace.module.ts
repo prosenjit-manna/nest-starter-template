@@ -5,6 +5,7 @@ import { ListWorkSpaceService } from "./list-workspace/list-workspace.service";
 import { UpdateWorkspaceService } from "./update-workspace/update-workspace.service";
 import { DeleteWorkSpaceService } from "./delete-workspace/delete-workspace.service";
 import { MembershipModule } from './membership/membership.module';
+import { RestoreWorkSpaceService } from "./restore-workspace/delete-workspace.service";
 
 @Module({
   providers: [
@@ -12,6 +13,7 @@ import { MembershipModule } from './membership/membership.module';
     UpdateWorkspaceService,
     ListWorkSpaceService,
     DeleteWorkSpaceService,
+    RestoreWorkSpaceService,
   ],
   imports: [
     MembershipModule
