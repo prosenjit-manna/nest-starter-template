@@ -5,6 +5,7 @@ import { PostCreateService } from './post-create/post-create.service';
 import { GetPostService } from './get-post/get-post.service';
 import { PostDeleteService } from './post-delete/post-delete.service';
 import { PostMemberShipValidation } from './post-membership-validation';
+import { PostRestoreService } from './post-restore/post-restore.service';
 
 @Module({
   providers: [
@@ -14,6 +15,7 @@ import { PostMemberShipValidation } from './post-membership-validation';
     PostCreateService,
     PostUpdateService,
     PostDeleteService,
+    PostRestoreService,
   ],
 })
 export class PostModule {}

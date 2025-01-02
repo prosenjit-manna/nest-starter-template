@@ -430,6 +430,7 @@ type Mutation {
   createPost(createPostInput: CreatePostInput!): CreatePostResponse!
   updatePost(postId: String!, updatePostInput: UpdatePostInput!): UpdatePostResponse!
   deletePost(postDeleteInput: PostDeleteInput): Boolean!
+  restore(postRestoreInput: PostRestoreInput): Boolean!
   updateProfile(updateProfileInput: UpdateProfileInput): UpdateProfileResponse!
   deleteFile(fileDeleteInput: FileDeleteInput): Boolean!
   resizeFile(resizeFileInput: ResizeFileInput): JSON!
@@ -535,6 +536,10 @@ input UpdatePostInput {
 input PostDeleteInput {
   id: String!
   fromStash: Boolean
+}
+
+input PostRestoreInput {
+  id: String!
 }
 
 input UpdateProfileInput {
