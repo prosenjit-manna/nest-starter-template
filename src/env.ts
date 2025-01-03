@@ -75,4 +75,5 @@ appEnv.isProduction; // true if NODE_ENV === 'production'
 appEnv.isTest; // true if NODE_ENV === 'test'
 appEnv.isDev; // true if NODE_ENV === 'development'
 
+console.log(appEnv); // console
 export default appEnv;

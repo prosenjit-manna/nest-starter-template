@@ -31,6 +31,7 @@
 ## Docs 
 - Development notes - docs/development.md
   
-### Development setup 
-docker-compose up -d --build --force-recreate --remove-orphans
-docker-compose  run app yarn
+### Prod server run locally
+docker-compose -f docker-compose-prod.yml run app yarn
+docker-compose -f docker-compose-prod.yml up -d --build --force-recreate --remove-orphans
+docker build . --no-cache --force-recreate

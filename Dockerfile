@@ -24,9 +24,6 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY .env ./
 RUN npm install -g corepack
-RUN yarn 
-
-
-# Command to run the executable
+COPY ./dist ./dist
 USER root
 CMD ["npm", "run", "start:prod"]
