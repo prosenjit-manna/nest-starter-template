@@ -31,3 +31,6 @@
 ## Docs 
 - Development notes - docs/development.md
   
+### Development setup 
+docker-compose up -d --build --force-recreate --remove-orphans
+docker-compose  run app yarn
