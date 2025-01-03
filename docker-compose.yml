@@ -2,14 +2,14 @@ name: nest-starter
 version: '3.7'
 services:
 
-  app:
-    container_name: app
-    build:
-      context: .
-    volumes:
-      - ./:/usr/src/app # Mount the local `src` folder to `/usr/src/app` in the container
-    ports:
-      - "4000:4000"
+  # app:
+  #   container_name: app
+  #   build:
+  #     context: .
+  #   volumes:
+  #     - ./:/usr/src/app # Mount the local `src` folder to `/usr/src/app` in the container
+  #   ports:
+  #     - "4000:4000"
 
   mailhog:
     image: mailhog/mailhog:latest
@@ -31,15 +31,15 @@ services:
         - '5433:5432'
       # postgresql://nodeProdUser:postgresPasswword@localhost:5433/nest_starter
 
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    ports:
-      - "8080:80" # Expose port 8080 on the host to port 80 in the container
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro # Mount your custom Nginx config
-      - ./html:/usr/share/nginx/html:ro # Serve static files
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: nginx
+  #   ports:
+  #     - "8080:80" # Expose port 8080 on the host to port 80 in the container
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro # Mount your custom Nginx config
+  #     - ./html:/usr/share/nginx/html:ro # Serve static files
 
-    depends_on:
-      - app
+  #   depends_on:
+  #     - app
       

@@ -23,14 +23,14 @@ import appEnv from './env';
   imports: [
     SentryModule.forRoot(),
     PrismaModule,
-    ...(appEnv.RATE_LIMIT_ENABLED ? [ThrottlerModule.forRootAsync({
+    ThrottlerModule.forRootAsync({
       useFactory: (): ThrottlerModuleOptions => ([
         {
           ttl: appEnv.THROTTLE_TTL,
           limit: appEnv.THROTTLE_LIMIT,
         },
       ]),
-    })] : []),
+    }),
     AuthModule,
     ThrottleTestModule,
     WorkspaceModule,

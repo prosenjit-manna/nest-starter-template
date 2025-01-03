@@ -29,5 +29,4 @@ RUN yarn
 
 # Command to run the executable
 USER root
-
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start:prod"]
