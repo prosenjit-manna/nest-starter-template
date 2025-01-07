@@ -11,6 +11,7 @@ class User {
 
 @ObjectType()
 export class MembershipResponse {
+  @Field() id: string;
   @Field() workspaceId: string;
   @Field() isOwner: boolean;
   @Field() isAccepted: boolean;

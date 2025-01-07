@@ -3,6 +3,7 @@ import { SendInvitationService } from './send-invitation/send-invitation.service
 import { MailerService } from 'src/mailer/mailer.service';
 import { AcceptInvitationService } from './accept-invitation/accept-invitation.service';
 import { ListMembershipService } from './list-membership/list-membership.service';
+import { MembershipDeleteService } from './membership-delete/membership-delete.service';
 
 @Module({
   providers: [
@@ -10,6 +11,7 @@ import { ListMembershipService } from './list-membership/list-membership.service
     SendInvitationService,
     AcceptInvitationService,
     ListMembershipService,
+    MembershipDeleteService,
   ],
 })
 export class MembershipModule {}

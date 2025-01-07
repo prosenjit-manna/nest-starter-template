@@ -198,6 +198,7 @@ type User {
 }
 
 type MembershipResponse {
+  id: String!
   workspaceId: String!
   isOwner: Boolean!
   isAccepted: Boolean!
@@ -431,6 +432,7 @@ type Mutation {
   restoreWorkSpace(restoreWorkspaceInput: WorkspaceRestoreInput): Boolean!
   sendInvitation(sendInvitationInput: SendInvitationInput!): SendInvitationResponse!
   acceptInvitation(acceptInvitationInput: AcceptInvitationInput!): Boolean!
+  deleteMembership(membershipDeleteInput: MembershipDeleteInput): Boolean!
   createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
   updateRole(roleUpdateInput: RoleUpdateInput!): RoleUpdateResponse!
   deleteRole(roleDeleteInput: RoleDeleteInput): Boolean!
@@ -501,6 +503,11 @@ input SendInvitationInput {
 input AcceptInvitationInput {
   token: String!
   accept: Boolean!
+}
+
+input MembershipDeleteInput {
+  id: String!
+  fromStash: Boolean
 }
 
 input RoleCreateInput {
