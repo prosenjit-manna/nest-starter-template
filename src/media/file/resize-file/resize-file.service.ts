@@ -45,7 +45,7 @@ export class ResizeFileService {
     }
 
 
-    const filePath = await this.fileService.resizeFile(file, resizeFileInput.resizeOptions);
+    const filePath = await this.fileService.resizeFile(file, resizeFileInput.resizeOptions, resizeFileInput.scale);
 
     await this.prismaService.file.deleteMany({
       where: {

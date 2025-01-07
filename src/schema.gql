@@ -584,6 +584,7 @@ scalar JSON
 
 input ResizeFileInput {
   id: String!
+  scale: Float!
   resizeOptions: ImageResizeOptions!
 }
 

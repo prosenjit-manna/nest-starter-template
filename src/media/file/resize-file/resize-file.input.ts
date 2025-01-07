@@ -1,4 +1,4 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, Float, InputType, Int } from '@nestjs/graphql';
 
 
 @InputType()
@@ -14,6 +14,7 @@ export class ResizeFileInput  {
   @Field(() => String)
   id: string;
 
+  @Field(() => Float) scale: number;
   @Field(() => ImageResizeOptions) resizeOptions: ImageResizeOptions;
 
 }

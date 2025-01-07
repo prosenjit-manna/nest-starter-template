@@ -68,7 +68,7 @@ export class FileService {
   }
 
 
-  async resizeFile(file: File, resizeInput: sharp.Region) {
+  async resizeFile(file: File, resizeInput: sharp.Region, scale: number) {
 
     const originalFilePath = join(process.cwd(), 'public',file.url);
 
@@ -95,8 +95,13 @@ export class FileService {
       filePath += 'h-' + resizeInput.height;
     }
 
+    const metadata = await sharp(originalFilePath).metadata();
     const newFilePath = `${basePath}${filePath ? '-' + filePath : ''}${extension}`;
-    await sharp(originalFilePath).extract(resizeInput).toFile(newFilePath);
+    
+    if (metadata.width && metadata.height) {
+      await sharp(originalFilePath).extract(resizeInput).resize(metadata.width * scale, metadata.height * scale).toFile(newFilePath);
+    }
+    
     return newFilePath.replace(join(process.cwd(), 'public'), '');
   }
 }
