@@ -25,10 +25,12 @@ export class ListWorkSpaceService {
     listWorkspaceInput: ListWorkSpaceInput,
     @Context('req') req: Request,
   ): Promise<ListWorkSpaceResponse> {
+
     const membership = await this.prisma.workspaceMembership.findMany({
       where: {
         userId: req?.user?.id,
         isAccepted: true,
+        deletedAt: null,
       },
     });
 

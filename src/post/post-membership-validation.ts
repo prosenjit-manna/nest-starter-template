@@ -11,6 +11,7 @@ export class PostMemberShipValidation {
       where: {
         userId: userId,
         isAccepted: true,
+        deletedAt: null
       },
     });
   
