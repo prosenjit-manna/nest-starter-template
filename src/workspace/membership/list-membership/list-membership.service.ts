@@ -39,6 +39,11 @@ export class ListMembershipService {
           mode: 'insensitive', 
         },
       },
+      deletedAt: listMembershipsInput?.fromStash ? {
+        not: {
+          not: null,
+        }
+      } : null,
     };
     
 
