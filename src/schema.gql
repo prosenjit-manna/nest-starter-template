@@ -433,6 +433,7 @@ type Mutation {
   sendInvitation(sendInvitationInput: SendInvitationInput!): SendInvitationResponse!
   acceptInvitation(acceptInvitationInput: AcceptInvitationInput!): Boolean!
   deleteMembership(membershipDeleteInput: MembershipDeleteInput): Boolean!
+  restoreMembership(membershipDeleteInput: MemberShipRestoreInput): Boolean!
   createRole(roleCreateInput: RoleCreateInput!): RoleCreateResponse!
   updateRole(roleUpdateInput: RoleUpdateInput!): RoleUpdateResponse!
   deleteRole(roleDeleteInput: RoleDeleteInput): Boolean!
@@ -508,6 +509,10 @@ input AcceptInvitationInput {
 input MembershipDeleteInput {
   id: String!
   fromStash: Boolean
+}
+
+input MemberShipRestoreInput {
+  id: String!
 }
 
 input RoleCreateInput {
