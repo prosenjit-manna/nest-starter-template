@@ -1,5 +1,4 @@
-import { Args, Context, Query, Resolver } from '@nestjs/graphql';
-import { Request } from 'express';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { SetMetadata } from '@nestjs/common';
 import { Prisma, PrivilegeGroup, PrivilegeName } from '@prisma/client';
 import { UseGuards } from '@nestjs/common';
@@ -30,11 +29,10 @@ export class ListMembershipService {
   @Query(() => ListMembershipResponse)
   async listMemberships(
     @Args('listMembershipsInput') listMembershipsInput: ListMembershipInput,
-    @Context('req') req: Request,
   ): Promise<ListMembershipResponse> {
 
     const queryObject: Prisma.WorkspaceMembershipWhereInput = {
-      workspaceId: req.currentWorkspaceId,
+      workspaceId: listMembershipsInput.workspaceId,
       user: {
         name: {
           contains: listMembershipsInput.search,

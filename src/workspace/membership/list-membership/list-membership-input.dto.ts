@@ -3,6 +3,8 @@ import { BaseListInput } from 'src/shared/base-list/base-list-input.dto';
 
 export enum MembershipListOrderByField {
   createdAt = 'createdAt',
+  isOwner = 'isOwner',
+  isAccepted = 'isAccepted',
 }
 
 registerEnumType(MembershipListOrderByField, {
@@ -15,5 +17,8 @@ export class ListMembershipInput extends BaseListInput {
   @Field(() => String, { nullable: true })
   search?: string;
 
+  @Field(() => MembershipListOrderByField, { nullable: true, defaultValue: MembershipListOrderByField.createdAt })
   orderByField?: MembershipListOrderByField;
+
+  @Field(() => String) workspaceId: string;
 }

@@ -324,6 +324,14 @@ input ListMembershipInput {
   orderBy: Order = DESC
   fromStash: Boolean = false
   search: String
+  orderByField: membershipListOrderByField = createdAt
+  workspaceId: String!
+}
+
+enum membershipListOrderByField {
+  createdAt
+  isOwner
+  isAccepted
 }
 
 input RoleListInput {
