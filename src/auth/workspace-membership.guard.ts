@@ -46,6 +46,7 @@ export class WorkspaceMemberShipGuard implements CanActivate {
       where: {
         isAccepted: true,
         userId,
+        deletedAt: null,
       },
     });
   }
