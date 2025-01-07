@@ -22,8 +22,12 @@ WORKDIR /usr/src/app
 
 # Install dependencies
 COPY package*.json ./
+COPY yarn.lock ./
 COPY .env ./
 RUN npm install -g corepack
+RUN npm install -g live-server
 COPY ./dist ./dist
 USER root
-CMD ["npm", "run", "start:prod"]
+RUN yarn
+# CMD ["npm", "run", "start:prod"]
+CMD ["live-server"]

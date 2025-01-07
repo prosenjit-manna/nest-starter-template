@@ -1,13 +1,13 @@
 name: nest-starter-prod
-version: '3.7'
 services:
 
   app:
     container_name: app
     build:
       context: .
-    volumes:
-      - ./:/usr/src/app # Mount the local `src` folder to `/usr/src/app` in the container
+      dockerfile: Dockerfile.prod
+    # volumes:
+      # - ./:/usr/src/app # Mount the local `src` folder to `/usr/src/app` in the container
     environment:
       - DATABASE_URL=postgresql://nodeProdUser:postgresPasswword@nest-starter-postgres:5432/nest_starter
       - SMTP_HOST=mailhog
