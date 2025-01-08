@@ -68,7 +68,7 @@ export class FileService {
   }
 
 
-  async resizeFile(file: File, resizeInput: sharp.Region, scale: number) {
+  async cropImage(file: File, cropInput: sharp.Region) {
 
     const originalFilePath = join(process.cwd(), 'public',file.url);
 
@@ -77,19 +77,45 @@ export class FileService {
 
     let filePath = '';
 
-    if (resizeInput.left) {
-      filePath += 'x-' + resizeInput.left;
+    if (cropInput.left) {
+      filePath += 'x-' + cropInput.left;
     }
 
-    if (resizeInput.top) {
-      filePath += 'y-' + resizeInput.top;
+    if (cropInput.top) {
+      filePath += 'y-' + cropInput.top;
     }
+
+    if (cropInput.width) {
+      filePath += 'w-' + cropInput.width;
+    }
+    if (cropInput.width && cropInput.height) {
+      filePath += 'x';
+    }
+    if (cropInput.height) {
+      filePath += 'h-' + cropInput.height;
+    }
+
+    const metadata = await sharp(originalFilePath).metadata();
+    const newFilePath = `${basePath}${filePath ? '-' + filePath : ''}${extension}`;
+
+    if (metadata.width && metadata.height) {
+      await sharp(originalFilePath).extract(cropInput).toFile(newFilePath);
+    }
+    
+    return newFilePath.replace(join(process.cwd(), 'public'), '');
+  }
+
+  async resizeImage(file: File, resizeInput: sharp.Region) {
+
+    const originalFilePath = join(process.cwd(), 'public',file.url);
+
+    const extension = path.extname(originalFilePath);
+    const basePath = originalFilePath.replace(extension, '');
+
+    let filePath = '';
 
     if (resizeInput.width) {
       filePath += 'w-' + resizeInput.width;
-    }
-    if (resizeInput.width && resizeInput.height) {
-      filePath += 'x';
     }
     if (resizeInput.height) {
       filePath += 'h-' + resizeInput.height;
@@ -97,9 +123,9 @@ export class FileService {
 
     const metadata = await sharp(originalFilePath).metadata();
     const newFilePath = `${basePath}${filePath ? '-' + filePath : ''}${extension}`;
-    
+
     if (metadata.width && metadata.height) {
-      await sharp(originalFilePath).extract(resizeInput).resize(metadata.width * scale, metadata.height * scale).toFile(newFilePath);
+      await sharp(originalFilePath).resize(resizeInput).toFile(newFilePath);
     }
     
     return newFilePath.replace(join(process.cwd(), 'public'), '');

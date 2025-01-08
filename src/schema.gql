@@ -584,15 +584,14 @@ scalar JSON
 
 input ResizeFileInput {
   id: String!
-  scale: Float!
   resizeOptions: ImageResizeOptions!
 }
 
 input ImageResizeOptions {
   width: Int!
-  height: Int!
-  left: Int!
-  top: Int!
+  height: Int
+  left: Int
+  top: Int
 }
 
 input CreateFolderInput {

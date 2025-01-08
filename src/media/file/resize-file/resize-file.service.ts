@@ -44,8 +44,14 @@ export class ResizeFileService {
       });
     }
 
+    let filePath = '';
 
-    const filePath = await this.fileService.resizeFile(file, resizeFileInput.resizeOptions, resizeFileInput.scale);
+    if (resizeFileInput.resizeOptions.left && resizeFileInput.resizeOptions.top) {
+      filePath = await this.fileService.cropImage(file, resizeFileInput.resizeOptions);
+    } else {
+      filePath = await this.fileService.resizeImage(file, resizeFileInput.resizeOptions);
+    }
+    
 
     await this.prismaService.file.deleteMany({
       where: {
