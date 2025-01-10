@@ -1,33 +1,49 @@
-FROM node:20
+# Stage 1: Build the application
+FROM node:20-alpine AS build
 
-# Add Maintainer Info
-LABEL maintainer="Prosenjit Manna <prosenjit@itobuz.com>"
+WORKDIR /app
+
+# Enable corepack and install dependencies using yarn
+RUN corepack enable
+RUN apk add --no-cache openssl
 
 
-# Install Chromium
-RUN apt-get update && apt-get install -y \
-    fonts-liberation \
-    libappindicator3-1 \
-    libasound2 \
-    libatk-bridge2.0-0 \
-    libatk1.0-0 \
-    libcups2 \
-    libdbus-glib-1-2 \
-    libx11-xcb1 \
-    xdg-utils \
-    && apt-get clean    
+# Copy the source code
+COPY . .
+COPY .env.production ./.env
 
-# Set working directory inside the container
-WORKDIR /usr/src/app
+RUN yarn install
+RUN npm run db:push
+RUN npm run db:seed
 
-# Install dependencies
-COPY package*.json ./
-COPY yarn.lock ./
-COPY .env ./
-RUN npm install -g corepack
+# Build the application
+RUN yarn build
+
+
+# Stage 2: Run the application
+FROM node:20-alpine
+RUN apk add --no-cache openssl
+
+WORKDIR /app
+
+# Set environment variable to production ENV NODE_ENV=production
+
+# Enable corepack
+RUN corepack enable
 RUN npm install -g live-server
-COPY ./dist ./dist
-USER root
-RUN yarn
-# CMD ["npm", "run", "start:prod"]
-CMD ["live-server"]
+
+# Copy built application from Stage 1
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/package.json ./
+COPY --from=build /app/yarn.lock ./
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/public ./public
+COPY --from=build /app/public ./public
+
+# Install only production dependencies 
+# RUN yarn
+
+
+# Define the command to run the application
+CMD ["node", "dist/main.js"]
+# CMD ["live-server"]

@@ -35,3 +35,9 @@
 docker-compose -f docker-compose-prod.yml run app yarn
 docker-compose -f docker-compose-prod.yml up -d --build --force-recreate --remove-orphans
 docker build . --no-cache --force-recreate
+
+### Prod server run locally
+docker buildx build -f Dockerfile.prod -t itobuz/nest-starter-backend-arm .
+docker push itobuz/nest-starter-backend-arm:latest
+docker buildx build --platform linux/amd64 -f Dockerfile.prod -t itobuz/nest-starter-backend-amd .
+docker push itobuz/nest-starter-backend-amd:latest

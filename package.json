@@ -24,7 +24,7 @@
     "db:seed": "npm run tsx src/seed/index.ts",
     "db:push": "npm run prisma -- db push",
     "prisma:generate": "npm run prisma -- generate",
-    "prepare": "husky"
+    "prepare": "if [ \"$NODE_ENV\" = \"production\" ]; then exit 0; else husky; fi"
   },
   "dependencies": {
     "@apollo/server": "4.11.2",
