@@ -20,5 +20,5 @@ export class ListMembershipInput extends BaseListInput {
   @Field(() => MembershipListOrderByField, { nullable: true, defaultValue: MembershipListOrderByField.createdAt })
   orderByField?: MembershipListOrderByField;
 
-  @Field(() => String) workspaceId: string;
+  @Field(() => String, { nullable: true }) workspaceId: string;
 }

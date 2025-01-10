@@ -326,7 +326,7 @@ input ListMembershipInput {
   fromStash: Boolean = false
   search: String
   orderByField: membershipListOrderByField = createdAt
-  workspaceId: String!
+  workspaceId: String
 }
 
 enum membershipListOrderByField {
