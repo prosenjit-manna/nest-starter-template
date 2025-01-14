@@ -1,6 +1,5 @@
 # Install dependency in mac  
-- brew install python3 
-- brew install python-setuptools
+- Node - v20.12.2
 - npm install -g corepack 
 - Install docker 
 
