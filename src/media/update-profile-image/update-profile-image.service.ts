@@ -7,7 +7,7 @@ export class UpdateProfileImageService {
   constructor(private readonly prisma: PrismaService) {}
 
   async updateProfileMedia(media: File, userId: string) {
-    return await this.prisma.user.update({
+    const response = await this.prisma.user.update({
       where: {
         id: userId,
       },
@@ -15,5 +15,10 @@ export class UpdateProfileImageService {
         profileImage: media.url,
       },
     });
+
+    return {
+      success: true,
+      profileImage: response.profileImage,
+    }
   }
 }
